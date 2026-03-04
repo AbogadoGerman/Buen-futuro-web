@@ -19,10 +19,25 @@ const CONFIG = {
 };
 
 async function getGoogleDriveClient() {
-  const keyPath = path.join(ROOT, "service-account.json");
+  // Buscar service-account.json en la raíz del proyecto o via variable de entorno
+  const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_PATH
+    || path.join(ROOT, "service-account.json");
+
   if (!fs.existsSync(keyPath)) {
-    throw new Error("Falta el archivo service-account.json. Asegúrate de tenerlo en la raíz.");
+    console.error("╔══════════════════════════════════════════════════════════════╗");
+    console.error("║  ERROR: No se encontró service-account.json                 ║");
+    console.error("╠══════════════════════════════════════════════════════════════╣");
+    console.error("║  Este archivo NO se sube a GitHub (.gitignore lo protege).  ║");
+    console.error("║  Debes colocarlo manualmente en la raíz del proyecto:       ║");
+    console.error(`║  ${ROOT}/service-account.json`);
+    console.error("║                                                             ║");
+    console.error("║  Alternativa: define la variable de entorno                 ║");
+    console.error("║  GOOGLE_SERVICE_ACCOUNT_PATH=/ruta/a/service-account.json   ║");
+    console.error("╚══════════════════════════════════════════════════════════════╝");
+    process.exit(1);
   }
+
+  console.log(`🔑 Usando credenciales: ${keyPath}`);
   const auth = new google.auth.GoogleAuth({
     keyFile: keyPath,
     scopes: ["https://www.googleapis.com/auth/drive.readonly"],
