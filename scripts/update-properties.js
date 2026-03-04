@@ -57,22 +57,50 @@ async function findLatestFile(drive) {
   return response.data.files[0];
 }
 
+const HABI_CDN = "https://d3hzflklh28tts.cloudfront.net/";
+
 async function scrapeImages(url) {
   try {
-    const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
-    const $ = cheerio.load(data);
+    const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const images = [];
-    
-    const ogImage = $('meta[property="og:image"]').attr("content");
-    if (ogImage) images.push(ogImage);
 
-    $("img").each((_, el) => {
-      const src = $(el).attr("src") || $(el).attr("data-src");
-      if (src && src.startsWith("http") && !src.includes("logo")) images.push(src);
-    });
+    // 1. Extract from JSON "image" array embedded in HABI pages
+    const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
+    if (imgArrayMatch) {
+      try {
+        const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
+        imgs.forEach(img => {
+          const fullUrl = img.startsWith("http") ? img : HABI_CDN + img;
+          images.push(fullUrl);
+        });
+      } catch {}
+    }
+
+    // 2. Fallback: extract from og:image and img tags via cheerio
+    if (images.length === 0) {
+      const $ = cheerio.load(data);
+      const ogImage = $('meta[property="og:image"]').attr("content");
+      if (ogImage) images.push(ogImage);
+
+      $("img").each((_, el) => {
+        const src = $(el).attr("src") || $(el).attr("data-src");
+        if (src && src.startsWith("http") && !src.includes("logo")) images.push(src);
+      });
+    }
+
     return [...new Set(images)].slice(0, 10);
   } catch {
     return [];
+  }
+}
+
+async function validate360(url) {
+  if (!url) return false;
+  try {
+    const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
+    return data.includes("matterport") || data.includes("showcase") || data.includes("model");
+  } catch {
+    return false;
   }
 }
 
@@ -98,11 +126,23 @@ async function main() {
     const enriched = [];
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
-      console.log(`[${i+1}/${properties.length}] Obteniendo fotos para el inmueble: ${p.nid || i}...`);
-      const images = p.url ? await scrapeImages(p.url) : [];
+      const habiUrl = p.url_habi || p.url || "";
+      console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
+
+      const [images, is360Valid] = await Promise.all([
+        habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
+        p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
+      ]);
+
+      if (!is360Valid && p.url_360) {
+        console.log(`  ⚠️  360 inválido (404/error) - se eliminará: ${p.url_360}`);
+      }
+      console.log(`  📸 ${images.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+
       enriched.push({
         ...p,
         images: images.length > 0 ? images : [CONFIG.placeholderImage],
+        url_360: is360Valid ? p.url_360 : "",
         precio: parseInt(p.precio_venta || 0)
       });
       await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));

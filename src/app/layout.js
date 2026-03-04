@@ -1,6 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
+  metadataBase: new URL("https://buenfuturo.vercel.app"),
   title: "Inmobiliaria Buen Futuro | Aliados HABI - Catálogo de Propiedades",
   description:
     "Encuentra tu hogar ideal con Inmobiliaria Buen Futuro. 59 propiedades HABI con tours 360°, descuentos exclusivos y financiación. Aliados oficiales HABI en Colombia.",
@@ -19,6 +20,10 @@ export const metadata = {
     description:
       "Encuentra tu hogar ideal. Catálogo de propiedades con tours 360° y descuentos exclusivos.",
     images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "32x32" }, { url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
   },
 };
 
