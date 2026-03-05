@@ -135,10 +135,33 @@ const REVIEWS = [
   { name:"Brayan Stiven Mora", time:"Hace 1 mes", rating:5, text:"Soy joven y pensé que iba a ser difícil. Me explicaron todo el proceso del crédito paso a paso.", i:"B", c:"#D84315" },
 ];
 
-function fmt(p){const n=typeof p==="string"?parseInt(p):p;if(!n)return"Consultar";return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",minimumFractionDigits:0,maximumFractionDigits:0}).format(n)}
-function fmtM(p){const n=typeof p==="string"?parseInt(p):p;if(!n)return"0";return Math.round(n/1000000)+"M"}
-function disc(p){const o=parseInt(p.precio_original||0),v=parseInt(p.precio_venta||0);if(!o||!v||o<=v)return 0;return Math.round(((o-v)/o)*100)}
-function isFeat(p){return disc(p)>=5||(p.bonoHabi&&p.bonoHabi>=5000000)}
+function num(v){const n=parseInt(v||0,10);return Number.isFinite(n)?n:0}
+function fmt(p){const n=num(p);if(!n)return"Consultar";return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",minimumFractionDigits:0,maximumFractionDigits:0}).format(n)}
+function fmtM(p){const n=num(p);if(!n)return"0";return Math.round(n/1000000)+"M"}
+function disc(p){const o=num(p.precio_original),v=num(p.precio_venta);if(!o||!v||o<=v)return 0;return Math.round(((o-v)/o)*100)}
+function isFeat(p){return disc(p)>=5||num(p.bonoHabi)>=5000000}
+function featKey(p){return p.nid||p.url_habi||p.titulo}
+function featScore(p){
+  const d=disc(p);
+  const bonusM=Math.min(num(p.bonoHabi)/1000000,10);
+  const imgCount=Array.isArray(p.images)?Math.min(p.images.length,8):0;
+  const has360=!!p.url_360;
+  const area=num(p.area);
+  const price=num(p.precio_venta);
+  const ppm=(price>0&&area>0)?price/area:0;
+  const ppmScore=ppm?Math.max(0,Math.min(1,(12000000-ppm)/8000000))*8:0;
+  const hab=num(p.habitaciones);
+  let score=0;
+  score+=d*5;
+  score+=bonusM*2;
+  score+=imgCount*1.5;
+  score+=has360?12:0;
+  score+=ppmScore;
+  score+=(hab>=2&&hab<=3)?3:0;
+  score+=num(p.garaje)>0?2:0;
+  score+=p.ascensor?1:0;
+  return score;
+}
 
 function waMsg(p){return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(p.banos||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
 
@@ -389,7 +412,14 @@ export default function App(){
     return 0;
   });
 
-  const featured=inv.filter(isFeat).slice(0,6);
+  const featured=(()=>{
+    const ordered=[...inv].sort((a,b)=>featScore(b)-featScore(a));
+    const primary=ordered.filter(isFeat);
+    const backup=ordered.filter(p=>!isFeat(p));
+    const merged=[...primary,...backup];
+    const seen=new Set();
+    return merged.filter(p=>{const k=featKey(p);if(seen.has(k))return false;seen.add(k);return true}).slice(0,6);
+  })();
   const clearAll=()=>{setApplied(dflt());setFilters(dflt());setFCount(0);setSearch("")};
 
   return(
@@ -513,7 +543,7 @@ export default function App(){
         {/* FEATURED */}
         {featured.length>0&&<section style={{padding:"clamp(16px,3vw,24px) clamp(10px,3vw,16px)",maxWidth:1100,margin:"0 auto"}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexWrap:"wrap",gap:8}}>
-            <div><h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(20px,4vw,26px)",fontWeight:800,color:"#1B2A4A"}}>Propiedades Destacadas</h2><p style={{color:"#5D6D7E",fontSize:12}}>Mejores descuentos y bonos HABI - Con vista 360°</p></div>
+            <div><h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(20px,4vw,26px)",fontWeight:800,color:"#1B2A4A"}}>Propiedades Destacadas</h2><p style={{color:"#5D6D7E",fontSize:12}}>Descuentos, bonos y mejor valor comercial</p></div>
             <button onClick={()=>setPage("catalogo")} style={{padding:"8px 16px",borderRadius:10,border:"2px solid #1B4F72",background:"transparent",color:"#1B4F72",fontWeight:700,fontSize:12,cursor:"pointer"}}>Ver todo ({inv.length})</button>
           </div>
           <div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>
