@@ -4,6 +4,11 @@ export const metadata = {
   title: "Inmobiliaria Buen Futuro | Aliados HABI - Catálogo de Propiedades",
   description:
     "Encuentra tu hogar ideal con Inmobiliaria Buen Futuro. 59 propiedades HABI con tours 360°, descuentos exclusivos y financiación. Aliados oficiales HABI en Colombia.",
+  icons: {
+    icon: "/inmobiliaria-buen-futuro.png",
+    shortcut: "/inmobiliaria-buen-futuro.png",
+    apple: "/inmobiliaria-buen-futuro.png",
+  },
 };
 
 export default function RootLayout({ children }) {
