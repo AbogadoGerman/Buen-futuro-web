@@ -46,6 +46,91 @@ function normalizeImageUrl(rawUrl, baseUrl) {
   }
 }
 
+function detectImageBaseUrl(pageUrl, $) {
+  const ogImage = $('meta[property="og:image"]').attr("content");
+  const twitterImage = $('meta[name="twitter:image"]').attr("content");
+  const sample = [ogImage, twitterImage].find(Boolean) || "";
+
+  if (sample && /^https?:\/\//i.test(sample)) {
+    return sample.replace(/\/venta-[^/?#]+(?:\?.*)?$/i, "/");
+  }
+
+  try {
+    const { origin } = new URL(pageUrl);
+    return `${origin}/`;
+  } catch {
+    return "https://d3hzflklh28tts.cloudfront.net/";
+  }
+}
+
+function buildImageUrl(imagePath, imageBaseUrl) {
+  if (!imagePath || typeof imagePath !== "string") return null;
+  const clean = imagePath.trim();
+  if (!clean) return null;
+  if (/^https?:\/\//i.test(clean)) return clean;
+
+  try {
+    return new URL(clean.replace(/^\//, ""), imageBaseUrl).href;
+  } catch {
+    return null;
+  }
+}
+
+function getGatsbyPageDataUrl(listingUrl) {
+  try {
+    const parsed = new URL(listingUrl);
+    const cleanPath = parsed.pathname.replace(/^\//, "").replace(/\/$/, "");
+    if (!cleanPath) return null;
+    return `${parsed.origin}/page-data/${cleanPath}/page-data.json`;
+  } catch {
+    return null;
+  }
+}
+
+async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
+  const pageDataUrl = getGatsbyPageDataUrl(url);
+  if (!pageDataUrl) return [];
+
+  try {
+    const { data } = await axios.get(pageDataUrl, {
+      timeout: 12000,
+      headers: { "User-Agent": CONFIG.userAgent }
+    });
+
+    const carousel =
+      data?.result?.pageContext?.propertyDetail?.property?.images ||
+      data?.result?.pageContext?.property?.images ||
+      [];
+
+    if (!Array.isArray(carousel) || !carousel.length) return [];
+
+    const mapped = carousel
+      .map((img) => {
+        const raw = typeof img === "string" ? img : img?.url;
+        const full = buildImageUrl(raw, imageBaseUrl);
+        if (!full) return null;
+        return {
+          url: full,
+          order: typeof img === "object" ? Number(img?.order || 0) : 0
+        };
+      })
+      .filter(Boolean)
+      .filter((item) => isValidImageUrl(item.url))
+      .sort((a, b) => (a.order || 0) - (b.order || 0))
+      .map((item) => item.url);
+
+    const uniqueByKey = new Map();
+    for (const imgUrl of mapped) {
+      const key = imageKey(imgUrl);
+      if (!uniqueByKey.has(key)) uniqueByKey.set(key, imgUrl);
+    }
+
+    return [...uniqueByKey.values()].slice(0, CONFIG.maxImages);
+  } catch {
+    return [];
+  }
+}
+
 function imageKey(url) {
   const clean = url.split("?")[0].split("#")[0];
   const ventaFile = clean.match(/venta-[^/]+\.(?:jpe?g|png|webp|avif)$/i);
@@ -138,6 +223,14 @@ async function scrapeImages(url) {
   try {
     const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
     const $ = cheerio.load(data);
+    const imageBaseUrl = detectImageBaseUrl(url, $);
+
+    // Primary source: Gatsby page-data carousel used by "Ver las N imágenes".
+    const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
+    if (carouselImages.length >= CONFIG.minImages) {
+      return carouselImages.slice(0, CONFIG.maxImages);
+    }
+
     const candidates = [];
 
     // 1) Metadata images.
@@ -148,7 +241,12 @@ async function scrapeImages(url) {
 
     // 2) Direct DOM images.
     $("img").each((_, el) => {
-      const src = $(el).attr("src") || $(el).attr("data-src") || $(el).attr("data-lazy-src");
+      const src =
+        $(el).attr("src") ||
+        $(el).attr("data-src") ||
+        $(el).attr("data-lazy-src") ||
+        $(el).attr("data-main-image") ||
+        $(el).attr("data-srcset");
       if (src) candidates.push(src);
 
       const srcset = $(el).attr("srcset");
@@ -167,7 +265,7 @@ async function scrapeImages(url) {
       }
     });
 
-    // 4) JSON-LD and NEXT_DATA with gallery arrays.
+    // 4) JSON-LD and embedded scripts with gallery arrays.
     $("script[type='application/ld+json']").each((_, el) => {
       const raw = $(el).html();
       if (!raw) return;
@@ -187,6 +285,13 @@ async function scrapeImages(url) {
       } catch {
         // Ignore malformed next data.
       }
+    }
+
+    // Gatsby pages: search inline JSON for "venta-..." image file names and expand with detected base URL.
+    const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
+    for (const match of ventaMatches) {
+      const full = buildImageUrl(match, imageBaseUrl);
+      if (full) candidates.push(full);
     }
 
     // 5) Fallback regex over whole HTML for image URLs.
