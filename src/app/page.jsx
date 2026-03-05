@@ -163,7 +163,7 @@ function featScore(p){
   return score;
 }
 
-function waMsg(p){return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(p.banos||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
+function waMsg(p){const banosVal=p["baños"]??p.banos;return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(banosVal||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
 
 function Stars({r}){return <div style={{display:"flex",gap:1}}>{[1,2,3,4,5].map(i=><svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i<=r?"#F4B400":"#ddd"}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</div>}
 
@@ -241,10 +241,14 @@ function CreditSim({onClose}){
 }
 
 /* ============ FILTER PANEL ============ */
-function dflt(){return{tipo:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas",banos:"Todos",garaje:false,ascensor:false,bonoHabi:false}}
-function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply}){
+function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
+function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
   if(!open)return null;
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
+  const clean=v=>(v||"").toString().trim();
+  const localidades=[...new Set(inv.map(p=>clean(p.zona)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const barrios=[...new Set(inv.filter(p=>f.localidad==="Todas"||clean(p.zona)===f.localidad).map(p=>clean(p.barrio)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const conjuntos=[...new Set(inv.filter(p=>(f.localidad==="Todas"||clean(p.zona)===f.localidad)&&(f.barrio==="Todos"||clean(p.barrio)===f.barrio)).map(p=>clean(p.conjunto)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   const precios=[["Todos","",""],["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];
   const setP=(tag,mn,mx)=>sf(prev=>({...prev,precioTag:tag,precioMin:mn,precioMax:mx}));
   return(
@@ -256,10 +260,36 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply}){
         </div>
         <div style={{padding:"16px 20px 24px",display:"flex",flexDirection:"column",gap:16}}>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Tipo</div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["Todos","Apartamento","Casa"].map(t=><button key={t} onClick={()=>u("tipo",t)} style={{padding:"9px 18px",borderRadius:20,border:"2px solid",borderColor:f.tipo===t?"#1B4F72":"#E0E0E0",background:f.tipo===t?"#1B4F72":"white",color:f.tipo===t?"white":"#5D6D7E",fontWeight:600,fontSize:13,cursor:"pointer",transition:"all .15s"}}>{t}</button>)}</div></div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            <div>
+              <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:6}}>Localidad</div>
+              <select value={f.localidad} onChange={e=>sf(prev=>({...prev,localidad:e.target.value,barrio:"Todos",conjunto:"Todos"}))} style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"2px solid #D5DBDB",fontSize:12,fontWeight:600,background:"white",cursor:"pointer"}}>
+                <option value="Todas">Todas</option>
+                {localidades.map(v=><option key={v} value={v}>{v}</option>)}
+              </select>
+            </div>
+            <div>
+              <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:6}}>Barrio</div>
+              <select value={f.barrio} onChange={e=>sf(prev=>({...prev,barrio:e.target.value,conjunto:"Todos"}))} style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"2px solid #D5DBDB",fontSize:12,fontWeight:600,background:"white",cursor:"pointer"}}>
+                <option value="Todos">Todos</option>
+                {barrios.map(v=><option key={v} value={v}>{v}</option>)}
+              </select>
+            </div>
+          </div>
+          <div>
+            <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:6}}>Conjunto</div>
+            <select value={f.conjunto} onChange={e=>u("conjunto",e.target.value)} style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"2px solid #D5DBDB",fontSize:12,fontWeight:600,background:"white",cursor:"pointer"}}>
+              <option value="Todos">Todos</option>
+              {conjuntos.map(v=><option key={v} value={v}>{v}</option>)}
+            </select>
+          </div>
+          <div>
+            <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Extras</div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{[["Parqueadero","garaje",false],["Ascensor","ascensor",false],["Bono HABI","bonoHabi",true]].map(([l,k,sp])=><button key={k} onClick={()=>u(k,!f[k])} style={{padding:"9px 16px",borderRadius:20,border:"2px solid",borderColor:f[k]?(sp?"#7B2FF7":"#1B4F72"):"#E0E0E0",background:f[k]?(sp?"#7B2FF7":"#1B4F72"):"white",color:f[k]?"white":"#5D6D7E",fontWeight:700,fontSize:12,cursor:"pointer"}}>{l}</button>)}</div>
+          </div>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Precio</div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{precios.map(([label,mn,mx])=><button key={label} onClick={()=>setP(label,mn,mx)} style={{padding:"8px 14px",borderRadius:18,border:"2px solid",borderColor:f.precioTag===label?"#B7791F":"#F7C948",background:f.precioTag===label?"#F59E0B":"#FFF8E1",color:f.precioTag===label?"white":"#92400E",fontWeight:700,fontSize:11,cursor:"pointer",transition:"all .15s"}}>{label}</button>)}</div></div>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Habitaciónes</div><div style={{display:"flex",gap:6}}>{["Todas","1","2","3","4","5+"].map(n=><button key={n} onClick={()=>u("habitaciones",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.habitaciones===n?"#1B4F72":"#E0E0E0",background:f.habitaciones===n?"#1B4F72":"white",color:f.habitaciones===n?"white":"#5D6D7E",fontWeight:700,fontSize:n==="Todas"?9:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
-          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Banos</div><div style={{display:"flex",gap:6}}>{["Todos","1","2","3","4+"].map(n=><button key={n} onClick={()=>u("baños",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.banos===n?"#1B4F72":"#E0E0E0",background:f.banos===n?"#1B4F72":"white",color:f.banos===n?"white":"#5D6D7E",fontWeight:700,fontSize:n==="Todos"?9:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{[["Parqueadero","garaje",false],["Ascensor","ascensor",false],["Bono HABI","bonoHabi",true]].map(([l,k,sp])=><button key={k} onClick={()=>u(k,!f[k])} style={{padding:"9px 16px",borderRadius:20,border:"2px solid",borderColor:f[k]?(sp?"#7B2FF7":"#1B4F72"):"#E0E0E0",background:f[k]?(sp?"#7B2FF7":"#1B4F72"):"white",color:f[k]?"white":"#5D6D7E",fontWeight:700,fontSize:12,cursor:"pointer"}}>{l}</button>)}</div>
+          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Baños</div><div style={{display:"flex",gap:6}}>{["Todos","1","2","3","4+"].map(n=><button key={n} onClick={()=>u("baños",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f["baños"]===n?"#1B4F72":"#E0E0E0",background:f["baños"]===n?"#1B4F72":"white",color:f["baños"]===n?"white":"#5D6D7E",fontWeight:700,fontSize:n==="Todos"?9:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
           <div style={{display:"flex",gap:10}}><button onClick={()=>sf(dflt())} style={{flex:1,padding:12,borderRadius:12,border:"2px solid #D5DBDB",background:"white",fontWeight:700,fontSize:14,cursor:"pointer",color:"#5D6D7E"}}>Limpiar</button><button onClick={onApply} style={{flex:2,padding:12,borderRadius:12,border:"none",background:"linear-gradient(135deg,#FF6B35,#E74C3C)",color:"white",fontWeight:800,fontSize:15,cursor:"pointer"}}>Aplicar filtros</button></div>
         </div>
       </div>
@@ -286,7 +316,7 @@ function Card({p,onClick,featured}){
       <div style={{padding:"10px 12px"}}>
         <h3 style={{margin:0,fontSize:"clamp(11px,2.8vw,13px)",fontWeight:700,color:"#1B2A4A",lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.titulo}</h3>
         <p style={{margin:"2px 0 0",fontSize:"clamp(10px,2.4vw,11px)",color:"#5D6D7E",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{[p.barrio,p.zona].filter(Boolean).join(" · ")}</p>
-        <div style={{display:"flex",gap:6,marginTop:5,fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",flexWrap:"wrap"}}>{p.area&&<span>{p.area}m²</span>}{p.habitaciones!=="0"&&<span>{p.habitaciones} hab</span>}{p.banos!=="0"&&<span>{p.banos} bañ</span>}{p.garaje!=="0"&&<span>{p.garaje} parq</span>}</div>
+        <div style={{display:"flex",gap:6,marginTop:5,fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",flexWrap:"wrap"}}>{p.area&&<span>{p.area}m²</span>}{p.habitaciones!=="0"&&<span>{p.habitaciones} hab</span>}{(p["baños"]??p.banos)!=="0"&&<span>{p["baños"]??p.banos} bañ</span>}{p.garaje!=="0"&&<span>{p.garaje} parq</span>}</div>
         <div style={{marginTop:7,paddingTop:7,borderTop:"1px solid #EBF0F5",display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span></div>
           <span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,flexShrink:0}}>Ver</span>
@@ -351,7 +381,7 @@ function Modal({p,onClose}){
             </div>
             <div className="modal-price-col" style={{textAlign:"right",flexShrink:0}}>{d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through"}}>{fmt(p.precio_original)}</div>}<div style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</div>{p.admin>0&&<div style={{fontSize:10,color:"#7F8C8D"}}>Admin: {fmt(p.admin)}/mes</div>}</div>
           </div>
-          <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>{[{l:"Área",v:p.area+"m²"},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p.banos},{l:"Parq",v:p.garaje},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"5px 10px",borderRadius:8,textAlign:"center",minWidth:48}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
+          <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>{[{l:"Área",v:p.area+"m²"},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p["baños"]??p.banos},{l:"Parq",v:p.garaje},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"5px 10px",borderRadius:8,textAlign:"center",minWidth:48}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
           {p.descripcion&&<p style={{marginTop:12,fontSize:"clamp(11px,2.5vw,13px)",color:"#34495E",lineHeight:1.5,wordWrap:"break-word",overflowWrap:"break-word"}}>{p.descripcion}</p>}
           <div className="modal-actions" style={{display:"flex",gap:8,marginTop:16}}>
             <a href={"https://wa.me/"+WA+"?text="+waMsg(p)} target="_blank" rel="noopener noreferrer" style={{flex:2,minWidth:0,display:"flex",alignItems:"center",justifyContent:"center",gap:6,background:"#25D366",color:"white",borderRadius:12,padding:"12px 10px",fontSize:"clamp(12px,3vw,14px)",fontWeight:700,textDecoration:"none"}}>
@@ -384,7 +414,7 @@ export default function App(){
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
-    let c=0;if(na.tipo!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na.banos!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
+    let c=0;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
     setFCount(c);setFOpen(false);setPage("catalogo");
   };
 
@@ -393,10 +423,13 @@ export default function App(){
     if(q&&![p.titulo,p.barrio,p.conjunto,p.nid,p.ciudad,p.tipo,p.zona].some(f=>(f||"").toLowerCase().includes(q)))return false;
     const af=applied;
     if(af.tipo!=="Todos"&&p.tipo!==af.tipo)return false;
+    if(af.localidad!=="Todas"&&String(p.zona||"").trim()!==af.localidad)return false;
+    if(af.barrio!=="Todos"&&String(p.barrio||"").trim()!==af.barrio)return false;
+    if(af.conjunto!=="Todos"&&String(p.conjunto||"").trim()!==af.conjunto)return false;
     if(af.precioMin&&parseInt(p.precio_venta||0)<parseInt(af.precioMin))return false;
     if(af.precioMax&&parseInt(p.precio_venta||0)>parseInt(af.precioMax))return false;
     if(af.habitaciones!=="Todas"){const h=parseInt(p.habitaciones||0);if(af.habitaciones==="5+"?h<5:h!==parseInt(af.habitaciones))return false}
-    if(af.banos!=="Todos"){const b=parseInt(p.banos||0);if(af.banos==="4+"?b<4:b!==parseInt(af.banos))return false}
+    if(af["baños"]!=="Todos"){const b=parseInt((p["baños"]??p.banos)||0);if(af["baños"]==="4+"?b<4:b!==parseInt(af["baños"]))return false}
     if(af.garaje&&(!p.garaje||p.garaje==="0"))return false;
     if(af.ascensor&&!p.ascensor)return false;
     if(af.bonoHabi&&(!p.bonoHabi||p.bonoHabi<=0))return false;
@@ -583,7 +616,7 @@ export default function App(){
 
       <a className="wf" href={"https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, estoy interesado en los inmuebles de Buen Futuro")} target="_blank" rel="noopener noreferrer"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
 
-      <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} />
+      <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} />
       {cOpen&&<CreditSim onClose={()=>setCOpen(false)} />}
       {sel&&<Modal p={sel} onClose={()=>setSel(null)} />}
     </div>
