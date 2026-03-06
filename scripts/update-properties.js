@@ -196,10 +196,25 @@ function extractUrlsFromObject(value, collector) {
 }
 
 async function getGoogleDriveClient() {
-  const keyPath = path.join(ROOT, "service-account.json");
+  // Buscar service-account.json en la raíz del proyecto o via variable de entorno
+  const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_PATH
+    || path.join(ROOT, "service-account.json");
+
   if (!fs.existsSync(keyPath)) {
-    throw new Error("Falta el archivo service-account.json. Asegúrate de tenerlo en la raíz.");
+    console.error("╔══════════════════════════════════════════════════════════════╗");
+    console.error("║  ERROR: No se encontró service-account.json                 ║");
+    console.error("╠══════════════════════════════════════════════════════════════╣");
+    console.error("║  Este archivo NO se sube a GitHub (.gitignore lo protege).  ║");
+    console.error("║  Debes colocarlo manualmente en la raíz del proyecto:       ║");
+    console.error(`║  ${ROOT}/service-account.json`);
+    console.error("║                                                             ║");
+    console.error("║  Alternativa: define la variable de entorno                 ║");
+    console.error("║  GOOGLE_SERVICE_ACCOUNT_PATH=/ruta/a/service-account.json   ║");
+    console.error("╚══════════════════════════════════════════════════════════════╝");
+    process.exit(1);
   }
+
+  console.log(`🔑 Usando credenciales: ${keyPath}`);
   const auth = new google.auth.GoogleAuth({
     keyFile: keyPath,
     scopes: ["https://www.googleapis.com/auth/drive.readonly"],
@@ -219,13 +234,25 @@ async function findLatestFile(drive) {
   return response.data.files[0];
 }
 
+const HABI_CDN = "https://d3hzflklh28tts.cloudfront.net/";
+
 async function scrapeImages(url) {
   try {
-    const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
+    const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
 
-    // Primary source: Gatsby page-data carousel used by "Ver las N imágenes".
+    // Primary: JSON "image" array embedded in HABI/Gatsby pages (fastest + most accurate)
+    const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
+    if (imgArrayMatch) {
+      try {
+        const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
+        const resolved = imgs.map(img => img.startsWith("http") ? img : HABI_CDN + img).filter(Boolean);
+        if (resolved.length >= CONFIG.minImages) return resolved.slice(0, CONFIG.maxImages);
+      } catch {}
+    }
+
+    // Secondary: Gatsby page-data carousel
     const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
     if (carouselImages.length >= CONFIG.minImages) {
       return carouselImages.slice(0, CONFIG.maxImages);
@@ -265,36 +292,14 @@ async function scrapeImages(url) {
       }
     });
 
-    // 4) JSON-LD and embedded scripts with gallery arrays.
-    $("script[type='application/ld+json']").each((_, el) => {
-      const raw = $(el).html();
-      if (!raw) return;
-      try {
-        const parsed = JSON.parse(raw);
-        extractUrlsFromObject(parsed, candidates);
-      } catch {
-        // Ignore malformed JSON-LD blocks.
-      }
-    });
-
-    const nextDataRaw = $("#__NEXT_DATA__").html();
-    if (nextDataRaw) {
-      try {
-        const parsed = JSON.parse(nextDataRaw);
-        extractUrlsFromObject(parsed, candidates);
-      } catch {
-        // Ignore malformed next data.
-      }
-    }
-
-    // Gatsby pages: search inline JSON for "venta-..." image file names and expand with detected base URL.
+    // 4) Gatsby venta-* file names
     const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
     for (const match of ventaMatches) {
       const full = buildImageUrl(match, imageBaseUrl);
       if (full) candidates.push(full);
     }
 
-    // 5) Fallback regex over whole HTML for image URLs.
+    // 5) Fallback regex over whole HTML
     const regexMatches = data.match(/https?:\/\/[^\s"'<>]+\.(?:jpe?g|png|webp|avif)(?:\?[^\s"'<>]*)?/gi) || [];
     candidates.push(...regexMatches);
 
@@ -302,7 +307,6 @@ async function scrapeImages(url) {
       .map((raw) => normalizeImageUrl(raw, url))
       .filter((imgUrl) => isValidImageUrl(imgUrl));
 
-    // Deduplicate with a key that collapses resized variants of the same photo.
     const uniqueByKey = new Map();
     for (const img of normalized) {
       const key = imageKey(img);
@@ -313,6 +317,16 @@ async function scrapeImages(url) {
     return uniqueSorted.slice(0, CONFIG.maxImages);
   } catch {
     return [];
+  }
+}
+
+async function validate360(url) {
+  if (!url) return false;
+  try {
+    const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
+    return data.includes("matterport") || data.includes("showcase") || data.includes("model");
+  } catch {
+    return false;
   }
 }
 
@@ -339,27 +353,25 @@ async function main() {
     let removedWithoutMedia = 0;
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
-      console.log(`[${i+1}/${properties.length}] Obteniendo fotos para el inmueble: ${p.nid || i}...`);
-      const scrapedImages = p.url ? await scrapeImages(p.url) : [];
+      const habiUrl = p.url_habi || p.url || "";
+      console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
 
-      const matterportImage = getMatterportUrl(p);
-      let images = [];
+      const [scrapedImages, is360Valid] = await Promise.all([
+        habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
+        p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
+      ]);
 
-      if (scrapedImages.length >= CONFIG.minImages) {
-        images = scrapedImages.slice(0, CONFIG.maxImages);
-      } else if (matterportImage) {
-        images = [matterportImage];
-        console.warn(`⚠️ ${p.nid || i}: ${scrapedImages.length} fotos reales; se usará solo Matterport.`);
-      } else {
-        removedWithoutMedia += 1;
-        console.warn(`⚠️ ${p.nid || i}: sin fotos reales suficientes y sin Matterport. Propiedad eliminada.`);
-        await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
-        continue;
+      if (!is360Valid && p.url_360) {
+        console.log(`  ⚠️  360 inválido (404/error) - se eliminará: ${p.url_360}`);
       }
+      console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+
+      const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
 
       enriched.push({
         ...p,
         images,
+        url_360: is360Valid ? p.url_360 : "",
         precio: parseInt(p.precio_venta || 0, 10)
       });
       await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
