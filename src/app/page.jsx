@@ -661,7 +661,7 @@ export default function App(){
                 <span style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 11px",borderRadius:14,fontSize:10,fontWeight:800}}>Aliados Oficiales HABI</span>
               </div>
               <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(26px,5vw,46px)",fontWeight:900,color:"#1B2A4A",lineHeight:1.1,marginBottom:10}}>Tu Buen Futuro<br/>inicia hoy</h1>
-              <p style={{fontSize:"clamp(12px,2vw,15px)",color:"#2471A3",lineHeight:1.5,marginBottom:16}}>Amplio catálogo de apartamentos y casas en Bogota<br/>con recorridos virtuales 360° - Aliados HABI</p>
+                <p style={{fontSize:"clamp(12px,2vw,15px)",color:"#2471A3",lineHeight:1.5,marginBottom:16}}>Amplio catálogo de apartamentos y casas en Bogotá<br/>con recorridos virtuales 360° - Aliados HABI</p>
               <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#E74C3C",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Ofertas</button>
                 <button onClick={()=>setCOpen(true)} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}><img src={LOGO_HABI_W} alt="" style={{height:15}} />Crédito</button>
