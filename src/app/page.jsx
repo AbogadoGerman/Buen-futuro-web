@@ -471,7 +471,13 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
-  const [reviewRef,reviewApi]=useEmblaCarousel({loop:false,align:"start",containScroll:"trimSnaps",slidesToScroll:1});
+  const [reviewRef,reviewApi]=useEmblaCarousel({
+    loop:false,
+    align:"start",
+    containScroll:"trimSnaps",
+    slidesToScroll:2,
+    breakpoints:{"(max-width: 768px)":{slidesToScroll:1}}
+  });
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
@@ -580,6 +586,7 @@ export default function App(){
           .hero-grid{flex-direction:column!important;gap:14px!important}
           .hero-imgs{flex:none!important;width:100%!important;flex-direction:row!important;gap:6px!important}
           .hero-imgs img{height:110px!important;flex:1!important;min-width:0!important;object-fit:cover!important;border-radius:10px!important}
+          .hero-copy{width:100%!important;min-width:0!important}
           .cat-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}
           .nav-desk{display:none!important}
           .mob-btn{display:flex!important}
@@ -596,6 +603,7 @@ export default function App(){
         /* ---- MOBILE 420 ---- */
         @media(max-width:420px){
           .cat-grid{grid-template-columns:1fr!important;gap:10px!important;max-width:100%!important}
+          .hero-imgs{flex-direction:column!important}
           .hero-imgs img{height:90px!important;border-radius:8px!important}
           .house-deco{display:none!important}
         }
@@ -635,7 +643,7 @@ export default function App(){
               <img src={HERO_TOP} alt="Interior" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
               <img src={HERO_BOT} alt="Sala" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
             </div>
-            <div style={{flex:1,minWidth:0,animation:"slideUp .7s"}}>
+            <div className="hero-copy" style={{flex:1,minWidth:0,animation:"slideUp .7s"}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
                 <img src={LOGO_HABI} alt="HABI" style={{height:24}} />
                 <span style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 11px",borderRadius:14,fontSize:10,fontWeight:800}}>Aliados Oficiales HABI</span>
