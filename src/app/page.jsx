@@ -471,8 +471,7 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
-  const [reviewSnap,setReviewSnap]=useState(0);
-  const [reviewRef,reviewApi]=useEmblaCarousel({loop:true,align:"start",slidesToScroll:1});
+  const [reviewRef,reviewApi]=useEmblaCarousel({loop:true,align:"start",slidesToScroll:2});
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
@@ -482,20 +481,8 @@ export default function App(){
   const [sort,setSort]=useState("relevancia");
   const reviewPrev=useCallback(()=>reviewApi&&reviewApi.scrollPrev(),[reviewApi]);
   const reviewNext=useCallback(()=>reviewApi&&reviewApi.scrollNext(),[reviewApi]);
-  const reviewGoTo=useCallback(i=>reviewApi&&reviewApi.scrollTo(i),[reviewApi]);
 
   useEffect(()=>{fetch("/data/inventory.json").then(r=>r.ok?r.json():null).then(d=>{if(d&&d.length)setInv(d)}).catch(()=>{});},[]);
-  useEffect(()=>{
-    if(!reviewApi)return;
-    const onSelect=()=>setReviewSnap(reviewApi.selectedScrollSnap());
-    onSelect();
-    reviewApi.on("select",onSelect);
-    reviewApi.on("reInit",onSelect);
-    return()=>{
-      reviewApi.off("select",onSelect);
-      reviewApi.off("reInit",onSelect);
-    };
-  },[reviewApi]);
   useEffect(()=>{
     if(!reviewApi)return;
     const t=setInterval(()=>reviewApi.scrollNext(),5000);
@@ -598,7 +585,6 @@ export default function App(){
           .mob-btn{display:flex!important}
           .footer-g{flex-direction:column!important;align-items:center!important;text-align:center!important}
           .search-wrap{display:none!important}
-          .reviews-embla__slide{flex-basis:100%!important}
           .sort-bar{flex-direction:column!important;align-items:stretch!important;gap:8px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
           .modal-price-col{text-align:left!important}
@@ -675,7 +661,6 @@ export default function App(){
                     {REVIEWS.map((r,idx)=><div className="reviews-embla__slide" key={r.name+idx}><div style={{background:"white",borderRadius:10,padding:"10px 12px",height:"100%",boxShadow:"0 2px 8px rgba(0,0,0,0.04)",border:"1px solid #EEE"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><div style={{width:26,height:26,borderRadius:"50%",background:r.c,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:11,flexShrink:0}}>{r.i}</div><div style={{minWidth:0}}><div style={{fontWeight:700,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.name}</div><div style={{fontSize:9,color:"#999"}}>{r.time}</div></div></div><Stars r={r.rating}/><p style={{marginTop:3,fontSize:11,color:"#555",lineHeight:1.3}}>{r.text}</p></div></div>)}
                   </div>
                 </div>
-                <div style={{display:"flex",justifyContent:"center",gap:5,marginTop:8}}>{REVIEWS.map((_,i)=><button key={i} onClick={()=>reviewGoTo(i)} style={{width:7,height:7,borderRadius:"50%",padding:0,background:i===reviewSnap?"#1B4F72":"#C5D1DC"}} />)}</div>
               </div>
             </div>
           </div>
