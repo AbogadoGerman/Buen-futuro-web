@@ -471,7 +471,8 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
-  const [revIdx,setRevIdx]=useState(0);
+  const [reviewSnap,setReviewSnap]=useState(0);
+  const [reviewRef,reviewApi]=useEmblaCarousel({loop:true,align:"start",slidesToScroll:1});
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
@@ -479,9 +480,27 @@ export default function App(){
   const [applied,setApplied]=useState(dflt);
   const [fCount,setFCount]=useState(0);
   const [sort,setSort]=useState("relevancia");
+  const reviewPrev=useCallback(()=>reviewApi&&reviewApi.scrollPrev(),[reviewApi]);
+  const reviewNext=useCallback(()=>reviewApi&&reviewApi.scrollNext(),[reviewApi]);
+  const reviewGoTo=useCallback(i=>reviewApi&&reviewApi.scrollTo(i),[reviewApi]);
 
   useEffect(()=>{fetch("/data/inventory.json").then(r=>r.ok?r.json():null).then(d=>{if(d&&d.length)setInv(d)}).catch(()=>{});},[]);
-  useEffect(()=>{const t=setInterval(()=>setRevIdx(i=>{const next=i+2;return next>=REVIEWS.length?0:next}),4000);return()=>clearInterval(t)},[]);
+  useEffect(()=>{
+    if(!reviewApi)return;
+    const onSelect=()=>setReviewSnap(reviewApi.selectedScrollSnap());
+    onSelect();
+    reviewApi.on("select",onSelect);
+    reviewApi.on("reInit",onSelect);
+    return()=>{
+      reviewApi.off("select",onSelect);
+      reviewApi.off("reInit",onSelect);
+    };
+  },[reviewApi]);
+  useEffect(()=>{
+    if(!reviewApi)return;
+    const t=setInterval(()=>reviewApi.scrollNext(),5000);
+    return()=>clearInterval(t);
+  },[reviewApi]);
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
@@ -560,6 +579,10 @@ export default function App(){
         .wf{position:fixed;bottom:18px;left:18px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,0.4);z-index:999;cursor:pointer;animation:float 3s ease-in-out infinite;text-decoration:none}
         .so{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s;cursor:pointer;text-decoration:none}.so:hover{transform:translateY(-2px)}
         .card-wrap{width:100%;min-width:0;overflow:hidden}
+        .reviews-embla{overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
+        .reviews-embla:active{cursor:grabbing}
+        .reviews-embla__container{display:flex;margin-left:-8px}
+        .reviews-embla__slide{flex:0 0 50%;min-width:0;padding-left:8px;transition:transform .35s ease,opacity .35s ease}
         .embla-modal{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .embla-modal:active{cursor:grabbing}
         .embla-modal__container{display:flex;height:100%}
@@ -575,7 +598,7 @@ export default function App(){
           .mob-btn{display:flex!important}
           .footer-g{flex-direction:column!important;align-items:center!important;text-align:center!important}
           .search-wrap{display:none!important}
-          .review-row{flex-direction:column!important;gap:6px!important}
+          .reviews-embla__slide{flex-basis:100%!important}
           .sort-bar{flex-direction:column!important;align-items:stretch!important;gap:8px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
           .modal-price-col{text-align:left!important}
@@ -638,12 +661,21 @@ export default function App(){
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#1B4F72",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Catálogo ({inv.length})</button>
               </div>
               <div style={{marginTop:20}}>
-                <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+                <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8,flexWrap:"wrap"}}>
                   <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:14,fontWeight:700,color:"#1B2A4A"}}>Clientes Buen Futuro</h3>
                   <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.76h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                   <span style={{background:"#E8F5E9",color:"#2E7D32",fontSize:9,fontWeight:700,padding:"2px 7px",borderRadius:10}}>{REVIEWS.length}+ reseñas</span>
+                  <div style={{display:"flex",alignItems:"center",gap:4,marginLeft:"auto"}}>
+                    <button onClick={reviewPrev} style={{width:24,height:24,borderRadius:"50%",background:"#EBF0F5",color:"#1B2A4A",fontWeight:800,fontSize:14,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button>
+                    <button onClick={reviewNext} style={{width:24,height:24,borderRadius:"50%",background:"#EBF0F5",color:"#1B2A4A",fontWeight:800,fontSize:14,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button>
+                  </div>
                 </div>
-                <div className="review-row" style={{display:"flex",gap:8,overflow:"hidden"}}>{[REVIEWS[revIdx],REVIEWS[(revIdx+1)%REVIEWS.length]].map((r,idx)=><div key={r.name+revIdx+idx} style={{background:"white",borderRadius:10,padding:"10px 12px",flex:1,minWidth:0,boxShadow:"0 2px 8px rgba(0,0,0,0.04)",border:"1px solid #EEE",animation:"fadeIn .5s"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><div style={{width:26,height:26,borderRadius:"50%",background:r.c,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:11,flexShrink:0}}>{r.i}</div><div style={{minWidth:0}}><div style={{fontWeight:700,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.name}</div><div style={{fontSize:9,color:"#999"}}>{r.time}</div></div></div><Stars r={r.rating}/><p style={{marginTop:3,fontSize:11,color:"#555",lineHeight:1.3}}>{r.text}</p></div>)}</div>
+                <div className="reviews-embla" ref={reviewRef}>
+                  <div className="reviews-embla__container">
+                    {REVIEWS.map((r,idx)=><div className="reviews-embla__slide" key={r.name+idx}><div style={{background:"white",borderRadius:10,padding:"10px 12px",height:"100%",boxShadow:"0 2px 8px rgba(0,0,0,0.04)",border:"1px solid #EEE"}}><div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><div style={{width:26,height:26,borderRadius:"50%",background:r.c,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:11,flexShrink:0}}>{r.i}</div><div style={{minWidth:0}}><div style={{fontWeight:700,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.name}</div><div style={{fontSize:9,color:"#999"}}>{r.time}</div></div></div><Stars r={r.rating}/><p style={{marginTop:3,fontSize:11,color:"#555",lineHeight:1.3}}>{r.text}</p></div></div>)}
+                  </div>
+                </div>
+                <div style={{display:"flex",justifyContent:"center",gap:5,marginTop:8}}>{REVIEWS.map((_,i)=><button key={i} onClick={()=>reviewGoTo(i)} style={{width:7,height:7,borderRadius:"50%",padding:0,background:i===reviewSnap?"#1B4F72":"#C5D1DC"}} />)}</div>
               </div>
             </div>
           </div>
