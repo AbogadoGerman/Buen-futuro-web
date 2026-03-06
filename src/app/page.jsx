@@ -471,7 +471,7 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
-  const [reviewRef,reviewApi]=useEmblaCarousel({loop:true,align:"start",slidesToScroll:2});
+  const [reviewRef,reviewApi]=useEmblaCarousel({loop:false,align:"start",containScroll:"trimSnaps",slidesToScroll:2});
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
@@ -566,10 +566,10 @@ export default function App(){
         .wf{position:fixed;bottom:18px;left:18px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,0.4);z-index:999;cursor:pointer;animation:float 3s ease-in-out infinite;text-decoration:none}
         .so{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s;cursor:pointer;text-decoration:none}.so:hover{transform:translateY(-2px)}
         .card-wrap{width:100%;min-width:0;overflow:hidden}
-        .reviews-embla{overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
+        .reviews-embla{width:100%;max-width:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .reviews-embla:active{cursor:grabbing}
-        .reviews-embla__container{display:flex;margin-left:-8px}
-        .reviews-embla__slide{flex:0 0 50%;min-width:0;padding-left:8px;transition:transform .35s ease,opacity .35s ease}
+        .reviews-embla__container{display:flex;gap:8px}
+        .reviews-embla__slide{flex:0 0 calc((100% - 8px)/2);min-width:0;transition:transform .35s ease,opacity .35s ease}
         .embla-modal{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .embla-modal:active{cursor:grabbing}
         .embla-modal__container{display:flex;height:100%}
@@ -634,7 +634,7 @@ export default function App(){
               <img src={HERO_TOP} alt="Interior" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
               <img src={HERO_BOT} alt="Sala" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
             </div>
-            <div style={{flex:1,animation:"slideUp .7s"}}>
+            <div style={{flex:1,minWidth:0,animation:"slideUp .7s"}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
                 <img src={LOGO_HABI} alt="HABI" style={{height:24}} />
                 <span style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 11px",borderRadius:14,fontSize:10,fontWeight:800}}>Aliados Oficiales HABI</span>
