@@ -149,111 +149,123 @@ function featScore(p){
   const has360=!!p.url_360;
   const area=num(p.area);
   const price=num(p.precio_venta);
-  const ppm=(price>0&&area>0)?price/area:0;
-  const ppmScore=ppm?Math.max(0,Math.min(1,(12000000-ppm)/8000000))*8:0;
-  const hab=num(p.habitaciones);
-  let score=0;
-  score+=d*5;
-  score+=bonusM*2;
-  score+=imgCount*1.5;
-  score+=has360?12:0;
-  score+=ppmScore;
-  score+=(hab>=2&&hab<=3)?3:0;
-  score+=num(p.garaje)>0?2:0;
-  score+=p.ascensor?1:0;
-  return score;
-}
+  function getWhatsappMsgInfo(p) {
+    return `Estoy interesado(a) en este inmueble\n\n📋 NID: ${p.nid}\n🏡 Inmueble: ${p.titulo}\n📍 Ubicación: ${[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")}\n💰 Precio: ${fmt(p.precio_venta)}\n\n¿Me podrías dar más información? ℹ️`;
+  }
+  function getWhatsappMsgVisita(p) {
+    return `Hola, estoy interesado(a) en el inmueble:\n\n📋 NID: ${p.nid}\n🏡 Inmueble: ${p.titulo}\n📍 Ubicación: ${[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")}\n💰 Precio: ${fmt(p.precio_venta)}\n\nMe puedes dar más info y programamos una visita.`;
+  }
 
-function waMsg(p){const banosVal=p["baños"]??p.banos;return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(banosVal||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
+  function Modal({p,onClose}){
+    const [ii,setII]=useState(0);
+    const [tab,setTab]=useState("fotos");
+    const imgs=p?.images||[];const d=p?disc(p):0;
+    const [emblaRef,emblaApi]=useEmblaCarousel({
+      loop:imgs.length>1,
+      align:"start",
+      dragFree:false,
+      containScroll:"trimSnaps"
+    });
+    const prev=useCallback(()=>emblaApi&&emblaApi.scrollPrev(),[emblaApi]);
+    const next=useCallback(()=>emblaApi&&emblaApi.scrollNext(),[emblaApi]);
+    const goTo=useCallback(i=>emblaApi&&emblaApi.scrollTo(i),[emblaApi]);
 
-function Stars({r}){return <div style={{display:"flex",gap:1}}>{[1,2,3,4,5].map(i=><svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i<=r?"#F4B400":"#ddd"}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</div>}
+    useEffect(()=>{
+      if(!emblaApi)return;
+      const onSelect=()=>setII(emblaApi.selectedScrollSnap());
+      onSelect();
+      emblaApi.on("select",onSelect);
+      emblaApi.on("reInit",onSelect);
+      return()=>{
+        emblaApi.off("select",onSelect);
+        emblaApi.off("reInit",onSelect);
+      };
+    },[emblaApi]);
 
-function HouseDeco(){return(
-  <svg className="house-deco" style={{position:"absolute",bottom:0,right:0,width:"35%",maxWidth:340,height:"auto",opacity:0.05,pointerEvents:"none"}} viewBox="0 0 400 420" fill="none">
-    <path d="M200 20L380 160V400H20V160Z" stroke="#1B4F72" strokeWidth="4" fill="none"/>
-    <rect x="60" y="200" width="80" height="100" rx="4" stroke="#1B4F72" strokeWidth="3" fill="none"/>
-    <rect x="260" y="200" width="80" height="100" rx="4" stroke="#1B4F72" strokeWidth="3" fill="none"/>
-    <rect x="160" y="260" width="80" height="140" rx="4" stroke="#1B4F72" strokeWidth="3" fill="none"/>
-    <circle cx="200" cy="100" r="25" stroke="#F4D03F" strokeWidth="3" fill="none"/>
-  </svg>
-)}
+    useEffect(()=>{
+      if(emblaApi)emblaApi.scrollTo(0,true);
+    },[p,emblaApi]);
 
-/* ============ CREDIT SIMULATOR ============ */
-function CreditSim({onClose}){
-  const [val,setVal]=useState(250000000);
-  const [cuotaP,setCuotaP]=useState(30);
-  const [anos,setAnos]=useState(15);
-  const [tipo,setTipo]=useState("pesos");
-  const tasaPesos=0.1150;const tasaUVR=0.0850;
-  const tasa=tipo==="pesos"?tasaPesos:(tasaUVR+0.035);
-  const mensual=Math.pow(1+tasa,1/12)-1;
-  const financiar=val*(1-cuotaP/100);const n=anos*12;
-  const cuotaMes=financiar*(mensual*Math.pow(1+mensual,n))/(Math.pow(1+mensual,n)-1);
-  const totalPagar=cuotaMes*n;const esVIS=val<=195000000;
-  return(
-    <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",backdropFilter:"blur(6px)",zIndex:1200,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeIn .25s",overflowY:"auto"}}>
-      <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:520,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)"}}>
-        <div style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",padding:"20px 24px",borderRadius:"20px 20px 0 0",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
-          <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <img src={LOGO_HABI_W} alt="HABI" style={{height:36,objectFit:"contain"}} />
-            <div><h2 style={{color:"white",fontFamily:"'Outfit'",fontSize:18,fontWeight:800,margin:0}}>Simulador de Crédito</h2><p style={{color:"rgba(255,255,255,0.7)",fontSize:11,margin:0}}>Alianza Buen Futuro x HABI</p></div>
+    const features = extractFeatures(p.descripcion || "");
+    if(!p)return null;
+
+    return(
+      <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",backdropFilter:"blur(4px)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:10,animation:"fadeIn .25s",overflowY:"auto"}}>
+        <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:750,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)",margin:"auto"}}>
+          {/* Tabs */}
+          <div style={{display:"flex",borderBottom:"2px solid #EBF0F5",position:"sticky",top:0,background:"white",zIndex:2,borderRadius:"20px 20px 0 0"}}>
+            <button onClick={()=>setTab("fotos")} style={{flex:1,padding:"14px",border:"none",background:tab==="fotos"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="fotos"?"#1B4F72":"#999",borderBottom:tab==="fotos"?"3px solid #1B4F72":"3px solid transparent",borderRadius:tab==="fotos"?"20px 0 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              Fotos ({imgs.length})
+            </button>
+            {p.url_360&&<button onClick={()=>setTab("360")} style={{flex:1,padding:"14px",border:"none",background:tab==="360"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="360"?"#7B2FF7":"#999",borderBottom:tab==="360"?"3px solid #7B2FF7":"3px solid transparent",borderRadius:tab==="360"?"0 20px 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
+              Vista 360°
+            </button>}
+            <button onClick={onClose} style={{padding:"14px 18px",border:"none",background:"#F8F9FA",cursor:"pointer",fontSize:18,color:"#999",borderRadius:"0 20px 0 0",flexShrink:0}}>✕</button>
           </div>
-          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
-        </div>
-        <div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:18}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,background:"#F3E8FF",padding:"10px 14px",borderRadius:12}}>
-            <img src={LOGO_BF} alt="BF" style={{height:28,objectFit:"contain"}} />
-            <span style={{fontSize:12,color:"#5B1FA6",fontWeight:600}}>Aliados oficiales HABI - Bonos exclusivos</span>
-          </div>
-          <div style={{display:"flex",gap:8}}>{[["pesos","En Pesos (Fija)"],["uvr","En UVR"]].map(([k,l])=><button key={k} onClick={()=>setTipo(k)} style={{flex:1,padding:10,borderRadius:10,border:"2px solid",borderColor:tipo===k?"#7B2FF7":"#E0E0E0",background:tipo===k?"#F3E8FF":"white",color:tipo===k?"#5B1FA6":"#666",fontWeight:700,fontSize:13,cursor:"pointer"}}>{l}</button>)}</div>
-          <div>
-            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><label style={{fontWeight:700,fontSize:13,color:"#1B2A4A"}}>Valor del inmueble</label>{esVIS&&<span style={{background:"#E8F5E9",color:"#2E7D32",padding:"2px 8px",borderRadius:10,fontSize:10,fontWeight:700}}>VIS</span>}</div>
-            <div style={{fontSize:22,fontWeight:800,color:"#5B1FA6",marginBottom:6}}>{fmt(val)}</div>
-            <input type="range" min={80000000} max={1500000000} step={5000000} value={val} onChange={e=>setVal(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>$80M</span><span>$1.500M</span></div>
-          </div>
-          <div>
-            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Cuota inicial: {cuotaP}% ({fmt(val*cuotaP/100)})</label>
-            <input type="range" min={esVIS?20:30} max={70} step={5} value={cuotaP} onChange={e=>setCuotaP(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>{esVIS?"20%":"30%"}</span><span>70%</span></div>
-          </div>
-          <div>
-            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Plazo: {anos} anos</label>
-            <input type="range" min={5} max={esVIS?30:20} step={1} value={anos} onChange={e=>setAnos(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
-          </div>
-          <div style={{background:"#F8F4FF",borderRadius:16,padding:16}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Financiar</div><div style={{fontSize:16,fontWeight:800,color:"#5B1FA6"}}>{fmt(financiar)}</div></div>
-              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Tasa E.A.</div><div style={{fontSize:16,fontWeight:800,color:"#1B2A4A"}}>{(tasa*100).toFixed(1)}%</div></div>
+
+          {/* Photo carousel tab */}
+          {tab==="fotos"&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111"}}>
+            <div className="embla-modal" ref={emblaRef}>
+              <div className="embla-modal__container">
+                {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i}><img src={img} alt="" /></div>)}
+              </div>
             </div>
-            <div style={{marginTop:10,textAlign:"center",padding:12,background:"white",borderRadius:12}}>
-              <div style={{fontSize:11,color:"#7F8C8D"}}>Cuota mensual estimada</div>
-              <div style={{fontSize:26,fontWeight:900,color:"#E74C3C"}}>{fmt(Math.round(cuotaMes))}</div>
+            {imgs.length>1&&<><button onClick={prev} style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button><button onClick={next} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button></>}
+            <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{imgs.map((_,i)=><button key={i} onClick={()=>goTo(i)} style={{width:10,height:10,borderRadius:"50%",border:"2px solid white",cursor:"pointer",background:i===ii?"white":"transparent",padding:0}} />)}</div>
+            {/* Thumbnails strip */}
+            {imgs.length>1&&<div className="modal-thumbs" style={{position:"absolute",bottom:30,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>{imgs.map((img,i)=><img key={i} src={img} alt="" onClick={()=>goTo(i)} style={{width:44,height:30,objectFit:"cover",borderRadius:4,border:i===ii?"2px solid white":"2px solid transparent",cursor:"pointer",opacity:i===ii?1:0.6}} />)}</div>}
+            {d>0&&<div style={{position:"absolute",top:12,left:12,background:"#E74C3C",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800}}>{d}% DESC.</div>}
+            {p.bonoHabi>0&&<div style={{position:"absolute",top:d>0?48:12,left:12,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800,display:"flex",alignItems:"center",gap:6}}><img src={LOGO_HABI_W} alt="" style={{height:16}} />Bono: {fmt(p.bonoHabi)}</div>}
+            <div style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,0.6)",color:"white",padding:"4px 10px",borderRadius:14,fontSize:12,fontWeight:600}}>{ii+1}/{imgs.length}</div>
+          </div>}
+
+          {/* 360 view tab */}
+          {tab==="360"&&<div style={{position:"relative",height:"clamp(280px,50vw,450px)",background:"#111"}}>
+            <iframe src={p.url_360} title="Vista 360" style={{width:"100%",height:"100%",border:"none"}} allowFullScreen allow="xr-spatial-tracking" />
+            <div style={{position:"absolute",top:10,left:10,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,display:"flex",alignItems:"center",gap:5}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
+              Recorrido Virtual Matterport
+            </div>
+          </div>}
+
+          {/* Property details */}
+          <div style={{padding:"clamp(14px,3vw,20px) clamp(14px,3vw,22px)"}}>
+            <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+              <div style={{flex:1,minWidth:0}}>
+                <h2 style={{margin:0,fontSize:"clamp(15px,3.5vw,22px)",color:"#1B2A4A",fontFamily:"'Playfair Display',serif",lineHeight:1.2,wordWrap:"break-word"}}>{p.titulo}</h2>
+                <p style={{margin:"4px 0",color:"#5D6D7E",fontSize:"clamp(11px,2.5vw,13px)",wordWrap:"break-word"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p)),cleanText(p.ciudad)].filter(Boolean).join(", ")}{p.conjunto?" · "+cleanText(p.conjunto):""}</p>
+              </div>
+              <div className="modal-price-col" style={{textAlign:"right",flexShrink:0}}>{d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through"}}>{fmt(p.precio_original)}</div>}<div style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</div>{p.admin>0&&<div style={{fontSize:10,color:"#7F8C8D"}}>Admin: {fmt(p.admin)}/mes</div>}</div>
+            </div>
+            <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>{[{l:"Área",v:p.area+"m²"},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p["baños"]??p.banos},{l:"Parq",v:p.garaje},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"5px 10px",borderRadius:8,textAlign:"center",minWidth:48}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
+            {features.length > 0 && (
+              <div style={{display:"flex",flexWrap:"wrap",gap:12,marginTop:18,marginBottom:8,justifyContent:"flex-start"}}>
+                {features.map(f => (
+                  <div key={f.key} style={{display:"flex",alignItems:"center",gap:7,padding:"7px 14px",background:"#F8F9FA",borderRadius:12,boxShadow:"0 1px 6px rgba(27,79,114,0.07)",fontWeight:600,fontSize:13,color:"#1B4F72"}}>
+                    <img src={f.icon} alt={f.label} style={{width:22,height:22,marginRight:4}} />
+                    {f.label}
+                  </div>
+                ))}
+              </div>
+            )}
+            {p.descripcion && <p style={{marginTop:10,fontSize:"clamp(11px,2.5vw,13px)",color:"#34495E",lineHeight:1.5,wordWrap:"break-word",overflowWrap:"break-word"}}>{p.descripcion}</p>}
+            <div className="modal-actions" style={{display:"flex",gap:8,marginTop:16}}>
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(getWhatsappMsgVisita(p))}`} target="_blank" rel="noopener noreferrer" style={{flex:1,minWidth:0,display:"flex",alignItems:"center",justifyContent:"center",gap:6,background:"#25D366",color:"white",borderRadius:12,padding:"12px 10px",fontSize:"clamp(12px,3vw,14px)",fontWeight:700,textDecoration:"none"}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                Programar visita
+              </a>
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(getWhatsappMsgInfo(p))}`} target="_blank" rel="noopener noreferrer" style={{flex:1,minWidth:0,display:"flex",alignItems:"center",justifyContent:"center",gap:6,background:"#F3E8FF",color:"#5B1FA6",borderRadius:12,padding:"12px 10px",fontSize:"clamp(12px,3vw,14px)",fontWeight:700,textDecoration:"none",border:"2px solid #7B2FF7"}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#7B2FF7"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                Más información
+              </a>
             </div>
           </div>
-          <p style={{fontSize:10,color:"#AEB6BF",textAlign:"center",lineHeight:1.4}}>*Simulación informativa. Tasa ref. Banrep 10.25% (ene 2026). Sujeto a aprobación.</p>
-          <a href={"https://wa.me/"+WA+"?text="+encodeURIComponent("\ud83c\udfe6 *SOLICITUD CREDITO - Buen Futuro x HABI*\n\nValor: "+fmt(val)+"\nCuota inicial: "+cuotaP+"%\nPlazo: "+anos+" años\nModalidad: "+(tipo==="pesos"?"Pesos":"UVR")+"\nCuota mensual: "+fmt(Math.round(cuotaMes)))} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,padding:14,borderRadius:14,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",textDecoration:"none",fontWeight:800,fontSize:15}}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-            Solicitar Crédito por WhatsApp</a>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* ============ FILTER PANEL ============ */
-const cleanText=v=>(v||"").toString().trim();
-const normText=v=>cleanText(v).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-
-const LOCALIDAD_BOGOTA_MAP={
-  "usaquen":"Usaquen",
-  "chapinero":"Chapinero",
-  "santa fe":"Santa Fe",
-  "san cristobal":"San Cristobal",
-  "usme":"Usme",
-  "tunjuelito":"Tunjuelito",
-  "bosa":"Bosa",
-  "kennedy":"Kennedy",
+    );
+  }
   "fontibon":"Fontibon",
   "engativa":"Engativa",
   "suba":"Suba",
