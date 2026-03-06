@@ -13,10 +13,187 @@ const CONFIG = {
   folderId: "1o_5NwB-fK84NOTbNQTKmNWuVmMOwvaOG",
   outputPath: path.join(ROOT, "src", "data", "inventory.json"),
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
-  placeholderImage: "/window.svg",
+  minImages: 1,
+  maxImages: 8,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
   delayBetweenRequestsMs: 800
 };
+
+function getMatterportUrl(property) {
+  const candidate = (property?.url_360 || "").trim();
+  if (!candidate || !candidate.startsWith("http")) return null;
+  if (!candidate.toLowerCase().includes("matterport.com")) return null;
+  return candidate;
+}
+
+function normalizeImageUrl(rawUrl, baseUrl) {
+  if (!rawUrl || typeof rawUrl !== "string") return null;
+
+  let candidate = rawUrl.trim();
+  if (!candidate) return null;
+
+  // Clean common wrappers from srcset/json strings.
+  candidate = candidate.replace(/^url\((.*)\)$/i, "$1").replace(/^['"]|['"]$/g, "");
+
+  if (candidate.startsWith("data:")) return null;
+  if (candidate.startsWith("//")) candidate = `https:${candidate}`;
+
+  try {
+    const absolute = new URL(candidate, baseUrl).href;
+    return absolute;
+  } catch {
+    return null;
+  }
+}
+
+function detectImageBaseUrl(pageUrl, $) {
+  const ogImage = $('meta[property="og:image"]').attr("content");
+  const twitterImage = $('meta[name="twitter:image"]').attr("content");
+  const sample = [ogImage, twitterImage].find(Boolean) || "";
+
+  if (sample && /^https?:\/\//i.test(sample)) {
+    return sample.replace(/\/venta-[^/?#]+(?:\?.*)?$/i, "/");
+  }
+
+  try {
+    const { origin } = new URL(pageUrl);
+    return `${origin}/`;
+  } catch {
+    return "https://d3hzflklh28tts.cloudfront.net/";
+  }
+}
+
+function buildImageUrl(imagePath, imageBaseUrl) {
+  if (!imagePath || typeof imagePath !== "string") return null;
+  const clean = imagePath.trim();
+  if (!clean) return null;
+  if (/^https?:\/\//i.test(clean)) return clean;
+
+  try {
+    return new URL(clean.replace(/^\//, ""), imageBaseUrl).href;
+  } catch {
+    return null;
+  }
+}
+
+function getGatsbyPageDataUrl(listingUrl) {
+  try {
+    const parsed = new URL(listingUrl);
+    const cleanPath = parsed.pathname.replace(/^\//, "").replace(/\/$/, "");
+    if (!cleanPath) return null;
+    return `${parsed.origin}/page-data/${cleanPath}/page-data.json`;
+  } catch {
+    return null;
+  }
+}
+
+async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
+  const pageDataUrl = getGatsbyPageDataUrl(url);
+  if (!pageDataUrl) return [];
+
+  try {
+    const { data } = await axios.get(pageDataUrl, {
+      timeout: 12000,
+      headers: { "User-Agent": CONFIG.userAgent }
+    });
+
+    const carousel =
+      data?.result?.pageContext?.propertyDetail?.property?.images ||
+      data?.result?.pageContext?.property?.images ||
+      [];
+
+    if (!Array.isArray(carousel) || !carousel.length) return [];
+
+    const mapped = carousel
+      .map((img) => {
+        const raw = typeof img === "string" ? img : img?.url;
+        const full = buildImageUrl(raw, imageBaseUrl);
+        if (!full) return null;
+        return {
+          url: full,
+          order: typeof img === "object" ? Number(img?.order || 0) : 0
+        };
+      })
+      .filter(Boolean)
+      .filter((item) => isValidImageUrl(item.url))
+      .sort((a, b) => (a.order || 0) - (b.order || 0))
+      .map((item) => item.url);
+
+    const uniqueByKey = new Map();
+    for (const imgUrl of mapped) {
+      const key = imageKey(imgUrl);
+      if (!uniqueByKey.has(key)) uniqueByKey.set(key, imgUrl);
+    }
+
+    return [...uniqueByKey.values()].slice(0, CONFIG.maxImages);
+  } catch {
+    return [];
+  }
+}
+
+function imageKey(url) {
+  const clean = url.split("?")[0].split("#")[0];
+  const ventaFile = clean.match(/venta-[^/]+\.(?:jpe?g|png|webp|avif)$/i);
+  return ventaFile ? ventaFile[0].toLowerCase() : clean.toLowerCase();
+}
+
+function isValidImageUrl(url) {
+  if (!url) return false;
+  const lower = url.toLowerCase();
+
+  if (!lower.startsWith("http")) return false;
+  if (lower.includes("logo") || lower.includes("icon") || lower.includes("favicon")) return false;
+  if (lower.includes("sprite") || lower.includes("map") || lower.includes("marker")) return false;
+  if (lower.includes("/static/")) return false;
+  if (lower.includes("whatsapp") || lower.includes("gps") || lower.includes("outlined")) return false;
+
+  const looksLikeImage = /\.(jpe?g|png|webp|avif)(\?|$)/i.test(lower);
+  if (!looksLikeImage) return false;
+
+  // Prioritize property-gallery style image URLs.
+  const knownImageCdn = lower.includes("cloudfront.net");
+  const ventaPattern = /\/venta-[^/]+\.(?:jpe?g|png|webp|avif)(\?|$)/i.test(lower);
+  return knownImageCdn || ventaPattern;
+}
+
+function scoreImage(url) {
+  const lower = url.toLowerCase();
+  let score = 0;
+
+  if (lower.includes("cloudfront.net")) score += 8;
+  if (lower.includes("venta-")) score += 5;
+  if (/\.(jpe?g|png|webp|avif)(\?|$)/i.test(lower)) score += 2;
+  if (lower.includes("logo") || lower.includes("icon") || lower.includes("favicon")) score -= 20;
+
+  return score;
+}
+
+function extractUrlsFromObject(value, collector) {
+  if (!value) return;
+
+  if (typeof value === "string") {
+    if (/\.(jpe?g|png|webp|avif)(\?|$)/i.test(value) || value.includes("cloudfront.net")) {
+      collector.push(value);
+    }
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) extractUrlsFromObject(item, collector);
+    return;
+  }
+
+  if (typeof value === "object") {
+    for (const [key, nested] of Object.entries(value)) {
+      const keyLower = key.toLowerCase();
+      if (["image", "images", "photo", "photos", "gallery", "media"].includes(keyLower)) {
+        extractUrlsFromObject(nested, collector);
+      } else {
+        extractUrlsFromObject(nested, collector);
+      }
+    }
+  }
+}
 
 async function getGoogleDriveClient() {
   // Buscar service-account.json en la raíz del proyecto o via variable de entorno
@@ -62,33 +239,82 @@ const HABI_CDN = "https://d3hzflklh28tts.cloudfront.net/";
 async function scrapeImages(url) {
   try {
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
-    const images = [];
+    const $ = cheerio.load(data);
+    const imageBaseUrl = detectImageBaseUrl(url, $);
 
-    // 1. Extract from JSON "image" array embedded in HABI pages
+    // Primary: JSON "image" array embedded in HABI/Gatsby pages (fastest + most accurate)
     const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
     if (imgArrayMatch) {
       try {
         const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
-        imgs.forEach(img => {
-          const fullUrl = img.startsWith("http") ? img : HABI_CDN + img;
-          images.push(fullUrl);
-        });
+        const resolved = imgs.map(img => img.startsWith("http") ? img : HABI_CDN + img).filter(Boolean);
+        if (resolved.length >= CONFIG.minImages) return resolved.slice(0, CONFIG.maxImages);
       } catch {}
     }
 
-    // 2. Fallback: extract from og:image and img tags via cheerio
-    if (images.length === 0) {
-      const $ = cheerio.load(data);
-      const ogImage = $('meta[property="og:image"]').attr("content");
-      if (ogImage) images.push(ogImage);
-
-      $("img").each((_, el) => {
-        const src = $(el).attr("src") || $(el).attr("data-src");
-        if (src && src.startsWith("http") && !src.includes("logo")) images.push(src);
-      });
+    // Secondary: Gatsby page-data carousel
+    const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
+    if (carouselImages.length >= CONFIG.minImages) {
+      return carouselImages.slice(0, CONFIG.maxImages);
     }
 
-    return [...new Set(images)].slice(0, 10);
+    const candidates = [];
+
+    // 1) Metadata images.
+    const ogImage = $('meta[property="og:image"]').attr("content");
+    const twitterImage = $('meta[name="twitter:image"]').attr("content");
+    if (ogImage) candidates.push(ogImage);
+    if (twitterImage) candidates.push(twitterImage);
+
+    // 2) Direct DOM images.
+    $("img").each((_, el) => {
+      const src =
+        $(el).attr("src") ||
+        $(el).attr("data-src") ||
+        $(el).attr("data-lazy-src") ||
+        $(el).attr("data-main-image") ||
+        $(el).attr("data-srcset");
+      if (src) candidates.push(src);
+
+      const srcset = $(el).attr("srcset");
+      if (srcset) {
+        const first = srcset.split(",")[0]?.trim().split(" ")[0];
+        if (first) candidates.push(first);
+      }
+    });
+
+    // 3) Picture/source srcset.
+    $("source").each((_, el) => {
+      const srcset = $(el).attr("srcset");
+      if (srcset) {
+        const first = srcset.split(",")[0]?.trim().split(" ")[0];
+        if (first) candidates.push(first);
+      }
+    });
+
+    // 4) Gatsby venta-* file names
+    const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
+    for (const match of ventaMatches) {
+      const full = buildImageUrl(match, imageBaseUrl);
+      if (full) candidates.push(full);
+    }
+
+    // 5) Fallback regex over whole HTML
+    const regexMatches = data.match(/https?:\/\/[^\s"'<>]+\.(?:jpe?g|png|webp|avif)(?:\?[^\s"'<>]*)?/gi) || [];
+    candidates.push(...regexMatches);
+
+    const normalized = candidates
+      .map((raw) => normalizeImageUrl(raw, url))
+      .filter((imgUrl) => isValidImageUrl(imgUrl));
+
+    const uniqueByKey = new Map();
+    for (const img of normalized) {
+      const key = imageKey(img);
+      if (!uniqueByKey.has(key)) uniqueByKey.set(key, img);
+    }
+
+    const uniqueSorted = [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
+    return uniqueSorted.slice(0, CONFIG.maxImages);
   } catch {
     return [];
   }
@@ -124,12 +350,13 @@ async function main() {
     const { data: properties } = parse(csvData, { header: true, skipEmptyLines: true });
     
     const enriched = [];
+    let removedWithoutMedia = 0;
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
       const habiUrl = p.url_habi || p.url || "";
       console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
 
-      const [images, is360Valid] = await Promise.all([
+      const [scrapedImages, is360Valid] = await Promise.all([
         habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
         p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
       ]);
@@ -137,13 +364,15 @@ async function main() {
       if (!is360Valid && p.url_360) {
         console.log(`  ⚠️  360 inválido (404/error) - se eliminará: ${p.url_360}`);
       }
-      console.log(`  📸 ${images.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+      console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+
+      const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
 
       enriched.push({
         ...p,
-        images: images.length > 0 ? images : [CONFIG.placeholderImage],
+        images,
         url_360: is360Valid ? p.url_360 : "",
-        precio: parseInt(p.precio_venta || 0)
+        precio: parseInt(p.precio_venta || 0, 10)
       });
       await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
     }
@@ -158,7 +387,8 @@ async function main() {
     if (!fs.existsSync(path.dirname(CONFIG.publicOutputPath))) fs.mkdirSync(path.dirname(CONFIG.publicOutputPath), { recursive: true });
     fs.writeFileSync(CONFIG.publicOutputPath, jsonData);
     
-    console.log("✅ ¡Inventario actualizado con éxito!");
+    console.log(`✅ ¡Inventario actualizado con éxito! (${enriched.length} propiedades)`);
+    console.log(`🗑️ Propiedades eliminadas por falta de fotos/Matterport: ${removedWithoutMedia}`);
   } catch (err) {
     console.error("❌ Error fatal:", err.message);
   }

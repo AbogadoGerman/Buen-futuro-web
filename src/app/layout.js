@@ -22,8 +22,9 @@ export const metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: [{ url: "/favicon.ico", sizes: "32x32" }, { url: "/icon.png", type: "image/png" }],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+    icon: [{ url: "/inmobiliaria-buen-futuro.png" }, { url: "/favicon.ico", sizes: "32x32" }],
+    shortcut: "/inmobiliaria-buen-futuro.png",
+    apple: "/inmobiliaria-buen-futuro.png",
   },
 };
 

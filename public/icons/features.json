@@ -1,0 +1,16 @@
+[
+  {"key":"balcon","icon":"balcony.svg","label":"Balcón"},
+  {"key":"ascensor","icon":"elevator.svg","label":"Ascensor"},
+  {"key":"parqueadero","icon":"parking.svg","label":"Parqueadero"},
+  {"key":"deposito","icon":"storage.svg","label":"Depósito"},
+  {"key":"zona_lavanderia","icon":"laundry.svg","label":"Zona de lavandería"},
+  {"key":"cocina_integral","icon":"kitchen.svg","label":"Cocina integral"},
+  {"key":"terraza","icon":"terrace.svg","label":"Terraza"},
+  {"key":"vista_exterior","icon":"view.svg","label":"Vista exterior"},
+  {"key":"vista_interior","icon":"view.svg","label":"Vista interior"},
+  {"key":"piso_ceramico","icon":"floor.svg","label":"Piso cerámico"},
+  {"key":"piso_laminado","icon":"floor.svg","label":"Piso laminado"},
+  {"key":"estudio","icon":"study.svg","label":"Estudio"},
+  {"key":"club_house","icon":"club.svg","label":"Club House"},
+  {"key":"conjunto_cerrado","icon":"condo.svg","label":"Conjunto cerrado"}
+]
