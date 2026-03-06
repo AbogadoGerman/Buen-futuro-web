@@ -10,3 +10,20 @@ body {
   background: #ffffff;
   color: #171717;
 }
+
+/* Ajustes responsivos para tarjetas de propiedades en móvil */
+@media (max-width: 768px) {
+  .card-wrap {
+    max-width: 98vw;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+}
+@media (max-width: 420px) {
+  .card-wrap {
+    max-width: 99vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+}
