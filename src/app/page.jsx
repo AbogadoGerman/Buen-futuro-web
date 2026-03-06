@@ -471,7 +471,7 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
-  const [reviewRef,reviewApi]=useEmblaCarousel({loop:false,align:"start",containScroll:"trimSnaps",slidesToScroll:2});
+  const [reviewRef,reviewApi]=useEmblaCarousel({loop:false,align:"start",containScroll:"trimSnaps",slidesToScroll:1});
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
@@ -568,8 +568,8 @@ export default function App(){
         .card-wrap{width:100%;min-width:0;overflow:hidden}
         .reviews-embla{width:100%;max-width:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .reviews-embla:active{cursor:grabbing}
-        .reviews-embla__container{display:flex;gap:8px}
-        .reviews-embla__slide{flex:0 0 calc((100% - 8px)/2);min-width:0;transition:transform .35s ease,opacity .35s ease}
+        .reviews-embla__container{display:flex;margin-left:-8px}
+        .reviews-embla__slide{flex:0 0 50%;min-width:0;padding-left:8px;transition:transform .35s ease,opacity .35s ease}
         .embla-modal{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .embla-modal:active{cursor:grabbing}
         .embla-modal__container{display:flex;height:100%}
@@ -585,6 +585,7 @@ export default function App(){
           .mob-btn{display:flex!important}
           .footer-g{flex-direction:column!important;align-items:center!important;text-align:center!important}
           .search-wrap{display:none!important}
+          .reviews-embla__slide{flex-basis:100%!important}
           .sort-bar{flex-direction:column!important;align-items:stretch!important;gap:8px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
           .modal-price-col{text-align:left!important}
