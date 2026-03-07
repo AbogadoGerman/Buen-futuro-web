@@ -479,7 +479,7 @@ export default function App(){
           -webkit-font-smoothing:antialiased;color-scheme:light!important;
         }
         img{max-width:100%;display:block}
-        input,button,select,textarea{font-family:inherit;color:#1B2A4A!important;background-color:white}
+        input,button,select,textarea{font-family:inherit;background-color:white}
         button{background:none;border:none;cursor:pointer}
         a{color:inherit;text-decoration:none}
         /* Force light mode on ALL elements */
