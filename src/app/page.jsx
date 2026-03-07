@@ -509,7 +509,7 @@ export default function App(){
           .hero-imgs{flex:none!important;width:100%!important;flex-direction:row!important;gap:6px!important}
           .hero-imgs img{height:110px!important;flex:1!important;min-width:0!important;object-fit:cover!important;border-radius:10px!important}
           .hero-copy{width:100%!important;min-width:0!important}
-          .cat-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}
+          .cat-grid{grid-template-columns:1fr!important;gap:10px!important}
           .nav-desk{display:none!important}
           .mob-btn{display:flex!important}
           .footer-g{flex-direction:column!important;align-items:center!important;text-align:center!important}
