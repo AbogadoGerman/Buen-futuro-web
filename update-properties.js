@@ -98,17 +98,20 @@ async function scrapeImages(url) {
 async function validate360(url) {
   if (!url) return false;
   try {
-    // Primary: OEmbed endpoint – returns 200 only for published/active models
-    const oembedUrl = `https://my.matterport.com/api/v1/oembed?url=${encodeURIComponent(url)}`;
-    const oembedResp = await axios.get(oembedUrl, {
-      timeout: 8000,
-      headers: { "User-Agent": CONFIG.userAgent },
-      validateStatus: null
-    });
-    if (oembedResp.status === 200 && oembedResp.data?.html) return true;
-    if (oembedResp.status === 404 || oembedResp.status === 403 || oembedResp.status === 400) return false;
+    // Fast positive check via OEmbed (works for public/indexed models)
+    // Note: OEmbed returns 404 for private/unlisted models that still work perfectly,
+    // so a 404 here is NOT a definitive "invalid" signal — always fall through to HTML check.
+    try {
+      const oembedUrl = `https://my.matterport.com/api/v1/oembed?url=${encodeURIComponent(url)}`;
+      const oembedResp = await axios.get(oembedUrl, {
+        timeout: 8000,
+        headers: { "User-Agent": CONFIG.userAgent },
+        validateStatus: null
+      });
+      if (oembedResp.status === 200 && oembedResp.data?.html) return true;
+    } catch {}
 
-    // Fallback: fetch the page and check for error indicators
+    // HTML-based check: handles private/unlisted models not covered by OEmbed
     const { data, status } = await axios.get(url, {
       timeout: 10000,
       headers: { "User-Agent": CONFIG.userAgent },
@@ -116,7 +119,7 @@ async function validate360(url) {
     });
     if (status !== 200) return false;
 
-    // Matterport returns HTTP 200 even for unavailable models; detect via content
+    // Matterport returns HTTP 200 even for unavailable models; detect via error content
     const errorPatterns = [
       /not\s+available/i,
       /no\s+est[aá]\s+disponible/i,
@@ -126,8 +129,8 @@ async function validate360(url) {
     ];
     if (errorPatterns.some((p) => p.test(data))) return false;
 
-    // Must have showcase-specific content (present on valid model pages, not error pages)
-    return data.includes("showcase") && data.includes("matterport");
+    // Valid Matterport pages always contain the brand name in the HTML
+    return data.includes("matterport");
   } catch {
     return false;
   }
