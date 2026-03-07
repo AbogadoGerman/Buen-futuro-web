@@ -148,6 +148,75 @@ function getLocalidad(p){
   return cleanText(p?.localidad||p?.zona_grande||p?.zona||"");
 }
 
+function CreditSim({onClose,property}){
+  const initVal=property?Math.max(80000000,Math.min(1500000000,num(property.precio_venta)||250000000)):250000000;
+  const [val,setVal]=useState(initVal);
+  const [cuotaP,setCuotaP]=useState(30);
+  const [anos,setAnos]=useState(15);
+  const [tipo,setTipo]=useState("pesos");
+  const tasaPesos=0.1150;const tasaUVR=0.0850;
+  const tasa=tipo==="pesos"?tasaPesos:(tasaUVR+0.035);
+  const mensual=Math.pow(1+tasa,1/12)-1;
+  const financiar=val*(1-cuotaP/100);const n=anos*12;
+  const cuotaMes=financiar*(mensual*Math.pow(1+mensual,n))/(Math.pow(1+mensual,n)-1);
+  const totalPagar=cuotaMes*n;const esVIS=val<=195000000;
+  return(
+    <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",backdropFilter:"blur(6px)",zIndex:1200,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeIn .25s",overflowY:"auto"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:520,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)"}}>
+        <div style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",padding:"20px 24px",borderRadius:"20px 20px 0 0",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <img src={LOGO_HABI_W} alt="HABI" style={{height:36,objectFit:"contain"}} />
+            <div><h2 style={{color:"white",fontFamily:"'Outfit'",fontSize:18,fontWeight:800,margin:0}}>Simulador de Crédito</h2><p style={{color:"rgba(255,255,255,0.7)",fontSize:11,margin:0}}>Alianza Buen Futuro x HABI</p></div>
+          </div>
+          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
+        </div>
+        <div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:18}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,background:"#F3E8FF",padding:"10px 14px",borderRadius:12}}>
+            <img src={LOGO_BF} alt="BF" style={{height:28,objectFit:"contain"}} />
+            <span style={{fontSize:12,color:"#5B1FA6",fontWeight:600}}>Aliados oficiales HABI - Bonos exclusivos</span>
+          </div>
+          <div style={{display:"flex",gap:8}}>{[["pesos","En Pesos (Fija)"],["uvr","En UVR"]].map(([k,l])=><button key={k} onClick={()=>setTipo(k)} style={{flex:1,padding:10,borderRadius:10,border:"2px solid",borderColor:tipo===k?"#7B2FF7":"#E0E0E0",background:tipo===k?"#F3E8FF":"white",color:tipo===k?"#5B1FA6":"#666",fontWeight:700,fontSize:13,cursor:"pointer"}}>{l}</button>)}</div>
+          <div>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><label style={{fontWeight:700,fontSize:13,color:"#1B2A4A"}}>Valor del inmueble</label>{esVIS&&<span style={{background:"#E8F5E9",color:"#2E7D32",padding:"2px 8px",borderRadius:10,fontSize:10,fontWeight:700}}>VIS</span>}</div>
+            <div style={{fontSize:22,fontWeight:800,color:"#5B1FA6",marginBottom:6}}>{fmt(val)}</div>
+            <input type="range" min={80000000} max={1500000000} step={5000000} value={val} onChange={e=>setVal(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>$80M</span><span>$1.500M</span></div>
+          </div>
+          <div>
+            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Cuota inicial: {cuotaP}% ({fmt(val*cuotaP/100)})</label>
+            <input type="range" min={esVIS?20:30} max={70} step={5} value={cuotaP} onChange={e=>setCuotaP(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>{esVIS?"20%":"30%"}</span><span>70%</span></div>
+          </div>
+          <div>
+            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Plazo: {anos} años</label>
+            <input type="range" min={5} max={esVIS?30:20} step={1} value={anos} onChange={e=>setAnos(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+          </div>
+          <div style={{background:"#F8F4FF",borderRadius:16,padding:16}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Financiar</div><div style={{fontSize:16,fontWeight:800,color:"#5B1FA6"}}>{fmt(financiar)}</div></div>
+              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Tasa E.A.</div><div style={{fontSize:16,fontWeight:800,color:"#1B2A4A"}}>{(tasa*100).toFixed(1)}%</div></div>
+            </div>
+            <div style={{marginTop:10,textAlign:"center",padding:12,background:"white",borderRadius:12}}>
+              <div style={{fontSize:11,color:"#7F8C8D"}}>Cuota mensual estimada</div>
+              <div style={{fontSize:26,fontWeight:900,color:"#E74C3C"}}>{fmt(Math.round(cuotaMes))}</div>
+            </div>
+          </div>
+          <p style={{fontSize:10,color:"#AEB6BF",textAlign:"center",lineHeight:1.4}}>*Simulación informativa. Tasa ref. Banrep 10.25% (ene 2026). Sujeto a aprobación.</p>
+          {(()=>{
+            const propUrl=property&&typeof window!=="undefined"?window.location.origin+"/"+property.nid:"";
+            const waMsg=property
+              ?`Vi el apartamento ${propUrl} y me gustaría solicitar un HabiCredit.\n\nSimulación:\nValor: ${fmt(val)}\nCuota inicial: ${cuotaP}%\nPlazo: ${anos} años\nModalidad: ${tipo==="pesos"?"Pesos":"UVR"}\nCuota mensual estimada: ${fmt(Math.round(cuotaMes))}`
+              :`🏦 *SOLICITUD CREDITO - Buen Futuro x HABI*\n\nValor: ${fmt(val)}\nCuota inicial: ${cuotaP}%\nPlazo: ${anos} años\nModalidad: ${tipo==="pesos"?"Pesos":"UVR"}\nCuota mensual: ${fmt(Math.round(cuotaMes))}`;
+            return <a href={"https://wa.me/"+WA+"?text="+encodeURIComponent(waMsg)} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,padding:14,borderRadius:14,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",textDecoration:"none",fontWeight:800,fontSize:15}}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            Solicitar Crédito por WhatsApp</a>;
+          })()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
   if(!open)return null;
@@ -204,7 +273,7 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
 }
 
 /* ============ CARD with 360 badge ============ */
-function Card({p,onClick,featured}){
+function Card({p,onClick,featured,onSimCredit}){
   const [ii,setII]=useState(0);const imgs=p.images||[];const d=disc(p);
   return(
     <div className="card-wrap" onClick={()=>onClick(p)} style={{background:"white",borderRadius:14,overflow:"hidden",cursor:"pointer",transition:"transform .2s, box-shadow .2s",boxShadow:"0 2px 12px rgba(27,79,114,0.07)",border:featured?"2px solid #FF6B35":"1px solid rgba(27,79,114,0.06)",minWidth:0}}>
@@ -226,7 +295,7 @@ function Card({p,onClick,featured}){
         <div style={{display:"flex",gap:6,marginTop:5,fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",flexWrap:"wrap"}}>{p.area&&<span>{p.area}m²</span>}{p.habitaciones&&p.habitaciones!=="0"&&<span>{p.habitaciones} hab</span>}{(p["baños"]??p.banos)&&(p["baños"]??p.banos)!=="0"&&<span>{p["baños"]??p.banos} bañ</span>}{p.garaje&&p.garaje!=="0"&&<span>{p.garaje} parq</span>}</div>
         <div style={{marginTop:7,paddingTop:7,borderTop:"1px solid #EBF0F5",display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span></div>
-          <span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,flexShrink:0}}>Ver</span>
+          <div style={{display:"flex",gap:4,alignItems:"center",flexShrink:0}}>{onSimCredit&&<button onClick={e=>{e.stopPropagation();onSimCredit(p);}} style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,border:"none",cursor:"pointer",whiteSpace:"nowrap"}}>💜 Simular</button>}<span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600}}>Ver</span></div>
         </div>
       </div>
     </div>
@@ -234,7 +303,7 @@ function Card({p,onClick,featured}){
 }
 
 /* ============ MODAL with 360 + Carousel tabs ============ */
-function Modal({p,onClose}){
+function Modal({p,onClose,onSimCredit}){
   const [ii,setII]=useState(0);
   const [tab,setTab]=useState("fotos");
   const imgs=p?.images||[];const d=p?disc(p):0;
@@ -328,6 +397,10 @@ function Modal({p,onClose}){
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#1B4F72"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
               Solicitar más información
             </button>
+            {onSimCredit&&<button onClick={()=>onSimCredit(p)} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",borderRadius:12,padding:"13px 10px",fontSize:"clamp(12px,2.5vw,14px)",fontWeight:700,border:"none",cursor:"pointer",width:"100%"}}>
+              <img src={LOGO_HABI_W} alt="" style={{height:16}} />
+              Simular Crédito HabiCredit
+            </button>}
           </div>
         </div>
       </div>
@@ -359,6 +432,7 @@ export default function App(){
   const [mobMenu,setMobMenu]=useState(false);
   const [fOpen,setFOpen]=useState(false);
   const [cOpen,setCOpen]=useState(false);
+  const [simProperty,setSimProperty]=useState(null);
   const [filters,setFilters]=useState(dflt);
   const [applied,setApplied]=useState(dflt);
   const [fCount,setFCount]=useState(0);
@@ -494,7 +568,7 @@ export default function App(){
           <img src={LOGO_BF} alt="BF" onClick={()=>setPage("inicio")} style={{height:"clamp(32px,8vw,40px)",objectFit:"contain",cursor:"pointer",flexShrink:0}} />
           <nav className="nav-desk" style={{display:"flex",gap:2,alignItems:"center"}}>
             {[["Inicio","inicio"],["Catálogo","catalogo"]].map(([l,id])=><button key={id} onClick={()=>setPage(id)} style={{fontWeight:600,fontSize:14,color:page===id?"white":"#1B2A4A",padding:"7px 14px",borderRadius:8,border:"none",background:page===id?"#1B4F72":"transparent",cursor:"pointer"}}>{l}</button>)}
-            <button onClick={()=>setCOpen(true)} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"7px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito</button>
+            <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"7px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito</button>
           </nav>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
             <button onClick={()=>{setFilters({...applied});setFOpen(true)}} style={{display:"flex",alignItems:"center",gap:4,padding:"7px clamp(10px,3vw,16px)",borderRadius:20,border:"none",cursor:"pointer",fontWeight:800,fontSize:"clamp(11px,2.8vw,13px)",background:"linear-gradient(135deg,#FF6B35,#E74C3C)",color:"white",animation:"pulse 2s infinite",position:"relative",flexShrink:0}}>
@@ -507,7 +581,7 @@ export default function App(){
         </div>
         {mobMenu&&<div className="mob-menu" style={{padding:"8px 16px 16px",display:"flex",flexDirection:"column",gap:4}}>
           {[["Inicio","inicio"],["Catálogo","catalogo"]].map(([l,id])=><button key={id} onClick={()=>{setPage(id);setMobMenu(false)}} style={{fontWeight:600,fontSize:14,color:"#1B2A4A",padding:"10px 14px",borderRadius:8,border:"none",background:page===id?"#EBF0F5":"transparent",cursor:"pointer",textAlign:"left"}}>{l}</button>)}
-          <button onClick={()=>{setCOpen(true);setMobMenu(false)}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito HABI</button>
+          <button onClick={()=>{setCOpen(true);setSimProperty(null);setMobMenu(false);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito HABI</button>
           <input placeholder="Buscar..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value){setPage("catalogo");setMobMenu(false)}}} style={{fontSize:13,padding:"10px 14px",border:"2px solid #D5DBDB",borderRadius:12,outline:"none",width:"100%",background:"white",margin:"4px 0"}} />
         </div>}
       </header>
@@ -530,7 +604,7 @@ export default function App(){
                 <p style={{fontSize:"clamp(12px,2vw,15px)",color:"#2471A3",lineHeight:1.5,marginBottom:16}}>Amplio catálogo de apartamentos y casas en Bogotá<br/>con recorridos virtuales 360° - Aliados HABI</p>
               <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#E74C3C",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Ofertas</button>
-                <button onClick={()=>setCOpen(true)} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}><img src={LOGO_HABI_W} alt="" style={{height:15}} />Crédito</button>
+                <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}><img src={LOGO_HABI_W} alt="" style={{height:15}} />Crédito</button>
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#1B4F72",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Catálogo ({inv.length})</button>
               </div>
               <div style={{marginTop:20}}>
@@ -560,7 +634,7 @@ export default function App(){
             <button onClick={()=>setPage("catalogo")} style={{padding:"8px 16px",borderRadius:10,border:"2px solid #1B4F72",background:"transparent",color:"#1B4F72",fontWeight:700,fontSize:12,cursor:"pointer"}}>Ver todo ({inv.length})</button>
           </div>
           <div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>
-            {featured.map((p,i)=><div key={p.nid} style={{animation:"slideUp .5s ease "+(i*.07)+"s both"}}><Card p={p} onClick={setSel} featured /></div>)}
+            {featured.map((p,i)=><div key={p.nid} style={{animation:"slideUp .5s ease "+(i*.07)+"s both"}}><Card p={p} onClick={setSel} featured onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} /></div>)}
           </div>
         </section>}
 
@@ -591,14 +665,14 @@ export default function App(){
           </div>
         </div>
         {filtered.length===0?<div style={{textAlign:"center",padding:40}}><div style={{fontSize:48}}>🏠</div><p style={{color:"#7F8C8D",fontSize:14,marginTop:10}}>No se encontraron inmuebles</p><button onClick={clearAll} style={{marginTop:12,padding:"10px 20px",borderRadius:10,border:"none",background:"#1B4F72",color:"white",fontWeight:700,cursor:"pointer"}}>Ver todos</button></div>
-        :<div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>{filtered.map((p,i)=><div key={p.nid||i} style={{animation:"slideUp .35s ease "+(i*.04)+"s both"}}><Card p={p} onClick={setSel} featured={isFeat(p)} /></div>)}</div>}
+        :<div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>{filtered.map((p,i)=><div key={p.nid||i} style={{animation:"slideUp .35s ease "+(i*.04)+"s both"}}><Card p={p} onClick={setSel} featured={isFeat(p)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} /></div>)}</div>}
       </section>}
 
       <a className="wf" href={"https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, estoy interesado en los inmuebles de Buen Futuro")} target="_blank" rel="noopener noreferrer"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
 
       <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} />
-      {cOpen&&<CreditSim onClose={()=>setCOpen(false)} />}
-      {sel&&<Modal p={sel} onClose={()=>setSel(null)} />}
+      {cOpen&&<CreditSim key={simProperty?.nid||"generic"} property={simProperty} onClose={()=>{setCOpen(false);setSimProperty(null);}} />}
+      {sel&&<Modal p={sel} onClose={()=>setSel(null)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} />}
     </div>
   );
 }
