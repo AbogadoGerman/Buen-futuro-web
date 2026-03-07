@@ -36,12 +36,25 @@ export async function generateMetadata({ params }) {
   };
 }
 
+function hasRealImages(images) {
+  if (!images || images.length === 0) return false;
+  return images.some(
+    (img) =>
+      img &&
+      img.startsWith("http") &&
+      !img.includes("unsplash.com") &&
+      !img.endsWith(".svg")
+  );
+}
+
 export default async function PropertyPage({ params }) {
   const { nid } = await params;
   const p = INV.find((x) => x.nid === nid);
   if (!p) notFound();
 
   const imgs = p.images || [];
+  const realPhotos = hasRealImages(imgs);
+  const has360 = Boolean(p.url_360);
   const precioOriginal = parseInt(p.precio_original || 0);
   const precioVenta = parseInt(p.precio_venta || 0);
   const descuento =
@@ -65,7 +78,7 @@ export default async function PropertyPage({ params }) {
 
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "20px 16px 40px" }}>
         {/* Images */}
-        {imgs.length > 0 && (
+        {realPhotos && (
           <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "#E8ECF0" }}>
             <img
               src={imgs[0]}
@@ -86,7 +99,7 @@ export default async function PropertyPage({ params }) {
         )}
 
         {/* Thumbnail strip */}
-        {imgs.length > 1 && (
+        {realPhotos && imgs.length > 1 && (
           <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 4 }}>
             {imgs.slice(1).map((img, i) => (
               <img key={i} src={img} alt="" style={{ width: 80, height: 60, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
@@ -162,7 +175,7 @@ export default async function PropertyPage({ params }) {
         )}
 
         {/* 360 Tour */}
-        {p.url_360 && (
+        {has360 && (
           <div style={{ background: "white", borderRadius: 16, padding: 20, marginBottom: 16, boxShadow: "0 2px 12px rgba(27,79,114,0.07)" }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#1B2A4A", margin: "0 0 10px" }}>Tour Virtual 360°</h2>
             <iframe
