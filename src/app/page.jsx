@@ -281,6 +281,7 @@ function Card({p,onClick,featured}){
       <div style={{padding:"10px 12px"}}>
         <h3 style={{margin:0,fontSize:"clamp(11px,2.8vw,13px)",fontWeight:700,color:"#1B2A4A",lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.titulo}</h3>
         <p style={{margin:"2px 0 0",fontSize:"clamp(10px,2.4vw,11px)",color:"#5D6D7E",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p))].filter(Boolean).join(" · ")}</p>
+        {p.direccion&&<p style={{margin:"2px 0 0",fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{cleanText(p.direccion)}</p>}
         <div style={{display:"flex",gap:6,marginTop:5,fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",flexWrap:"wrap"}}>{p.area&&<span>{p.area}m²</span>}{p.habitaciones&&p.habitaciones!=="0"&&<span>{p.habitaciones} hab</span>}{(p["baños"]??p.banos)&&(p["baños"]??p.banos)!=="0"&&<span>{p["baños"]??p.banos} bañ</span>}{p.garaje&&p.garaje!=="0"&&<span>{p.garaje} parq</span>}</div>
         <div style={{marginTop:7,paddingTop:7,borderTop:"1px solid #EBF0F5",display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span></div>
