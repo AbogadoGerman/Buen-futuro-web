@@ -15,7 +15,7 @@ const CONFIG = {
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
   propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
   minImages: 1,
-  maxImages: 8,
+  maxImages: 12,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
   delayBetweenRequestsMs: 800
 };
