@@ -306,6 +306,7 @@ function Card({p,onClick,featured,onSimCredit}){
 function Modal({p,onClose,onSimCredit}){
   const [ii,setII]=useState(0);
   const [tab,setTab]=useState("fotos");
+  const [valid360,setValid360]=useState(false);
   const imgs=p?.images||[];const d=p?disc(p):0;
   const [emblaRef,emblaApi]=useEmblaCarousel({
     loop:imgs.length>1,
@@ -333,6 +334,17 @@ function Modal({p,onClose,onSimCredit}){
     if(emblaApi)emblaApi.scrollTo(0,true);
   },[p,emblaApi]);
 
+  useEffect(()=>{
+    setValid360(false);
+    if(!p?.url_360)return;
+    let cancelled=false;
+    fetch('/api/check-360?url='+encodeURIComponent(p.url_360))
+      .then(r=>r.json())
+      .then(d=>{if(!cancelled){if(d.valid)setValid360(true);else setTab(t=>t==='360'?'fotos':t);}})
+      .catch(()=>{});
+    return()=>{cancelled=true;};
+  },[p?.url_360]);
+
   if(!p)return null;
 
   return(
@@ -344,7 +356,7 @@ function Modal({p,onClose,onSimCredit}){
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             Fotos ({imgs.length})
           </button>
-          {p.url_360&&<button onClick={()=>setTab("360")} style={{flex:1,padding:"14px",border:"none",background:tab==="360"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="360"?"#7B2FF7":"#999",borderBottom:tab==="360"?"3px solid #7B2FF7":"3px solid transparent",borderRadius:tab==="360"?"0 20px 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+          {valid360&&<button onClick={()=>setTab("360")} style={{flex:1,padding:"14px",border:"none",background:tab==="360"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="360"?"#7B2FF7":"#999",borderBottom:tab==="360"?"3px solid #7B2FF7":"3px solid transparent",borderRadius:tab==="360"?"0 20px 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
             Vista 360°
           </button>}

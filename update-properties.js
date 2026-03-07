@@ -98,8 +98,36 @@ async function scrapeImages(url) {
 async function validate360(url) {
   if (!url) return false;
   try {
-    const { data } = await axios.get(url, { timeout: 10000, headers: { "User-Agent": CONFIG.userAgent } });
-    return data.includes("matterport") || data.includes("showcase") || data.includes("model");
+    // Primary: OEmbed endpoint – returns 200 only for published/active models
+    const oembedUrl = `https://my.matterport.com/api/v1/oembed?url=${encodeURIComponent(url)}`;
+    const oembedResp = await axios.get(oembedUrl, {
+      timeout: 8000,
+      headers: { "User-Agent": CONFIG.userAgent },
+      validateStatus: null
+    });
+    if (oembedResp.status === 200 && oembedResp.data?.html) return true;
+    if (oembedResp.status === 404 || oembedResp.status === 403 || oembedResp.status === 400) return false;
+
+    // Fallback: fetch the page and check for error indicators
+    const { data, status } = await axios.get(url, {
+      timeout: 10000,
+      headers: { "User-Agent": CONFIG.userAgent },
+      validateStatus: null
+    });
+    if (status !== 200) return false;
+
+    // Matterport returns HTTP 200 even for unavailable models; detect via content
+    const errorPatterns = [
+      /not\s+available/i,
+      /no\s+est[aá]\s+disponible/i,
+      /"available"\s*:\s*false/i,
+      /"published"\s*:\s*false/i,
+      /model[_\s]not[_\s]found/i,
+    ];
+    if (errorPatterns.some((p) => p.test(data))) return false;
+
+    // Must have showcase-specific content (present on valid model pages, not error pages)
+    return data.includes("showcase") && data.includes("matterport");
   } catch {
     return false;
   }
