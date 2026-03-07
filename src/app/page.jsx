@@ -410,7 +410,7 @@ export default function App(){
   const reviewPrev=useCallback(()=>reviewApi&&reviewApi.scrollPrev(),[reviewApi]);
   const reviewNext=useCallback(()=>reviewApi&&reviewApi.scrollNext(),[reviewApi]);
 
-  useEffect(()=>{fetch("/data/inventory.json").then(r=>r.ok?r.json():null).then(d=>{if(d&&d.length)setInv(d.map(p=>({...p,tipo:p.tipo||p.tipo_de_propiedad||"",precio_original:p.precio_original||p.precio_anterior||"0",habitaciones:p.habitaciones||p.num_habitaciones||"",baños:p["baños"]||p.banos||"",garaje:p.garaje||p.garajes||"",piso:p.piso||p.num_piso||"",admin:p.admin||p.costo_administracion||0,bonoHabi:p.bonoHabi||p.bonus_value||0,ascensor:p.ascensor!=null?p.ascensor:p.tiene_ascensor==="1",url_habi:p.url_habi||p.url||""})))}).catch(()=>{});},[]);
+  useEffect(()=>{fetch("/data/inventory.json").then(r=>r.ok?r.json():null).then(d=>{if(d&&d.length)setInv(d.map(p=>({...p,tipo:(r=>{const t=r.toLowerCase();return t.includes("casa")?"Casa":t.includes("apartamento")?"Apartamento":r})(p.tipo||p.tipo_de_propiedad||""),precio_original:p.precio_original||(p.precio_anterior&&p.precio_anterior!=="0"?p.precio_anterior:"0"),habitaciones:p.habitaciones||p.num_habitaciones||"",baños:p["baños"]||p.banos||"",garaje:p.garaje||p.garajes||"",piso:p.piso||p.num_piso||"",admin:p.admin||p.costo_administracion||0,bonoHabi:p.bonoHabi||p.bonus_value||0,ascensor:p.ascensor!=null?p.ascensor:p.tiene_ascensor==="1",url_habi:p.url_habi||p.url||""})))}).catch(()=>{});},[]);
   useEffect(()=>{
     if(!reviewApi)return;
     const t=setInterval(()=>reviewApi.scrollNext(),5000);
