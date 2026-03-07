@@ -148,6 +148,68 @@ function getLocalidad(p){
   return cleanText(p?.localidad||p?.zona_grande||p?.zona||"");
 }
 
+function CreditSim({onClose}){
+  const [val,setVal]=useState(250000000);
+  const [cuotaP,setCuotaP]=useState(30);
+  const [anos,setAnos]=useState(15);
+  const [tipo,setTipo]=useState("pesos");
+  const tasaPesos=0.1150;const tasaUVR=0.0850;
+  const tasa=tipo==="pesos"?tasaPesos:(tasaUVR+0.035);
+  const mensual=Math.pow(1+tasa,1/12)-1;
+  const financiar=val*(1-cuotaP/100);const n=anos*12;
+  const cuotaMes=financiar*(mensual*Math.pow(1+mensual,n))/(Math.pow(1+mensual,n)-1);
+  const totalPagar=cuotaMes*n;const esVIS=val<=195000000;
+  return(
+    <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",backdropFilter:"blur(6px)",zIndex:1200,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeIn .25s",overflowY:"auto"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:520,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)"}}>
+        <div style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",padding:"20px 24px",borderRadius:"20px 20px 0 0",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <img src={LOGO_HABI_W} alt="HABI" style={{height:36,objectFit:"contain"}} />
+            <div><h2 style={{color:"white",fontFamily:"'Outfit'",fontSize:18,fontWeight:800,margin:0}}>Simulador de Crédito</h2><p style={{color:"rgba(255,255,255,0.7)",fontSize:11,margin:0}}>Alianza Buen Futuro x HABI</p></div>
+          </div>
+          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
+        </div>
+        <div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:18}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,background:"#F3E8FF",padding:"10px 14px",borderRadius:12}}>
+            <img src={LOGO_BF} alt="BF" style={{height:28,objectFit:"contain"}} />
+            <span style={{fontSize:12,color:"#5B1FA6",fontWeight:600}}>Aliados oficiales HABI - Bonos exclusivos</span>
+          </div>
+          <div style={{display:"flex",gap:8}}>{[["pesos","En Pesos (Fija)"],["uvr","En UVR"]].map(([k,l])=><button key={k} onClick={()=>setTipo(k)} style={{flex:1,padding:10,borderRadius:10,border:"2px solid",borderColor:tipo===k?"#7B2FF7":"#E0E0E0",background:tipo===k?"#F3E8FF":"white",color:tipo===k?"#5B1FA6":"#666",fontWeight:700,fontSize:13,cursor:"pointer"}}>{l}</button>)}</div>
+          <div>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><label style={{fontWeight:700,fontSize:13,color:"#1B2A4A"}}>Valor del inmueble</label>{esVIS&&<span style={{background:"#E8F5E9",color:"#2E7D32",padding:"2px 8px",borderRadius:10,fontSize:10,fontWeight:700}}>VIS</span>}</div>
+            <div style={{fontSize:22,fontWeight:800,color:"#5B1FA6",marginBottom:6}}>{fmt(val)}</div>
+            <input type="range" min={80000000} max={1500000000} step={5000000} value={val} onChange={e=>setVal(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>$80M</span><span>$1.500M</span></div>
+          </div>
+          <div>
+            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Cuota inicial: {cuotaP}% ({fmt(val*cuotaP/100)})</label>
+            <input type="range" min={esVIS?20:30} max={70} step={5} value={cuotaP} onChange={e=>setCuotaP(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>{esVIS?"20%":"30%"}</span><span>70%</span></div>
+          </div>
+          <div>
+            <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A",display:"block",marginBottom:4}}>Plazo: {anos} años</label>
+            <input type="range" min={5} max={esVIS?30:20} step={1} value={anos} onChange={e=>setAnos(+e.target.value)} style={{width:"100%",accentColor:"#7B2FF7"}} />
+          </div>
+          <div style={{background:"#F8F4FF",borderRadius:16,padding:16}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Financiar</div><div style={{fontSize:16,fontWeight:800,color:"#5B1FA6"}}>{fmt(financiar)}</div></div>
+              <div style={{textAlign:"center"}}><div style={{fontSize:10,color:"#7F8C8D"}}>Tasa E.A.</div><div style={{fontSize:16,fontWeight:800,color:"#1B2A4A"}}>{(tasa*100).toFixed(1)}%</div></div>
+            </div>
+            <div style={{marginTop:10,textAlign:"center",padding:12,background:"white",borderRadius:12}}>
+              <div style={{fontSize:11,color:"#7F8C8D"}}>Cuota mensual estimada</div>
+              <div style={{fontSize:26,fontWeight:900,color:"#E74C3C"}}>{fmt(Math.round(cuotaMes))}</div>
+            </div>
+          </div>
+          <p style={{fontSize:10,color:"#AEB6BF",textAlign:"center",lineHeight:1.4}}>*Simulación informativa. Tasa ref. Banrep 10.25% (ene 2026). Sujeto a aprobación.</p>
+          <a href={"https://wa.me/"+WA+"?text="+encodeURIComponent("🏦 *SOLICITUD CREDITO - Buen Futuro x HABI*\n\nValor: "+fmt(val)+"\nCuota inicial: "+cuotaP+"%\nPlazo: "+anos+" años\nModalidad: "+(tipo==="pesos"?"Pesos":"UVR")+"\nCuota mensual: "+fmt(Math.round(cuotaMes)))} target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,padding:14,borderRadius:14,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",textDecoration:"none",fontWeight:800,fontSize:15}}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            Solicitar Crédito por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
   if(!open)return null;
