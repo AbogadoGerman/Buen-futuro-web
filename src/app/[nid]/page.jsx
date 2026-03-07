@@ -1,11 +1,46 @@
-import { INV } from "@/data/properties";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
 
 const WA = "573108074915";
 
-function fmt(p) {
-  const n = parseInt(p || 0, 10);
+function getInventory() {
+  const filePath = path.join(process.cwd(), "public", "data", "inventory.json");
+  const raw = fs.readFileSync(filePath, "utf-8");
+  return JSON.parse(raw);
+}
+
+function normalize(p) {
+  return {
+    nid: p.nid,
+    titulo: p.titulo || "",
+    tipo: p.tipo_de_propiedad || "",
+    conjunto: p.conjunto || "",
+    barrio: p.barrio || "",
+    ciudad: p.ciudad || "",
+    zona: p.zona_grande || p.zona_mediana || "",
+    area: p.area || "",
+    habitaciones: p.num_habitaciones || "",
+    banos: p.banos || "",
+    garajes: p.garajes || "",
+    piso: p.num_piso || "",
+    estrato: p.estrato || "",
+    ascensor: p.tiene_ascensor === "1",
+    precioVenta: p.precio_venta || "",
+    precioAnterior: p.precio_anterior || "",
+    admin: parseInt(p.costo_administracion || "0", 10),
+    bonoHabi: parseInt(p.bonus_value || "0", 10),
+    descripcion: p.descripcion || "",
+    url360: p.url_360 || "",
+    urlHabi: p.url || "",
+    images: p.images || [],
+    direccion: p.direccion || "",
+  };
+}
+
+function fmt(v) {
+  const n = parseInt(v || 0, 10);
   if (!n) return "Consultar";
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -16,41 +51,47 @@ function fmt(p) {
 }
 
 export async function generateStaticParams() {
-  return INV.map((p) => ({ nid: p.nid }));
+  const inv = getInventory();
+  return inv
+    .filter((p) => p.current_state === "published")
+    .map((p) => ({ nid: p.nid }));
 }
 
 export async function generateMetadata({ params }) {
   const { nid } = await params;
-  const p = INV.find((x) => x.nid === nid);
-  if (!p) return { title: "Inmueble no encontrado" };
+  const inv = getInventory();
+  const raw = inv.find((x) => x.nid === nid);
+  if (!raw) return { title: "Inmueble no encontrado" };
+  const p = normalize(raw);
   return {
     title: p.titulo + " | Inmobiliaria Buen Futuro",
     description: p.descripcion
       ? p.descripcion.slice(0, 160)
-      : `${p.tipo} en venta en ${p.barrio}, ${p.ciudad}. Precio: ${fmt(p.precio_venta)}.`,
+      : `${p.tipo} en venta en ${p.barrio}, ${p.ciudad}. Precio: ${fmt(p.precioVenta)}.`,
     openGraph: {
       title: p.titulo,
       description: p.descripcion ? p.descripcion.slice(0, 160) : "",
-      images: p.images && p.images[0] ? [{ url: p.images[0] }] : [],
+      images: p.images.length ? [{ url: p.images[0] }] : [],
     },
   };
 }
 
 export default async function PropertyPage({ params }) {
   const { nid } = await params;
-  const p = INV.find((x) => x.nid === nid);
-  if (!p) notFound();
+  const inv = getInventory();
+  const raw = inv.find((x) => x.nid === nid);
+  if (!raw) notFound();
 
-  const imgs = p.images || [];
-  const precioOriginal = parseInt(p.precio_original || 0);
-  const precioVenta = parseInt(p.precio_venta || 0);
+  const p = normalize(raw);
+  const precioAnterior = parseInt(p.precioAnterior || 0);
+  const precioVenta = parseInt(p.precioVenta || 0);
   const descuento =
-    precioOriginal && precioVenta && precioOriginal > precioVenta
-      ? Math.round(((precioOriginal - precioVenta) / precioOriginal) * 100)
+    precioAnterior && precioVenta && precioAnterior > precioVenta
+      ? Math.round(((precioAnterior - precioVenta) / precioAnterior) * 100)
       : 0;
 
   const waMsg = encodeURIComponent(
-    `Hola, estoy interesado(a) en el inmueble:\n\n📋 NID: ${p.nid}\n🏡 Inmueble: ${p.titulo}\n📍 Ubicación: ${[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(", ")}\n💰 Precio: ${fmt(p.precio_venta)}\n\n¿Me podrías dar más información?`
+    `Hola, estoy interesado(a) en el inmueble:\n\n📋 NID: ${p.nid}\n🏡 Inmueble: ${p.titulo}\n📍 Ubicación: ${[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(", ")}\n💰 Precio: ${fmt(p.precioVenta)}\n\n¿Me podrías dar más información?`
   );
 
   return (
@@ -64,11 +105,11 @@ export default async function PropertyPage({ params }) {
       </div>
 
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "20px 16px 40px" }}>
-        {/* Images */}
-        {imgs.length > 0 && (
+        {/* Main image */}
+        {p.images.length > 0 && (
           <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "#E8ECF0" }}>
             <img
-              src={imgs[0]}
+              src={p.images[0]}
               alt={p.titulo}
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover" }}
             />
@@ -86,9 +127,9 @@ export default async function PropertyPage({ params }) {
         )}
 
         {/* Thumbnail strip */}
-        {imgs.length > 1 && (
+        {p.images.length > 1 && (
           <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 4 }}>
-            {imgs.slice(1).map((img, i) => (
+            {p.images.slice(1).map((img, i) => (
               <img key={i} src={img} alt="" style={{ width: 80, height: 60, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
             ))}
           </div>
@@ -102,9 +143,9 @@ export default async function PropertyPage({ params }) {
           </div>
 
           <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-            <span style={{ fontSize: "clamp(20px,5vw,28px)", fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_venta)}</span>
-            {precioOriginal > precioVenta && (
-              <span style={{ fontSize: 14, color: "#999", textDecoration: "line-through" }}>{fmt(p.precio_original)}</span>
+            <span style={{ fontSize: "clamp(20px,5vw,28px)", fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precioVenta)}</span>
+            {precioAnterior > precioVenta && (
+              <span style={{ fontSize: 14, color: "#999", textDecoration: "line-through" }}>{fmt(p.precioAnterior)}</span>
             )}
           </div>
 
@@ -114,7 +155,7 @@ export default async function PropertyPage({ params }) {
 
           {p.bonoHabi > 0 && (
             <div style={{ marginTop: 10, background: "linear-gradient(135deg,#7B2FF7,#5B1FA6)", color: "white", padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700, display: "inline-block" }}>
-              🎁 Bono HABI: {fmt(p.bonoHabi)}
+              Bono HABI: {fmt(p.bonoHabi)}
             </div>
           )}
         </div>
@@ -124,15 +165,15 @@ export default async function PropertyPage({ params }) {
           <h2 style={{ fontSize: 15, fontWeight: 800, color: "#1B2A4A", margin: "0 0 14px" }}>Características</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))", gap: 10 }}>
             {[
-              ["📐 Área", p.area ? p.area + " m²" : null],
-              ["🛏 Habitaciones", p.habitaciones],
-              ["🚿 Baños", p.baños],
-              ["🚗 Garajes", p.garaje],
-              ["🏢 Piso", p.piso],
-              ["⚡ Estrato", p.estrato],
-              ["🛗 Ascensor", p.ascensor ? "Sí" : p.ascensor === false ? "No" : null],
+              ["Área", p.area ? p.area + " m²" : null],
+              ["Habitaciones", p.habitaciones],
+              ["Baños", p.banos],
+              ["Garajes", p.garajes],
+              ["Piso", p.piso],
+              ["Estrato", p.estrato],
+              ["Ascensor", p.ascensor ? "Sí" : null],
             ]
-              .filter(([, v]) => v !== null && v !== undefined && v !== "" && v !== "0" && v !== 0)
+              .filter(([, v]) => v !== null && v !== undefined && v !== "" && v !== "0")
               .map(([label, value]) => (
                 <div key={label} style={{ background: "#F0F3F7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
                   <div style={{ fontSize: 11, color: "#7F8C8D", marginBottom: 2 }}>{label}</div>
@@ -146,16 +187,16 @@ export default async function PropertyPage({ params }) {
         {p.descripcion && (
           <div style={{ background: "white", borderRadius: 16, padding: 20, marginBottom: 16, boxShadow: "0 2px 12px rgba(27,79,114,0.07)" }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#1B2A4A", margin: "0 0 10px" }}>Descripción</h2>
-            <p style={{ fontSize: 13, color: "#5D6D7E", lineHeight: 1.7, margin: 0 }}>{p.descripcion}</p>
+            <p style={{ fontSize: 13, color: "#5D6D7E", lineHeight: 1.7, margin: 0, whiteSpace: "pre-line" }}>{p.descripcion}</p>
           </div>
         )}
 
         {/* 360 Tour */}
-        {p.url_360 && (
+        {p.url360 && (
           <div style={{ background: "white", borderRadius: 16, padding: 20, marginBottom: 16, boxShadow: "0 2px 12px rgba(27,79,114,0.07)" }}>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#1B2A4A", margin: "0 0 10px" }}>Tour Virtual 360°</h2>
             <iframe
-              src={p.url_360}
+              src={p.url360}
               title="Tour 360°"
               style={{ width: "100%", height: 360, border: "none", borderRadius: 10 }}
               allowFullScreen
@@ -166,8 +207,8 @@ export default async function PropertyPage({ params }) {
         {/* Ref & HABI link */}
         <div style={{ background: "white", borderRadius: 16, padding: 16, marginBottom: 20, boxShadow: "0 2px 12px rgba(27,79,114,0.07)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span style={{ fontSize: 12, color: "#7F8C8D" }}>Ref. HABI: <strong style={{ color: "#1B2A4A" }}>{p.nid}</strong></span>
-          {p.url_habi && (
-            <a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none" }}>
+          {p.urlHabi && (
+            <a href={p.urlHabi} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none" }}>
               Ver en HABI →
             </a>
           )}
@@ -190,7 +231,7 @@ export default async function PropertyPage({ params }) {
             rel="noopener noreferrer"
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "white", color: "#1B4F72", borderRadius: 14, padding: "14px 20px", fontWeight: 700, fontSize: 15, textDecoration: "none", border: "2px solid #1B4F72" }}
           >
-            📅 Agendar visita
+            Agendar visita
           </a>
         </div>
       </div>
