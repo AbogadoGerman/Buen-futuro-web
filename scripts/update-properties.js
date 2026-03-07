@@ -13,6 +13,7 @@ const CONFIG = {
   folderId: "1o_5NwB-fK84NOTbNQTKmNWuVmMOwvaOG",
   outputPath: path.join(ROOT, "src", "data", "inventory.json"),
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
+  propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
   minImages: 1,
   maxImages: 8,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
@@ -386,7 +387,38 @@ async function main() {
     // Guardar en public/data/ para fetch desde el frontend
     if (!fs.existsSync(path.dirname(CONFIG.publicOutputPath))) fs.mkdirSync(path.dirname(CONFIG.publicOutputPath), { recursive: true });
     fs.writeFileSync(CONFIG.publicOutputPath, jsonData);
-    
+
+    // Generar properties.js con el formato que usa el frontend
+    const pageFormatted = enriched.map((p) => ({
+      nid: p.nid,
+      titulo: p.titulo,
+      tipo: p.tipo_de_propiedad,
+      barrio: p.barrio,
+      conjunto: p.conjunto,
+      ciudad: p.ciudad,
+      descripcion: p.descripcion,
+      area: p.area,
+      habitaciones: p.num_habitaciones,
+      baños: p.banos,
+      garaje: p.garajes,
+      piso: p.num_piso,
+      estrato: p.estrato,
+      ascensor: p.tiene_ascensor === "1" || p.tiene_ascensor === 1
+        ? true
+        : p.tiene_ascensor === "0" || p.tiene_ascensor === 0
+        ? false
+        : null,
+      bonoHabi: parseInt(p.bonus_value || 0),
+      admin: parseInt(p.costo_administracion || 0),
+      precio_venta: p.precio_venta,
+      precio_original: p.precio_anterior,
+      url_360: p.url_360 || "",
+      url_habi: p.url_habi || p.url || "",
+      images: p.images || [],
+    }));
+    const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
+    fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
+
     console.log(`✅ ¡Inventario actualizado con éxito! (${enriched.length} propiedades)`);
     console.log(`🗑️ Propiedades eliminadas por falta de fotos/Matterport: ${removedWithoutMedia}`);
   } catch (err) {
