@@ -324,7 +324,10 @@ async function scrapeImages(url) {
 async function validate360(url) {
   if (!url) return false;
   try {
-    // Primary: OEmbed endpoint – returns 200 only for published/active models
+    // Primary: OEmbed endpoint – returns 200 only for published/active models.
+    // NOTE: The oEmbed API can return 404 for valid/working models, so a 404
+    // response is NOT treated as definitive failure – we always fall through
+    // to the direct page check.
     const oembedUrl = `https://my.matterport.com/api/v1/oembed?url=${encodeURIComponent(url)}`;
     const oembedResp = await axios.get(oembedUrl, {
       timeout: 8000,
@@ -332,9 +335,11 @@ async function validate360(url) {
       validateStatus: null
     });
     if (oembedResp.status === 200 && oembedResp.data?.html) return true;
-    if (oembedResp.status === 404 || oembedResp.status === 403 || oembedResp.status === 400) return false;
+    // Do NOT return false on 404/403/400 – oEmbed is unreliable for some models.
+    // Always fall through to the direct page check below.
 
-    // Fallback: fetch the page and check for error indicators
+    // Fallback: fetch the page directly and check for error indicators.
+    // Matterport returns HTTP 200 even for unavailable models; detect via content.
     const { data, status } = await axios.get(url, {
       timeout: 10000,
       headers: { "User-Agent": CONFIG.userAgent },
@@ -342,7 +347,6 @@ async function validate360(url) {
     });
     if (status !== 200) return false;
 
-    // Matterport returns HTTP 200 even for unavailable models; detect via content
     const errorPatterns = [
       /not\s+available/i,
       /no\s+est[aá]\s+disponible/i,
@@ -352,7 +356,7 @@ async function validate360(url) {
     ];
     if (errorPatterns.some((p) => p.test(data))) return false;
 
-    // Must have showcase-specific content (present on valid model pages, not error pages)
+    // Valid model pages always contain both "showcase" and "matterport".
     return data.includes("showcase") && data.includes("matterport");
   } catch {
     return false;

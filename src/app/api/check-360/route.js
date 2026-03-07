@@ -18,11 +18,11 @@ export async function GET(request) {
       if (data?.html) return Response.json({ valid: true });
     }
 
-    if (resp.status === 404 || resp.status === 403 || resp.status === 400) {
-      return Response.json({ valid: false });
-    }
+    // Do NOT return false on 404/403/400 – the oEmbed API can return 404 even
+    // for valid, working Matterport models. Always fall through to the direct
+    // page check which is the reliable validator.
 
-    // Fallback: fetch the page and check for error indicators
+    // Fallback: fetch the page directly and check for error indicators
     const pageResp = await fetch(url, {
       signal: AbortSignal.timeout(10000),
       headers: { "User-Agent": "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)" },
