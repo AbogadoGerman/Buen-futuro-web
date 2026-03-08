@@ -15,7 +15,7 @@ const CONFIG = {
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
   propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
   minImages: 1,
-  maxImages: 12,
+  maxImages: 20,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
   delayBetweenRequestsMs: 800
 };
@@ -240,20 +240,23 @@ async function scrapeImages(url) {
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
 
-    // Primary: JSON "image" array embedded in HABI/Gatsby pages (fastest + most accurate)
+    // 1) JSON "image" array embedded in HABI/Gatsby pages (e.g. JSON-LD structured data)
+    let jsonLdImages = [];
     const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
     if (imgArrayMatch) {
       try {
         const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
-        const resolved = imgs.map(img => img.startsWith("http") ? img : HABI_CDN + img).filter(Boolean);
-        if (resolved.length >= CONFIG.minImages) return resolved.slice(0, CONFIG.maxImages);
+        jsonLdImages = imgs.map(img => img.startsWith("http") ? img : HABI_CDN + img).filter(Boolean);
       } catch {}
     }
 
-    // Secondary: Gatsby page-data carousel
+    // 2) Gatsby page-data carousel (usually has the FULL image set)
     const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
-    if (carouselImages.length >= CONFIG.minImages) {
-      return carouselImages.slice(0, CONFIG.maxImages);
+
+    // Pick whichever source returned more images
+    const bestPrimary = carouselImages.length >= jsonLdImages.length ? carouselImages : jsonLdImages;
+    if (bestPrimary.length >= CONFIG.minImages) {
+      return bestPrimary.slice(0, CONFIG.maxImages);
     }
 
     const candidates = [];
