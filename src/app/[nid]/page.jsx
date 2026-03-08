@@ -1,6 +1,7 @@
 import { INV } from "@/data/properties";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const WA = "573108074915";
 
@@ -80,10 +81,13 @@ export default async function PropertyPage({ params }) {
         {/* Images */}
         {realPhotos && (
           <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "#E8ECF0" }}>
-            <img
+            <Image
               src={imgs[0]}
               alt={p.titulo}
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover" }}
+              fill
+              sizes="(max-width:768px) 100vw, 780px"
+              priority
+              style={{ objectFit: "cover" }}
             />
             {descuento > 0 && (
               <div style={{ position: "absolute", top: 12, left: 12, background: "#E74C3C", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 13, fontWeight: 800 }}>
@@ -102,7 +106,7 @@ export default async function PropertyPage({ params }) {
         {realPhotos && imgs.length > 1 && (
           <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 4 }}>
             {imgs.slice(1).map((img, i) => (
-              <img key={i} src={img} alt="" style={{ width: 80, height: 60, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
+              <Image key={i} src={img} alt="" width={80} height={60} style={{ objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
             ))}
           </div>
         )}
