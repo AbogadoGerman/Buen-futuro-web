@@ -382,7 +382,7 @@ function Modal({p,onClose,onSimCredit}){
 
         {/* 360 view tab */}
         {tab==="360"&&<div style={{position:"relative",height:"clamp(280px,50vw,450px)",background:"#111"}}>
-          <iframe src={p.url_360} title="Vista 360" style={{width:"100%",height:"100%",border:"none"}} allowFullScreen allow="xr-spatial-tracking" />
+          <iframe src={p.url_360} title="Vista 360" loading="lazy" style={{width:"100%",height:"100%",border:"none"}} allowFullScreen allow="xr-spatial-tracking" />
           <div style={{position:"absolute",top:10,left:10,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,display:"flex",alignItems:"center",gap:5}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
             Recorrido Virtual Matterport

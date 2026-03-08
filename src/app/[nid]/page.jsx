@@ -185,6 +185,7 @@ export default async function PropertyPage({ params }) {
             <iframe
               src={p.url_360}
               title="Tour 360°"
+              loading="lazy"
               style={{ width: "100%", height: 360, border: "none", borderRadius: 10 }}
               allowFullScreen
             />
