@@ -151,10 +151,7 @@ function isValidImageUrl(url) {
   const looksLikeImage = /\.(jpe?g|png|webp|avif)(\?|$)/i.test(lower);
   if (!looksLikeImage) return false;
 
-  // Prioritize property-gallery style image URLs.
-  const knownImageCdn = lower.includes("cloudfront.net");
-  const ventaPattern = /\/venta-[^/]+\.(?:jpe?g|png|webp|avif)(\?|$)/i.test(lower);
-  return knownImageCdn || ventaPattern;
+  return true;
 }
 
 function scoreImage(url) {
