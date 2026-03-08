@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { INV } from "@/data/properties";
 import useEmblaCarousel from "embla-carousel-react";
 
@@ -165,14 +166,14 @@ function CreditSim({onClose,property}){
       <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:520,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)"}}>
         <div style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",padding:"20px 24px",borderRadius:"20px 20px 0 0",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <img src={LOGO_HABI_W} alt="HABI" style={{height:36,objectFit:"contain"}} />
+            <Image src={LOGO_HABI_W} alt="HABI" width={96} height={36} style={{objectFit:"contain"}} />
             <div><h2 style={{color:"white",fontFamily:"'Outfit'",fontSize:18,fontWeight:800,margin:0}}>Simulador de Crédito</h2><p style={{color:"rgba(255,255,255,0.7)",fontSize:11,margin:0}}>Alianza Buen Futuro x HABI</p></div>
           </div>
           <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
         </div>
         <div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:18}}>
           <div style={{display:"flex",alignItems:"center",gap:10,background:"#F3E8FF",padding:"10px 14px",borderRadius:12}}>
-            <img src={LOGO_BF} alt="BF" style={{height:28,objectFit:"contain"}} />
+            <Image src={LOGO_BF} alt="BF" width={75} height={28} style={{objectFit:"contain"}} />
             <span style={{fontSize:12,color:"#5B1FA6",fontWeight:600}}>Aliados oficiales HABI - Bonos exclusivos</span>
           </div>
           <div style={{display:"flex",gap:8}}>{[["pesos","En Pesos (Fija)"],["uvr","En UVR"]].map(([k,l])=><button key={k} onClick={()=>setTipo(k)} style={{flex:1,padding:10,borderRadius:10,border:"2px solid",borderColor:tipo===k?"#7B2FF7":"#E0E0E0",background:tipo===k?"#F3E8FF":"white",color:tipo===k?"#5B1FA6":"#666",fontWeight:700,fontSize:13,cursor:"pointer"}}>{l}</button>)}</div>
@@ -283,7 +284,7 @@ function Card({p,onClick,featured,onSimCredit}){
         {imgs.length>1&&<div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3}}>{imgs.map((_,i)=><button key={i} onClick={e=>{e.stopPropagation();setII(i)}} style={{width:6,height:6,borderRadius:"50%",border:"1.5px solid white",cursor:"pointer",background:i===ii?"white":"rgba(255,255,255,0.3)",padding:0}} />)}</div>}
         {p.tipo&&<div style={{position:"absolute",top:8,left:8,background:"#1B4F72",color:"white",padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:600}}>{p.tipo}</div>}
           {d>0&&<div style={{position:"absolute",top:8,right:8,background:"#E74C3C",color:"white",padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:800}}>{d}% OFF</div>}
-          {num(p.bonoHabi)>0&&<div style={{position:"absolute",bottom:22,left:8,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"2px 8px",borderRadius:12,fontSize:9,fontWeight:800,display:"flex",alignItems:"center",gap:3}}><img src={LOGO_HABI_W} alt="" style={{height:12}} />Bono {fmtM(p.bonoHabi)}</div>}
+          {num(p.bonoHabi)>0&&<div style={{position:"absolute",bottom:22,left:8,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"2px 8px",borderRadius:12,fontSize:9,fontWeight:800,display:"flex",alignItems:"center",gap:3}}><Image src={LOGO_HABI_W} alt="" width={32} height={12} style={{objectFit:"contain"}} />Bono {fmtM(p.bonoHabi)}</div>}
         {p.url_360&&<div style={{position:"absolute",top:8,left:p.tipo?(p.tipo.length*6.5+24):8,background:"rgba(0,0,0,0.6)",color:"white",padding:"2px 7px",borderRadius:12,fontSize:9,fontWeight:700,display:"flex",alignItems:"center",gap:2}}>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>360°
         </div>}
@@ -375,7 +376,7 @@ function Modal({p,onClose,onSimCredit}){
           {/* Thumbnails strip */}
           {imgs.length>1&&<div className="modal-thumbs" style={{position:"absolute",bottom:30,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>{imgs.map((img,i)=><img key={i} src={img} alt="" onClick={()=>goTo(i)} style={{width:44,height:30,objectFit:"cover",borderRadius:4,border:i===ii?"2px solid white":"2px solid transparent",cursor:"pointer",opacity:i===ii?1:0.6}} />)}</div>}
           {d>0&&<div style={{position:"absolute",top:12,left:12,background:"#E74C3C",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800}}>{d}% DESC.</div>}
-          {num(p.bonoHabi)>0&&<div style={{position:"absolute",top:d>0?54:12,left:12,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800,display:"flex",alignItems:"center",gap:6}}><img src={LOGO_HABI_W} alt="" style={{height:16}} />Bono: {fmt(p.bonoHabi)}</div>}
+          {num(p.bonoHabi)>0&&<div style={{position:"absolute",top:d>0?54:12,left:12,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800,display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI_W} alt="" width={43} height={16} style={{objectFit:"contain"}} />Bono: {fmt(p.bonoHabi)}</div>}
           <div style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,0.6)",color:"white",padding:"4px 10px",borderRadius:14,fontSize:12,fontWeight:600}}>{ii+1}/{imgs.length}</div>
         </div>}
 
@@ -410,7 +411,7 @@ function Modal({p,onClose,onSimCredit}){
               Solicitar más información
             </button>
             {onSimCredit&&<button onClick={()=>onSimCredit(p)} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",borderRadius:12,padding:"13px 10px",fontSize:"clamp(12px,2.5vw,14px)",fontWeight:700,border:"none",cursor:"pointer",width:"100%"}}>
-              <img src={LOGO_HABI_W} alt="" style={{height:16}} />
+              <Image src={LOGO_HABI_W} alt="" width={43} height={16} style={{objectFit:"contain"}} />
               Simular Crédito HabiCredit
             </button>}
           </div>
@@ -577,10 +578,10 @@ export default function App(){
       {/* HEADER */}
       <header style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,243,247,0.97)",backdropFilter:"blur(12px)",borderBottom:"1px solid rgba(27,79,114,0.08)",overflow:"hidden"}}>
         <div style={{maxWidth:1100,margin:"0 auto",padding:"6px clamp(10px,3vw,16px)",display:"flex",alignItems:"center",justifyContent:"space-between",gap:6}}>
-          <img src={LOGO_BF} alt="BF" onClick={()=>setPage("inicio")} style={{height:"clamp(32px,8vw,40px)",objectFit:"contain",cursor:"pointer",flexShrink:0}} />
+          <Image src={LOGO_BF} alt="BF" width={107} height={40} onClick={()=>setPage("inicio")} style={{height:"clamp(32px,8vw,40px)",width:"auto",objectFit:"contain",cursor:"pointer",flexShrink:0}} />
           <nav className="nav-desk" style={{display:"flex",gap:2,alignItems:"center"}}>
             {[["Inicio","inicio"],["Catálogo","catalogo"]].map(([l,id])=><button key={id} onClick={()=>setPage(id)} style={{fontWeight:600,fontSize:14,color:page===id?"white":"#1B2A4A",padding:"7px 14px",borderRadius:8,border:"none",background:page===id?"#1B4F72":"transparent",cursor:"pointer"}}>{l}</button>)}
-            <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"7px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito</button>
+            <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"7px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Image src={LOGO_HABI} alt="" width={43} height={16} style={{objectFit:"contain"}} />Crédito</button>
           </nav>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
             <button onClick={()=>{setFilters({...applied});setFOpen(true)}} style={{display:"flex",alignItems:"center",gap:4,padding:"7px clamp(10px,3vw,16px)",borderRadius:20,border:"none",cursor:"pointer",fontWeight:800,fontSize:"clamp(11px,2.8vw,13px)",background:"linear-gradient(135deg,#FF6B35,#E74C3C)",color:"white",animation:"pulse 2s infinite",position:"relative",flexShrink:0}}>
@@ -593,7 +594,7 @@ export default function App(){
         </div>
         {mobMenu&&<div className="mob-menu" style={{padding:"8px 16px 16px",display:"flex",flexDirection:"column",gap:4}}>
           {[["Inicio","inicio"],["Catálogo","catalogo"]].map(([l,id])=><button key={id} onClick={()=>{setPage(id);setMobMenu(false)}} style={{fontWeight:600,fontSize:14,color:"#1B2A4A",padding:"10px 14px",borderRadius:8,border:"none",background:page===id?"#EBF0F5":"transparent",cursor:"pointer",textAlign:"left"}}>{l}</button>)}
-          <button onClick={()=>{setCOpen(true);setSimProperty(null);setMobMenu(false);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><img src={LOGO_HABI} alt="" style={{height:16}} />Crédito HABI</button>
+          <button onClick={()=>{setCOpen(true);setSimProperty(null);setMobMenu(false);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI} alt="" width={43} height={16} style={{objectFit:"contain"}} />Crédito HABI</button>
           <input placeholder="Buscar..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value){setPage("catalogo");setMobMenu(false)}}} style={{fontSize:13,padding:"10px 14px",border:"2px solid #D5DBDB",borderRadius:12,outline:"none",width:"100%",background:"white",margin:"4px 0"}} />
         </div>}
       </header>
@@ -604,19 +605,19 @@ export default function App(){
           <HouseDeco />
           <div className="hero-grid" style={{maxWidth:1100,margin:"0 auto",display:"flex",gap:"clamp(16px,3vw,36px)",alignItems:"center"}}>
             <div className="hero-imgs" style={{flex:"0 0 40%",display:"flex",flexDirection:"column",gap:10}}>
-              <img src={HERO_TOP} alt="Interior" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
-              <img src={HERO_BOT} alt="Sala" style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
+              <Image src={HERO_TOP} alt="Interior" width={500} height={195} priority style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
+              <Image src={HERO_BOT} alt="Sala" width={500} height={195} priority style={{width:"100%",height:195,borderRadius:14,objectFit:"cover",boxShadow:"0 6px 24px rgba(27,79,114,0.1)"}} />
             </div>
             <div className="hero-copy" style={{flex:1,minWidth:0,animation:"slideUp .7s"}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-                <img src={LOGO_HABI} alt="HABI" style={{height:24}} />
+                <Image src={LOGO_HABI} alt="HABI" width={64} height={24} style={{objectFit:"contain"}} />
                 <span style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 11px",borderRadius:14,fontSize:10,fontWeight:800}}>Aliados Oficiales HABI</span>
               </div>
               <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(26px,5vw,46px)",fontWeight:900,color:"#1B2A4A",lineHeight:1.1,marginBottom:10}}>Tu Buen Futuro<br/>inicia hoy</h1>
                 <p style={{fontSize:"clamp(12px,2vw,15px)",color:"#2471A3",lineHeight:1.5,marginBottom:16}}>Amplio catálogo de apartamentos y casas en Bogotá<br/>con recorridos virtuales 360° - Aliados HABI</p>
               <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#E74C3C",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Ofertas</button>
-                <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}><img src={LOGO_HABI_W} alt="" style={{height:15}} />Crédito</button>
+                <button onClick={()=>{setCOpen(true);setSimProperty(null);}} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}><Image src={LOGO_HABI_W} alt="" width={40} height={15} style={{objectFit:"contain"}} />Crédito</button>
                 <button onClick={()=>setPage("catalogo")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#1B4F72",color:"white",fontWeight:700,fontSize:13,cursor:"pointer"}}>Catálogo ({inv.length})</button>
               </div>
               <div style={{marginTop:20}}>
@@ -653,7 +654,7 @@ export default function App(){
         {/* FOOTER */}
         <section style={{padding:"clamp(24px,4vw,36px) clamp(10px,3vw,16px)",background:"#1B2A4A",borderTop:"4px solid #F4D03F"}}>
           <div className="footer-g" style={{maxWidth:1100,margin:"0 auto",display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:28}}>
-            <div><img src={LOGO_BF} alt="BF" style={{height:42,marginBottom:8}} /><p style={{color:"#AEB6BF",fontSize:11,maxWidth:230,lineHeight:1.5}}>Tu aliado de confianza en bienes raíces. Aliados oficiales HABI.</p><div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><img src={LOGO_HABI} alt="" style={{height:20}} /><span style={{color:"#B39DDB",fontSize:10,fontWeight:600}}>Aliados Oficiales</span></div></div>
+            <div><Image src={LOGO_BF} alt="BF" width={112} height={42} style={{marginBottom:8}} /><p style={{color:"#AEB6BF",fontSize:11,maxWidth:230,lineHeight:1.5}}>Tu aliado de confianza en bienes raíces. Aliados oficiales HABI.</p><div style={{display:"flex",alignItems:"center",gap:6,marginTop:8}}><Image src={LOGO_HABI} alt="" width={53} height={20} style={{objectFit:"contain"}} /><span style={{color:"#B39DDB",fontSize:10,fontWeight:600}}>Aliados Oficiales</span></div></div>
             <div><h4 style={{color:"#F4D03F",fontWeight:700,fontSize:11,marginBottom:8,letterSpacing:1}}>CONTÁCTANOS</h4><a href={"https://wa.me/"+WA} target="_blank" rel="noopener noreferrer" style={{color:"#25D366",fontSize:12,textDecoration:"none",display:"block",marginBottom:4}}>+57 310 807 4915</a><a href="mailto:Inmobiliariabuenfuturo1@gmail.com" style={{color:"#D5DBDB",fontSize:11,textDecoration:"none",display:"block",marginBottom:12,wordBreak:"break-all"}}>Inmobiliariabuenfuturo1@gmail.com</a><h4 style={{color:"#F4D03F",fontWeight:700,fontSize:11,marginBottom:8,letterSpacing:1}}>SÍGUENOS</h4><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{SOCIALS.map(s=><a key={s.n} href={s.u} target="_blank" rel="noopener noreferrer" className="so" title={s.n} style={{background:s.c}}><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d={s.d}/></svg></a>)}</div></div>
           </div>
           <div style={{maxWidth:1100,margin:"16px auto 0",paddingTop:12,borderTop:"1px solid rgba(255,255,255,0.1)",textAlign:"center",color:"#7F8C8D",fontSize:10}}>2026 Inmobiliaria Buen Futuro. Todos los derechos reservados.</div>
