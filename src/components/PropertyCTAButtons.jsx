@@ -5,6 +5,29 @@ import { trackViewContent, trackContact, trackSchedule } from "./PixelScripts";
 
 const WA = "573108074915";
 
+function sendServerEvent(p, eventName) {
+  const fbp = (document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/) || [])[1] || "";
+  const fbc = (document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/) || [])[1] || "";
+  fetch("/api/notify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nid: p.nid,
+      titulo: p.titulo || "",
+      ubicacion: [p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(", "),
+      precio: p.precioFormateado || "",
+      area: p.area || "N/A",
+      habitaciones: p.habitaciones || "N/A",
+      banos: p.banos || "N/A",
+      bonoHabi: "",
+      eventName,
+      sourceUrl: window.location.href,
+      fbp,
+      fbc,
+    }),
+  }).catch(() => {});
+}
+
 export default function PropertyCTAButtons({ property }) {
   const p = property;
 
@@ -22,11 +45,13 @@ export default function PropertyCTAButtons({ property }) {
 
   function handleInfo() {
     trackContact(p);
+    sendServerEvent(p, "Contact");
     window.open(`https://wa.me/${WA}?text=${waMsg}`, "_blank");
   }
 
   function handleSchedule() {
     trackSchedule(p);
+    sendServerEvent(p, "Schedule");
     window.open(`https://wa.me/${WA}?text=${waScheduleMsg}`, "_blank");
   }
 
