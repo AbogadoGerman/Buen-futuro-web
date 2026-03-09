@@ -78,6 +78,16 @@ export default async function PropertyPage({ params }) {
       </div>
 
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "20px 16px 40px" }}>
+        {/* VENDIDO banner when no photos and no 360 */}
+        {!realPhotos && !has360 && (
+          <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "linear-gradient(135deg,#1B2A4A,#2C3E50)" }}>
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%) rotate(-15deg)", background: "#E74C3C", color: "white", padding: "16px 60px", fontSize: "clamp(22px,5vw,36px)", fontWeight: 900, letterSpacing: 6, textTransform: "uppercase", boxShadow: "0 6px 30px rgba(231,76,60,0.5)", textAlign: "center", zIndex: 1 }}>VENDIDO</div>
+          </div>
+        )}
+
         {/* Images */}
         {realPhotos && (
           <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "#E8ECF0" }}>
