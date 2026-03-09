@@ -203,12 +203,32 @@ export default async function PropertyPage({ params }) {
         )}
 
         {/* Ref & HABI link */}
-        <div style={{ background: "white", borderRadius: 16, padding: 16, marginBottom: 20, boxShadow: "0 2px 12px rgba(27,79,114,0.07)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-          <span style={{ fontSize: 12, color: "#7F8C8D" }}>Ref. HABI: <strong style={{ color: "#1B2A4A" }}>{p.nid}</strong></span>
-          {p.url_habi && (
-            <a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none" }}>
-              Ver en HABI →
-            </a>
+        <div style={{ background: "white", borderRadius: 16, padding: 16, marginBottom: 20, boxShadow: "0 2px 12px rgba(27,79,114,0.07)", display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+            <span style={{ fontSize: 12, color: "#7F8C8D" }}>Ref. HABI: <strong style={{ color: "#1B2A4A" }}>{p.nid}</strong></span>
+            {p.url_habi && (
+              <a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none" }}>
+                Ver en HABI →
+              </a>
+            )}
+          </div>
+          {p.direccion && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#E74C3C"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span style={{ fontSize: 13, color: "#5D6D7E" }}>{p.direccion}</span>
+              <a
+                href={
+                  p.link_google_map ||
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.direccion + (p.ciudad ? ", " + p.ciudad : ""))}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none", background: "#EAF2FB", padding: "3px 8px", borderRadius: 6 }}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Ver ubicación
+              </a>
+            </div>
           )}
         </div>
 

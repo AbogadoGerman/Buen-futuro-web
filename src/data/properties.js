@@ -41,7 +41,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9e86f33ce3-48.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf159b03f4-49.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cd685aba04-50.png"
-    ]
+    ],
+    "direccion": "Carrera 70D # 64 - 38",
+    "link_google_map": ""
   },
   {
     "nid": "37630798748",
@@ -85,7 +87,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-19b24f5178-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2412bbb40a-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c02d2d566f-26.png"
-    ]
+    ],
+    "direccion": "Avenida Carrera 70 #57R - 27 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "38310898347",
@@ -127,7 +131,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-61aa6d1608-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-14f153ac56-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4fc272286c-19.png"
-    ]
+    ],
+    "direccion": "Avenida Carrera 70C #57R-15sur",
+    "link_google_map": ""
   },
   {
     "nid": "32761168405",
@@ -166,7 +172,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2d2be2b5aa-45.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-680b93dcc7-46.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c849a85fef-47.png"
-    ]
+    ],
+    "direccion": "Carrera 70C # 57R - 75 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "47678100040",
@@ -210,7 +218,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-eff5ef5d00-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2d69b168e0-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-25d745c6b0-22.png"
-    ]
+    ],
+    "direccion": "KR 70D 64 38 SUR BQ 6",
+    "link_google_map": ""
   },
   {
     "nid": "46532881467",
@@ -244,7 +254,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3e206b972e-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bdc51bb9cb-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d9fdabfd71-10.png"
-    ]
+    ],
+    "direccion": "Carrera 70D  # 65 60 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "43130201469",
@@ -287,7 +299,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-37f5d9151f-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-49551db9fd-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6d6d4f8957-22.png"
-    ]
+    ],
+    "direccion": "CL 57R BIS  SUR 73B 73",
+    "link_google_map": ""
   },
   {
     "nid": "42517032504",
@@ -331,7 +345,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-536c8fb70d-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5f77bd447f-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1fc0fb0ce4-21.png"
-    ]
+    ],
+    "direccion": "Avenida 68 sur  # 70D - 71",
+    "link_google_map": ""
   },
   {
     "nid": "43918054156",
@@ -371,7 +387,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0ea1b9c783-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-58a07dcaa1-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2623a7fd22-16.png"
-    ]
+    ],
+    "direccion": "Carrera 70c # 57r - 73sur",
+    "link_google_map": ""
   },
   {
     "nid": "23047695936",
@@ -396,7 +414,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/23047695936/bellavista-2---apartamento-venta-ensueno-ciudad-bolivar",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 70D # 64 - 38 sur",
+    "link_google_map": ""
   },
   {
     "nid": "55229964135",
@@ -433,7 +453,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5c11912efe-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ccbe01857f-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-57d6d9dc2f-8.png"
-    ]
+    ],
+    "direccion": "KR 73F 60A 40 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "41045846603",
@@ -469,7 +491,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4e8d9a1d84-30.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8e0ff8e5dd-31.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-55ee42129f-32.png"
-    ]
+    ],
+    "direccion": "Carrera 87c # 69a sur - 43",
+    "link_google_map": ""
   },
   {
     "nid": "44107341070",
@@ -513,7 +537,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b86267134e-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a284a34b7c-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1d63a40725-22.png"
-    ]
+    ],
+    "direccion": "Calle 7D # 81B - 03",
+    "link_google_map": ""
   },
   {
     "nid": "21531124903",
@@ -557,7 +583,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-16018785b4-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-97e2799879-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9a175bbc2c-22.png"
-    ]
+    ],
+    "direccion": "Calle 14b # 119a - 20",
+    "link_google_map": ""
   },
   {
     "nid": "33207115273",
@@ -600,7 +628,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f0c5452630-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d0a7a50f5a-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f85d4eab52-20.png"
-    ]
+    ],
+    "direccion": "Calle 11b #74-67",
+    "link_google_map": ""
   },
   {
     "nid": "50794909483",
@@ -625,7 +655,9 @@ export const INV = [
     "url_habi": "",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 45A SUR 88C 98",
+    "link_google_map": ""
   },
   {
     "nid": "22892643920",
@@ -665,7 +697,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e80a5fd2c2-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ee5239be54-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-083f49573a-18.png"
-    ]
+    ],
+    "direccion": "Carrera 72D #22A - 51",
+    "link_google_map": ""
   },
   {
     "nid": "44809236869",
@@ -709,7 +743,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b6dafb9dfa-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-efd9c83c66-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8b2f1e46d0-26.png"
-    ]
+    ],
+    "direccion": "KR 126 17F 80 T",
+    "link_google_map": ""
   },
   {
     "nid": "34443547800",
@@ -751,7 +787,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-932a944a77-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3ce6549ac9-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cb8af03b20-18.png"
-    ]
+    ],
+    "direccion": "CL 15A 123 79",
+    "link_google_map": ""
   },
   {
     "nid": "43601844394",
@@ -795,7 +833,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-747044b762-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-19374fa486-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7ac7a81ec0-21.png"
-    ]
+    ],
+    "direccion": "Carrera 115 # 149b - 10",
+    "link_google_map": ""
   },
   {
     "nid": "35525408520",
@@ -837,7 +877,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d622dadbda-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-465bfcada0-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-392ad8ecaf-23.png"
-    ]
+    ],
+    "direccion": "CL 60B SUR 70 44",
+    "link_google_map": ""
   },
   {
     "nid": "54220753081",
@@ -879,7 +921,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2e57ab1ce6-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cfa1e6a454-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5e7eabfd40-21.png"
-    ]
+    ],
+    "direccion": "CL 16 123 81",
+    "link_google_map": ""
   },
   {
     "nid": "55282611120",
@@ -923,7 +967,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-11dfc1bb50-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4c82596081-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-090ae20483-21.png"
-    ]
+    ],
+    "direccion": "Carrera 24 #6-225 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "35569649700",
@@ -967,7 +1013,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5bd5a4adf9-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1a0c4f4bdb-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5f0a962819-25.png"
-    ]
+    ],
+    "direccion": "Calle 163 # 16a - 19",
+    "link_google_map": ""
   },
   {
     "nid": "50375981389",
@@ -1011,7 +1059,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9925b409f1-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c8ff8679a2-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6381c42586-21.png"
-    ]
+    ],
+    "direccion": "Calle 71a sur # 83 - 20",
+    "link_google_map": ""
   },
   {
     "nid": "20082986767",
@@ -1055,7 +1105,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b7461c2908-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a29ba85645-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-058479ea46-21.png"
-    ]
+    ],
+    "direccion": "Calle 11A # 79A-60",
+    "link_google_map": ""
   },
   {
     "nid": "29745272175",
@@ -1093,7 +1145,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-936b180f7a-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c084b952c4-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e48db65abc-15.png"
-    ]
+    ],
+    "direccion": "CL 48 SUR 86 02",
+    "link_google_map": ""
   },
   {
     "nid": "43072772748",
@@ -1137,7 +1191,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-92e8c64b01-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f780e5a622-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a2666974ed-22.png"
-    ]
+    ],
+    "direccion": "Carrera 135 # 17 - 35",
+    "link_google_map": ""
   },
   {
     "nid": "50392869272",
@@ -1179,7 +1235,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-282eb3a6a3-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7e8c0f0fd7-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-331db6037a-18.png"
-    ]
+    ],
+    "direccion": "Carrera 135 #17-35",
+    "link_google_map": ""
   },
   {
     "nid": "44659200898",
@@ -1223,7 +1281,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-092d8d0c5e-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-531d960b46-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8d61c78272-21.png"
-    ]
+    ],
+    "direccion": "Calle 17C # 135-43",
+    "link_google_map": ""
   },
   {
     "nid": "47221414405",
@@ -1260,7 +1320,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-810c7ee732-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9a7353e392-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-abfc1b5f92-13.png"
-    ]
+    ],
+    "direccion": "Calle 16 #123-51",
+    "link_google_map": ""
   },
   {
     "nid": "13387125306",
@@ -1298,7 +1360,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ac0b7b49df-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-57cafec0e2-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7161b9b271-14.png"
-    ]
+    ],
+    "direccion": "Calle 15 # 119A-07",
+    "link_google_map": ""
   },
   {
     "nid": "44831408971",
@@ -1342,7 +1406,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2f27a716e0-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-733541e91d-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-58fa8b62ce-23.png"
-    ]
+    ],
+    "direccion": "KR 123 14B 46",
+    "link_google_map": ""
   },
   {
     "nid": "42749237683",
@@ -1367,7 +1433,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/42749237683/element---apartamento-venta-santander-antonio-narino",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Calle 18sur # 27 - 49",
+    "link_google_map": ""
   },
   {
     "nid": "39155109922",
@@ -1407,7 +1475,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d665a39518-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6b29afb053-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c704ef53c3-22.png"
-    ]
+    ],
+    "direccion": "Calle 12 # 25A - 12",
+    "link_google_map": ""
   },
   {
     "nid": "41089307272",
@@ -1448,7 +1518,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-050255ec53-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0c91a51cfd-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a81504bba5-18.png"
-    ]
+    ],
+    "direccion": "Calle 6a # 18 - 33",
+    "link_google_map": ""
   },
   {
     "nid": "38614633112",
@@ -1488,7 +1560,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ee3a621e3b-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b140aa436d-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-797aefabfb-21.png"
-    ]
+    ],
+    "direccion": "Calle 12 # 25a - 12",
+    "link_google_map": ""
   },
   {
     "nid": "41891693477",
@@ -1530,7 +1604,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-123d400361-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-512384bced-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a51d233329-19.png"
-    ]
+    ],
+    "direccion": "Carrera 19a # 16 - 26",
+    "link_google_map": ""
   },
   {
     "nid": "21532463725",
@@ -1565,7 +1641,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-07215e7637-27.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c3d8ae03f4-28.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-31bc94f295-29.png"
-    ]
+    ],
+    "direccion": "Calle 6a # 18 - 33",
+    "link_google_map": ""
   },
   {
     "nid": "45363380803",
@@ -1603,7 +1681,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-bbe3cd3b26-39.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ed3a113d8e-40.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6559ee123e-41.png"
-    ]
+    ],
+    "direccion": "Calle 12 # 25a - 12",
+    "link_google_map": ""
   },
   {
     "nid": "44551738011",
@@ -1643,7 +1723,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3512e50ee3-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d2fc3ec276-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-09f109e903-18.png"
-    ]
+    ],
+    "direccion": "Calle 6a # 18 - 33",
+    "link_google_map": ""
   },
   {
     "nid": "37120059148",
@@ -1668,7 +1750,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/37120059148/primavera-6-39---apartamento-venta-primavera-occidental-puente-aranda",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 39B #4F - 75",
+    "link_google_map": ""
   },
   {
     "nid": "36315822854",
@@ -1710,7 +1794,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-143a26cce2-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c3288d680c-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dad5b4acb0-20.png"
-    ]
+    ],
+    "direccion": "Calle 3 # 36 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "43203898939",
@@ -1750,7 +1836,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-41ef194e53-30.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-12c26de3bf-31.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a92bf34ffc-32.png"
-    ]
+    ],
+    "direccion": "Calle 4B #34A - 85",
+    "link_google_map": ""
   },
   {
     "nid": "38458597019",
@@ -1791,7 +1879,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-017d8e223e-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e9b4796940-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7bf8f7b19d-18.png"
-    ]
+    ],
+    "direccion": "Calle 4b # 34a - 85",
+    "link_google_map": ""
   },
   {
     "nid": "40244449681",
@@ -1830,7 +1920,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6cb9c7a0fb-31.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-11a6f07f28-32.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-56dbbc8e1f-33.png"
-    ]
+    ],
+    "direccion": "Calle 3 #36 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "45285293602",
@@ -1874,7 +1966,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ab92009af0-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b3747d009a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-668e255eda-22.png"
-    ]
+    ],
+    "direccion": "Calle 3 # 36 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "46647538704",
@@ -1916,7 +2010,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fb3fa66cb3-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1f95ca2bcd-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bf9a82b047-19.png"
-    ]
+    ],
+    "direccion": "Calle 3 # 36 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "41615402882",
@@ -1959,7 +2055,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-302decadca-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-abeda47b93-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4f27d10906-20.png"
-    ]
+    ],
+    "direccion": "Calle 3 # 36 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "41732459929",
@@ -2003,7 +2101,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3438c5adac-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-60f173f2c0-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f224a49aed-21.png"
-    ]
+    ],
+    "direccion": "Calle 181C #13 - 54",
+    "link_google_map": ""
   },
   {
     "nid": "38017722973",
@@ -2041,7 +2141,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e8ccb66502-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5e80a0edbd-26.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0710fd4f36-27.png"
-    ]
+    ],
+    "direccion": "Calle 10B #81F  - 70",
+    "link_google_map": ""
   },
   {
     "nid": "39878251105",
@@ -2082,7 +2184,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-64a2e6aa01-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a23ba96125-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8df86e04f4-18.png"
-    ]
+    ],
+    "direccion": "Calle 7 D # 81 C - 03",
+    "link_google_map": ""
   },
   {
     "nid": "38830164225",
@@ -2121,7 +2225,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ab42d96e6c-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9a1ccca3df-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3a8bb477ab-17.png"
-    ]
+    ],
+    "direccion": "Calle 10b # 81f - 70",
+    "link_google_map": ""
   },
   {
     "nid": "44483045139",
@@ -2160,7 +2266,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-45b3365f01-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d69cf4b97c-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1739d15bea-17.png"
-    ]
+    ],
+    "direccion": "Calle 10B #81F - 92",
+    "link_google_map": ""
   },
   {
     "nid": "48790200964",
@@ -2200,7 +2308,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-18c8c80180-35.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fc474e7c61-36.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a3f316ae3b-37.png"
-    ]
+    ],
+    "direccion": "KR 79 10D 59",
+    "link_google_map": ""
   },
   {
     "nid": "33034102118",
@@ -2225,7 +2335,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/33034102118/castilla-urbana---apartamento-venta-bosconia-kennedy",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Calle 10B #81F - 92",
+    "link_google_map": ""
   },
   {
     "nid": "36643410460",
@@ -2265,7 +2377,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5a28ce079f-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f716e379f1-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a3664da0cc-17.png"
-    ]
+    ],
+    "direccion": "carrera 7 # 9A 41 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "36544469425",
@@ -2300,7 +2414,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-37c791885f-29.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cfc33225d2-30.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-71c6c5d246-31.png"
-    ]
+    ],
+    "direccion": "Calle 163 # 59 A - 10",
+    "link_google_map": ""
   },
   {
     "nid": "35307078584",
@@ -2340,7 +2456,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9eb4486b33-32.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8fefda871d-33.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6e953facaf-34.png"
-    ]
+    ],
+    "direccion": "CARRERA 81A 16C - 46",
+    "link_google_map": ""
   },
   {
     "nid": "43497547168",
@@ -2380,7 +2498,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e6a9a36c2c-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fd7b13a6c9-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6aec7f6c8f-22.png"
-    ]
+    ],
+    "direccion": "CL 152B 73 36",
+    "link_google_map": ""
   },
   {
     "nid": "46743793411",
@@ -2422,7 +2542,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-97fe18e045-38.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-268de1b862-39.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-152cb0dca7-40.png"
-    ]
+    ],
+    "direccion": "CL 71BIS 91 69",
+    "link_google_map": ""
   },
   {
     "nid": "32826416152",
@@ -2463,7 +2585,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fa6d2b31c6-32.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4fa306f550-33.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e1d2136f83-34.png"
-    ]
+    ],
+    "direccion": "Carrera 81A #16C - 71",
+    "link_google_map": ""
   },
   {
     "nid": "34794029910",
@@ -2504,7 +2628,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-78328d597d-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0bdaa26715-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8e76fb9c8a-18.png"
-    ]
+    ],
+    "direccion": "CARRERA99#157 43",
+    "link_google_map": ""
   },
   {
     "nid": "42518582025",
@@ -2545,7 +2671,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b4b7c156a3-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-47a5359e75-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fc0b7df578-19.png"
-    ]
+    ],
+    "direccion": "CL 138C SUR 14K 26",
+    "link_google_map": "https://maps.app.goo.gl/BrWMha6qqXXKYgcNA"
   },
   {
     "nid": "38904947595",
@@ -2587,7 +2715,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-bd92adbd57-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-279f1f1224-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ca70b296b8-19.png"
-    ]
+    ],
+    "direccion": "Calle 138 a Sur # 14I - 58",
+    "link_google_map": "https://maps.app.goo.gl/9Pvme1ZuSvwg5RzVA"
   },
   {
     "nid": "41340610955",
@@ -2631,7 +2761,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-57211ca68d-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fb6d5635b5-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-38a6fd591e-22.png"
-    ]
+    ],
+    "direccion": "Calle 55 Sur #82B - 91",
+    "link_google_map": ""
   },
   {
     "nid": "29509655156",
@@ -2675,7 +2807,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6269ea0a00-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cfe2e7be57-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4cd192e36d-21.png"
-    ]
+    ],
+    "direccion": "CL 80 BIS SUR 94 21",
+    "link_google_map": ""
   },
   {
     "nid": "41529805216",
@@ -2718,7 +2852,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1115477874-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fb5d0ec042-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5bb40cc16c-19.png"
-    ]
+    ],
+    "direccion": "Calle 88Sur # 88 C - 90",
+    "link_google_map": ""
   },
   {
     "nid": "43865415477",
@@ -2762,7 +2898,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b8bf6f9683-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-35b971d639-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7f821536da-12.png"
-    ]
+    ],
+    "direccion": "Carrera 116A # 15C - 70",
+    "link_google_map": ""
   },
   {
     "nid": "49661042314",
@@ -2806,7 +2944,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1ca913a31c-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5b42a214e5-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4d2647ed71-23.png"
-    ]
+    ],
+    "direccion": "Calle 55 sur # 24c - 85",
+    "link_google_map": ""
   },
   {
     "nid": "53546120846",
@@ -2849,7 +2989,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b08cc8bb2f-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b529613ce2-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-11a6c2c08a-20.png"
-    ]
+    ],
+    "direccion": "Carrera  90A # 8A-68",
+    "link_google_map": ""
   },
   {
     "nid": "53460648824",
@@ -2893,7 +3035,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-17855d8bd6-35.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b883adc7b4-36.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7159fe1e93-37.png"
-    ]
+    ],
+    "direccion": "KR 114F 145 45",
+    "link_google_map": ""
   },
   {
     "nid": "35540609707",
@@ -2937,7 +3081,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1a9454ce55-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3a1ca10f48-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f12b77dc93-21.png"
-    ]
+    ],
+    "direccion": "CL 148 99 38",
+    "link_google_map": ""
   },
   {
     "nid": "43459559748",
@@ -2977,7 +3123,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-344781cf75-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6bbffa0b08-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4e508c701a-21.png"
-    ]
+    ],
+    "direccion": "Calle 137 A # 98 50",
+    "link_google_map": ""
   },
   {
     "nid": "38706692173",
@@ -3021,7 +3169,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6b4adb6712-42.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-63210f36c6-43.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6de32964be-44.png"
-    ]
+    ],
+    "direccion": "Diagonal 17B #89 - 50",
+    "link_google_map": ""
   },
   {
     "nid": "36154202483",
@@ -3065,7 +3215,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4675dc0657-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-df0bc4f02f-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ee0ad011ea-21.png"
-    ]
+    ],
+    "direccion": "calle 69 sur n 82a- 52",
+    "link_google_map": "https://maps.app.goo.gl/PCiQ7QGAM4HfczyJ7"
   },
   {
     "nid": "40467385755",
@@ -3108,7 +3260,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-24aee2ca2e-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4a82ae97d2-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1ab9b5b1d2-20.png"
-    ]
+    ],
+    "direccion": "Calle 71A Sur #83 - 20",
+    "link_google_map": ""
   },
   {
     "nid": "44861480070",
@@ -3144,7 +3298,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6f1baf97fd-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-61cc5d67b6-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d21a48e417-24.png"
-    ]
+    ],
+    "direccion": "Carrera 81 # 75 - 11sur",
+    "link_google_map": ""
   },
   {
     "nid": "34743992478",
@@ -3186,7 +3342,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ce23793e06-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d481883736-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-01abd37b51-18.png"
-    ]
+    ],
+    "direccion": "Calle 87 sur # 91 - 85",
+    "link_google_map": ""
   },
   {
     "nid": "48286889856",
@@ -3228,7 +3386,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8bb15fc928-53.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fb3d40f667-54.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-348f19ef25-55.png"
-    ]
+    ],
+    "direccion": "CL 83 SUR 91 48",
+    "link_google_map": ""
   },
   {
     "nid": "43361421359",
@@ -3272,7 +3432,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7c1e6bbd37-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9b37519aeb-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-48b83ab23f-20.png"
-    ]
+    ],
+    "direccion": "Calle 26 sur # 93 D - 60",
+    "link_google_map": ""
   },
   {
     "nid": "35296521609",
@@ -3316,7 +3478,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0c8fde4139-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bbcf839a3b-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-74a9e8f6e8-21.png"
-    ]
+    ],
+    "direccion": "Carrera 116A #15C - 70",
+    "link_google_map": ""
   },
   {
     "nid": "41209020536",
@@ -3356,7 +3520,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-de8d6a6577-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2216e8d890-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b0d6fecd8a-24.png"
-    ]
+    ],
+    "direccion": "Carrera 123 #15A - 25",
+    "link_google_map": ""
   },
   {
     "nid": "51951873641",
@@ -3396,7 +3562,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-07ad7838cd-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bf4903b4eb-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-47bd825ee3-17.png"
-    ]
+    ],
+    "direccion": "KR 16 58A 64",
+    "link_google_map": ""
   },
   {
     "nid": "43788217651",
@@ -3438,7 +3606,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0e6973a5ca-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-092c84eb52-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5ca03fd319-19.png"
-    ]
+    ],
+    "direccion": "Carrera 14 # 38 - 58 sur",
+    "link_google_map": ""
   },
   {
     "nid": "32091791640",
@@ -3482,7 +3652,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a69b18fc5b-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5a2fe1de18-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-250a6a7de1-22.png"
-    ]
+    ],
+    "direccion": "Calle 12 # 25a - 12",
+    "link_google_map": ""
   },
   {
     "nid": "38814364848",
@@ -3526,7 +3698,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8eeabdc620-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4388cc349b-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-210bc07529-22.png"
-    ]
+    ],
+    "direccion": "Calle 6a # 18 - 33",
+    "link_google_map": ""
   },
   {
     "nid": "44870825067",
@@ -3570,7 +3744,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c3ff95f692-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8fb8e01c89-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-43a013c16a-20.png"
-    ]
+    ],
+    "direccion": "Calle 10 # 26 - 20",
+    "link_google_map": ""
   },
   {
     "nid": "49038843919",
@@ -3614,7 +3790,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a64376c0a5-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7f96716466-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-33de1d061f-21.png"
-    ]
+    ],
+    "direccion": "Calle 12 # 25a - 12",
+    "link_google_map": ""
   },
   {
     "nid": "30357555278",
@@ -3658,7 +3836,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-84e2f804ad-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5b86c06a87-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4dacf7f714-21.png"
-    ]
+    ],
+    "direccion": "Calle 6A # 18-33",
+    "link_google_map": ""
   },
   {
     "nid": "55356480949",
@@ -3702,7 +3882,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-95d95f515f-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5da238991d-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-be5d59b8c7-22.png"
-    ]
+    ],
+    "direccion": "KR 19A 16 26",
+    "link_google_map": ""
   },
   {
     "nid": "51850808946",
@@ -3735,7 +3917,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1009124c94-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-173fd582bf-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f52822918d-9.png"
-    ]
+    ],
+    "direccion": "CALLE 10 #26-22 PEATONAL Y 26-40 VEHICULAR",
+    "link_google_map": ""
   },
   {
     "nid": "42522587805",
@@ -3772,7 +3956,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-281f64fb55-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-adafb07da0-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-36e24c8c29-15.png"
-    ]
+    ],
+    "direccion": "Carrera 39d # 5a - 52",
+    "link_google_map": ""
   },
   {
     "nid": "43413963371",
@@ -3816,7 +4002,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1496a5ba5e-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-00a0ec5302-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ab423dfd34-9.png"
-    ]
+    ],
+    "direccion": "calle 4f #39b-20",
+    "link_google_map": ""
   },
   {
     "nid": "36588015632",
@@ -3860,7 +4048,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-25af1428bf-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5432dd0f2b-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-23652fe7f8-21.png"
-    ]
+    ],
+    "direccion": "Calle 164 # 19 - 05",
+    "link_google_map": ""
   },
   {
     "nid": "39684380489",
@@ -3900,7 +4090,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-082f9825ac-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-07b9522ea9-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4ae09ce676-18.png"
-    ]
+    ],
+    "direccion": "Calle 183 # 8d - 17",
+    "link_google_map": ""
   },
   {
     "nid": "44540143176",
@@ -3944,7 +4136,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-57dabfdcae-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9be783797e-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b7d9bc1f2f-23.png"
-    ]
+    ],
+    "direccion": "KR 8A 159 35",
+    "link_google_map": ""
   },
   {
     "nid": "21759860825",
@@ -3969,7 +4163,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/21759860825/navarra---apartaestudio-venta-granja-norte-usaquen",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 8 # 170 - 52",
+    "link_google_map": ""
   },
   {
     "nid": "32115630965",
@@ -4013,7 +4209,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-dc62300ce8-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4916de1a9d-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-78a427d653-21.png"
-    ]
+    ],
+    "direccion": "Carrera 8 # 170 - 52",
+    "link_google_map": ""
   },
   {
     "nid": "29384662422",
@@ -4057,7 +4255,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-52cced0aa4-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7145d69ae2-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0e37204dc6-20.png"
-    ]
+    ],
+    "direccion": "Carrera 8 # 170 - 52",
+    "link_google_map": ""
   },
   {
     "nid": "37135402051",
@@ -4101,7 +4301,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-61f1646bb0-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-579d3cf4b9-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7e8da8ad54-22.png"
-    ]
+    ],
+    "direccion": "Carrera 8 # 170 - 52",
+    "link_google_map": ""
   },
   {
     "nid": "34890046335",
@@ -4145,7 +4347,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-786d601428-44.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-aa6c5e0a4d-49.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-62126f77e9-50.png"
-    ]
+    ],
+    "direccion": "Calle 10 # 81a - 20",
+    "link_google_map": ""
   },
   {
     "nid": "45562121376",
@@ -4189,7 +4393,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-243e5cc2e1-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e607744db4-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3baaee2aed-23.png"
-    ]
+    ],
+    "direccion": " Calle 10B No. 81F - 92 Castilla",
+    "link_google_map": ""
   },
   {
     "nid": "10649395286",
@@ -4233,7 +4439,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6e13ade07d-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fc63ef4936-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5dd8671c32-22.png"
-    ]
+    ],
+    "direccion": "Calle 7d # 81b - 03",
+    "link_google_map": ""
   },
   {
     "nid": "45009248338",
@@ -4277,7 +4485,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-38e9517b5f-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-476d6a7077-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dd1ec29484-22.png"
-    ]
+    ],
+    "direccion": "Calle 10 # 81a - 20",
+    "link_google_map": ""
   },
   {
     "nid": "34210433915",
@@ -4321,7 +4531,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0ced65c52a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9e6ff1d2c6-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e9688d6f4a-23.png"
-    ]
+    ],
+    "direccion": "CL 10B 81F 92",
+    "link_google_map": ""
   },
   {
     "nid": "54000107853",
@@ -4365,7 +4577,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-66bf8717fc-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1061797b79-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ea20348a11-23.png"
-    ]
+    ],
+    "direccion": "CL 10B 81F 92",
+    "link_google_map": ""
   },
   {
     "nid": "51302242086",
@@ -4409,7 +4623,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0f57db4bfb-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-43b04e636c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-801c97b988-21.png"
-    ]
+    ],
+    "direccion": "Diagonal 3 # 83-02",
+    "link_google_map": ""
   },
   {
     "nid": "51866158499",
@@ -4453,7 +4669,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-28bc394900-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d790ba089a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b308cee72a-22.png"
-    ]
+    ],
+    "direccion": "CL 10B 81F 70",
+    "link_google_map": ""
   },
   {
     "nid": "37292096078",
@@ -4489,7 +4707,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c8670a5ef3-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0f7e89346d-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-06a269c793-14.png"
-    ]
+    ],
+    "direccion": "Calle 16f # 99 - 72",
+    "link_google_map": ""
   },
   {
     "nid": "43431830176",
@@ -4533,7 +4753,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2ac1c3875f-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a28acfeca0-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5657508757-22.png"
-    ]
+    ],
+    "direccion": "Calle 16F # 99-72",
+    "link_google_map": ""
   },
   {
     "nid": "21210909105",
@@ -4577,7 +4799,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f21bc275e8-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-28eea0b95c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d066531a36-21.png"
-    ]
+    ],
+    "direccion": "AC 153 97B 30 IN B CA 6",
+    "link_google_map": ""
   },
   {
     "nid": "53009509432",
@@ -4621,7 +4845,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-801b1a8634-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b7c2a37eb1-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e25477f15e-22.png"
-    ]
+    ],
+    "direccion": "AK 70C 57R 33 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "54451143714",
@@ -4665,7 +4891,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a579d58528-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-51b4c4a821-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-81678dd04d-23.png"
-    ]
+    ],
+    "direccion": "CARRERA 92 #150-66 MODULO 3 PROYECTO ZIMA -ORIZONTAL",
+    "link_google_map": ""
   },
   {
     "nid": "28578137143",
@@ -4709,7 +4937,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d2891173d2-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-aec1c64be5-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-230e45fc79-20.png"
-    ]
+    ],
+    "direccion": "Carrera 116 # 152 - 99",
+    "link_google_map": ""
   },
   {
     "nid": "54315878963",
@@ -4753,7 +4983,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-77031a9ff8-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-681ce8d912-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5885d6bb9c-21.png"
-    ]
+    ],
+    "direccion": "CARRERA 92 #150-66 MODULO 3 PROYECTO ZIMA -ORIZONTAL",
+    "link_google_map": ""
   },
   {
     "nid": "44764105576",
@@ -4797,7 +5029,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-21159fefc1-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1869890920-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2af1a08433-23.png"
-    ]
+    ],
+    "direccion": "Carrera 50 # 152 - 57",
+    "link_google_map": ""
   },
   {
     "nid": "50771601930",
@@ -4841,7 +5075,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-354134b0f7-5.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5cddfb7142-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8c608cd4ff-28.png"
-    ]
+    ],
+    "direccion": "Transversal 112c # 64d - 97",
+    "link_google_map": ""
   },
   {
     "nid": "47675861086",
@@ -4885,7 +5121,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7804c46c39-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e510a4075a-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a817219336-21.png"
-    ]
+    ],
+    "direccion": "Carrera 81 a # 16c - 71",
+    "link_google_map": ""
   },
   {
     "nid": "53748168197",
@@ -4926,7 +5164,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d538f3893b-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ff39bd4602-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e71b0b6e83-18.png"
-    ]
+    ],
+    "direccion": "Carrera 105A # 70D-51",
+    "link_google_map": ""
   },
   {
     "nid": "48011764754",
@@ -4961,7 +5201,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f3bd936859-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d27415a72a-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-854938272d-13.png"
-    ]
+    ],
+    "direccion": "CL 81 SUR 81 90",
+    "link_google_map": ""
   },
   {
     "nid": "22372346800",
@@ -5005,7 +5247,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-63514786c9-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-965011f118-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d501f05a5a-22.png"
-    ]
+    ],
+    "direccion": "KR 81J 57C 20 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "34785342516",
@@ -5045,7 +5289,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c62daee92e-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d685699bfa-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-23e67c0078-17.png"
-    ]
+    ],
+    "direccion": "Calle 12 #25A - 12",
+    "link_google_map": ""
   },
   {
     "nid": "31931033940",
@@ -5079,7 +5325,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-971ca7c1c6-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fb5feffac2-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b18de1df9e-10.png"
-    ]
+    ],
+    "direccion": "Calle 17 #20 - 51",
+    "link_google_map": ""
   },
   {
     "nid": "41336802472",
@@ -5110,7 +5358,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5d843a6e2f-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dce67dd5fc-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e3083e8932-15.png"
-    ]
+    ],
+    "direccion": "Calle 18 # 20 - 51",
+    "link_google_map": ""
   },
   {
     "nid": "41197793405",
@@ -5135,7 +5385,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/41197793405/ebano-103---apartamento-venta-san-patricio-usaquen",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 18A # 103 - 88",
+    "link_google_map": ""
   },
   {
     "nid": "41066619201",
@@ -5170,7 +5422,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-732ac664e4-38.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7908487ed1-40.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-df75996afb-41.png"
-    ]
+    ],
+    "direccion": "Carrera 8 # 189a - 24",
+    "link_google_map": ""
   },
   {
     "nid": "34231231658",
@@ -5211,7 +5465,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1311211cd1-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cd7aa12dc4-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8046bc319a-18.png"
-    ]
+    ],
+    "direccion": "Carrera 100 #50B - 45 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "35186968087",
@@ -5255,7 +5511,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e4f139dc04-24.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-588e157d2c-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b2ccd1cfba-27.png"
-    ]
+    ],
+    "direccion": " Carrera 100 #50B  - 45 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "42495765898",
@@ -5291,7 +5549,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8a30aa3bad-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-25d66d97d2-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4f3d15b7ee-14.png"
-    ]
+    ],
+    "direccion": "Calle 52 Sur #93D - 98",
+    "link_google_map": "https://maps.app.goo.gl/4TbfFm7JooxKbLx2A"
   },
   {
     "nid": "32536821824",
@@ -5316,7 +5576,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/32536821824/porvenir-reservado-8---apartamento-venta-corzo-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 93 c # 54  - 31 sur",
+    "link_google_map": ""
   },
   {
     "nid": "50105081960",
@@ -5360,7 +5622,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f5a9143a1d-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-949b166caf-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b6b5d4f3a7-12.png"
-    ]
+    ],
+    "direccion": "KR 89A 73C 45 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "37018316441",
@@ -5404,7 +5668,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-733b62265d-41.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f940f3d619-42.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d15e6b88c4-43.png"
-    ]
+    ],
+    "direccion": "Calle 83 Sur #91 - 48",
+    "link_google_map": ""
   },
   {
     "nid": "42261595001",
@@ -5448,7 +5714,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c7de680cee-36.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4ce6b40c18-37.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-29e17c31f5-38.png"
-    ]
+    ],
+    "direccion": "CL 80 BIS SUR 91 48 IN 18 AP 604",
+    "link_google_map": ""
   },
   {
     "nid": "37228919296",
@@ -5487,7 +5755,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-72024b0085-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8639d202e9-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-335010faaf-17.png"
-    ]
+    ],
+    "direccion": "Calle 2 # 93d - 66",
+    "link_google_map": ""
   },
   {
     "nid": "46332550800",
@@ -5531,7 +5801,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2553dbe67e-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0c464f2472-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0f96c68d8c-18.png"
-    ]
+    ],
+    "direccion": "Carrera 87b # 8A - 38",
+    "link_google_map": ""
   },
   {
     "nid": "15326139172",
@@ -5574,7 +5846,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-48ab56f638-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-33fefad406-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-749e0ca6f8-20.png"
-    ]
+    ],
+    "direccion": "Carrera 81J #57D - 02",
+    "link_google_map": ""
   },
   {
     "nid": "48377396500",
@@ -5617,7 +5891,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-abb73bc7b9-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4545372c76-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b35483f716-19.png"
-    ]
+    ],
+    "direccion": "Carrera 81c # 55 - 75sur",
+    "link_google_map": ""
   },
   {
     "nid": "34611421819",
@@ -5658,7 +5934,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6e9d65c601-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d07055fa85-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fe0cc04c6f-19.png"
-    ]
+    ],
+    "direccion": "Carrera 89A #45A - 38 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "30781642316",
@@ -5695,7 +5973,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d6767b7a28-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4179ae14d5-24.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f278bce624-25.png"
-    ]
+    ],
+    "direccion": "Carrera 81a # 16C - 71",
+    "link_google_map": ""
   },
   {
     "nid": "41532330583",
@@ -5733,7 +6013,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-325b42fb59-31.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2840738fa6-42.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3de1301051-32.png"
-    ]
+    ],
+    "direccion": "CL 138C SUR 14K 26",
+    "link_google_map": ""
   },
   {
     "nid": "33901267462",
@@ -5777,7 +6059,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8264aedc1e-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c4b7e0455c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c41e280b66-21.png"
-    ]
+    ],
+    "direccion": "CARRERA 72 A 64 J-06",
+    "link_google_map": ""
   },
   {
     "nid": "55686882569",
@@ -5821,7 +6105,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fa7bc3c267-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7148b726d3-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-34372f1bd3-21.png"
-    ]
+    ],
+    "direccion": "KR 14B 146 33",
+    "link_google_map": ""
   },
   {
     "nid": "19171125428",
@@ -5862,7 +6148,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3f6484b2fc-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-de72a235d8-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-657954cfb1-17.png"
-    ]
+    ],
+    "direccion": "Carrera 18 # 15 - 36",
+    "link_google_map": ""
   },
   {
     "nid": "46556445739",
@@ -5906,7 +6194,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0d976574c7-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf3deeb219-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-977b4df19c-23.png"
-    ]
+    ],
+    "direccion": "CL 49A BIS  SUR 10D 20",
+    "link_google_map": ""
   },
   {
     "nid": "52331817110",
@@ -5950,7 +6240,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c03a8776fc-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-86556866df-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dba933a192-21.png"
-    ]
+    ],
+    "direccion": "CL 49A BIS  SUR 10D 20",
+    "link_google_map": ""
   },
   {
     "nid": "31675187552",
@@ -5994,7 +6286,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f50a477622-5.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7e4968085e-4.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ceb5f25dbf-15.png"
-    ]
+    ],
+    "direccion": "CL 43A SUR 12A 55",
+    "link_google_map": ""
   },
   {
     "nid": "43334710030",
@@ -6036,7 +6330,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2a16132da1-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-462a2e0fe8-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-93635fe557-20.png"
-    ]
+    ],
+    "direccion": "Calle 50 sur # 97C - 23 sur",
+    "link_google_map": ""
   },
   {
     "nid": "45013668222",
@@ -6080,7 +6376,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-63619effdb-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7c71659a51-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e77909cb87-24.png"
-    ]
+    ],
+    "direccion": "Calle 59c sur # 88h - 15",
+    "link_google_map": ""
   },
   {
     "nid": "38557266203",
@@ -6124,7 +6422,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2bdbbf2659-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e414c83063-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f650eda52b-22.png"
-    ]
+    ],
+    "direccion": "Carrera 81 h # 75 - 85 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "38060556578",
@@ -6149,7 +6449,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/38060556578/senderos-campo-verde---apartamento-venta-campo-verde-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 80BIS  SUR 91 90",
+    "link_google_map": ""
   },
   {
     "nid": "30060851250",
@@ -6193,7 +6495,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-133382bc46-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a9da56abcc-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f7ee6bb87e-21.png"
-    ]
+    ],
+    "direccion": "Calle 83 sur # 91 - 48",
+    "link_google_map": ""
   },
   {
     "nid": "37976336758",
@@ -6235,7 +6539,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-562416b47e-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-319bb26ff3-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7156d9642a-24.png"
-    ]
+    ],
+    "direccion": "calle 80 bis # 91 - 90",
+    "link_google_map": ""
   },
   {
     "nid": "46000905627",
@@ -6269,7 +6575,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f06d24d5e7-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-de968bc09e-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-233c5f6628-10.png"
-    ]
+    ],
+    "direccion": "Calle 87 sur # 91 - 90",
+    "link_google_map": ""
   },
   {
     "nid": "45763372298",
@@ -6313,7 +6621,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f2c584c06a-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1d2e105516-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e6fbaa90b3-20.png"
-    ]
+    ],
+    "direccion": "Calle 74a Sur #92-21",
+    "link_google_map": ""
   },
   {
     "nid": "51028474407",
@@ -6357,7 +6667,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-dd1e788bd2-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3e43e42dd1-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4cce570075-22.png"
-    ]
+    ],
+    "direccion": "Calle 87 sur # 91 - 85",
+    "link_google_map": ""
   },
   {
     "nid": "45761920342",
@@ -6401,7 +6713,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7473213bfe-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2cfc5becee-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-17ab73e8f6-23.png"
-    ]
+    ],
+    "direccion": "Carrera 94 # 87 - 40 sur",
+    "link_google_map": ""
   },
   {
     "nid": "46670390818",
@@ -6445,7 +6759,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f016466276-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-508d28f926-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3629f72dfc-22.png"
-    ]
+    ],
+    "direccion": "Calle 83 SUR # 91-48",
+    "link_google_map": ""
   },
   {
     "nid": "51150439454",
@@ -6489,7 +6805,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-bd7eee13b6-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-752a49715a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d897134160-22.png"
-    ]
+    ],
+    "direccion": "Calle 85 SUR # 91-91",
+    "link_google_map": ""
   },
   {
     "nid": "49833444626",
@@ -6533,7 +6851,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5cddea7bac-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bc6f0e441c-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5c4bbc1742-22.png"
-    ]
+    ],
+    "direccion": "Calle 83 SUR # 91-70",
+    "link_google_map": ""
   },
   {
     "nid": "45739265409",
@@ -6577,7 +6897,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c25fe132db-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9fbbec37b5-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a8eca5c1b8-21.png"
-    ]
+    ],
+    "direccion": "Calle 85 sur # 92 - 85",
+    "link_google_map": ""
   },
   {
     "nid": "54310978321",
@@ -6621,7 +6943,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4602827fbe-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c433682adb-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3a67c3eec2-22.png"
-    ]
+    ],
+    "direccion": "KR 135 17 84",
+    "link_google_map": ""
   },
   {
     "nid": "51995888209",
@@ -6660,7 +6984,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-802c019dea-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d5b317fee0-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dec9794d3a-16.png"
-    ]
+    ],
+    "direccion": "Carrera 90 # 68-52",
+    "link_google_map": ""
   },
   {
     "nid": "23388681868",
@@ -6704,7 +7030,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f88b9ef3da-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4c6ff538f3-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6f02980f05-22.png"
-    ]
+    ],
+    "direccion": "CL 136sur 14f 85",
+    "link_google_map": ""
   },
   {
     "nid": "38548104765",
@@ -6746,7 +7074,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-969a20378b-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3e4dbb0e11-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6baed9c0b3-19.png"
-    ]
+    ],
+    "direccion": "Calle 60A sur # 32 - 05",
+    "link_google_map": ""
   },
   {
     "nid": "53338035873",
@@ -6790,7 +7120,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-cdc0b79159-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2ad08e3616-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-152fa338c2-24.png"
-    ]
+    ],
+    "direccion": "KR 20 94A 36",
+    "link_google_map": ""
   },
   {
     "nid": "41879312235",
@@ -6834,7 +7166,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6b5f37c2b7-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e25dbcff45-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8c051b7408-19.png"
-    ]
+    ],
+    "direccion": "Calle 60A # 60A - 10",
+    "link_google_map": ""
   },
   {
     "nid": "28517373754",
@@ -6878,7 +7212,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9b626eb4b2-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d2ec8c4aeb-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9917092857-21.png"
-    ]
+    ],
+    "direccion": "CL 65B 88 87",
+    "link_google_map": ""
   },
   {
     "nid": "51148893367",
@@ -6922,7 +7258,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8bc4931f1a-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2aff3a5381-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-262238b648-20.png"
-    ]
+    ],
+    "direccion": "DG 77B 116B 42",
+    "link_google_map": ""
   },
   {
     "nid": "43167480859",
@@ -6966,7 +7304,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6dda46092c-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d01cc204bc-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b1e93404ec-20.png"
-    ]
+    ],
+    "direccion": "Carrera 116 # 77 - 65",
+    "link_google_map": ""
   },
   {
     "nid": "37469413556",
@@ -7010,7 +7350,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6982a59d00-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0e613b89cd-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-18ffd24e6d-22.png"
-    ]
+    ],
+    "direccion": "KR 7A 151 90",
+    "link_google_map": ""
   },
   {
     "nid": "36659921694",
@@ -7054,7 +7396,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-735d589949-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-536584aa91-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cc395f1173-23.png"
-    ]
+    ],
+    "direccion": "Calle 3 sur # 69d - 34",
+    "link_google_map": ""
   },
   {
     "nid": "38828391536",
@@ -7098,7 +7442,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c6fcc9a553-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1a4d82cd72-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-64b9343eac-21.png"
-    ]
+    ],
+    "direccion": "Carrera 82A #6 - 16",
+    "link_google_map": ""
   },
   {
     "nid": "46060928359",
@@ -7138,7 +7484,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-72579f2a3b-49.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ed89d67b68-50.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9181f2665c-51.png"
-    ]
+    ],
+    "direccion": "Carrera 89a bis # 8a - 18",
+    "link_google_map": ""
   },
   {
     "nid": "50585103194",
@@ -7182,7 +7530,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5ede685230-39.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-614135e8e2-40.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-99ca88af0c-41.png"
-    ]
+    ],
+    "direccion": "KR 29 66 31",
+    "link_google_map": ""
   },
   {
     "nid": "53767900249",
@@ -7223,7 +7573,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ce8668205b-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e53caf877a-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9f01387f61-19.png"
-    ]
+    ],
+    "direccion": "KR 8C 186 67",
+    "link_google_map": ""
   },
   {
     "nid": "35826916985",
@@ -7267,7 +7619,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-29c424fec7-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ca3a6899d9-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-96031fa8e2-23.png"
-    ]
+    ],
+    "direccion": "Calle 50 sur  # 93 d  - 97",
+    "link_google_map": ""
   },
   {
     "nid": "35686710883",
@@ -7311,7 +7665,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5eea845940-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3cdb9af42c-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8f87104e0d-22.png"
-    ]
+    ],
+    "direccion": "CL 54C SUR 95A 11",
+    "link_google_map": ""
   },
   {
     "nid": "53749671590",
@@ -7355,7 +7711,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-bb4df6263b-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-362008f6fe-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a5dd5ca09b-20.png"
-    ]
+    ],
+    "direccion": "CL 80 BIS  SUR 91 48",
+    "link_google_map": ""
   },
   {
     "nid": "51952801120",
@@ -7388,7 +7746,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-57275ce1d2-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a3243357f6-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2779a7812d-10.png"
-    ]
+    ],
+    "direccion": "Carrera 98 # 0 - 41",
+    "link_google_map": ""
   },
   {
     "nid": "44023150474",
@@ -7432,7 +7792,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fe9797d176-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0be2c355bc-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7a836c9b32-23.png"
-    ]
+    ],
+    "direccion": "CALLE 17 F #129-63",
+    "link_google_map": ""
   },
   {
     "nid": "43786260021",
@@ -7476,7 +7838,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-937af07221-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5fa7ae825a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b72143ee32-22.png"
-    ]
+    ],
+    "direccion": "Carrera 116A  # 15c - 70",
+    "link_google_map": ""
   },
   {
     "nid": "36369376283",
@@ -7520,7 +7884,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4325e58cf8-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-560325b458-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-515a5939b1-23.png"
-    ]
+    ],
+    "direccion": "KR 56 159 31",
+    "link_google_map": ""
   },
   {
     "nid": "29056461983",
@@ -7561,7 +7927,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-29d92f913e-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5716f5619b-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5567572e0f-19.png"
-    ]
+    ],
+    "direccion": "Carrera 7C #65-51 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "54102377766",
@@ -7603,7 +7971,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fa4ca73898-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8b16869f79-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d1f469d731-23.png"
-    ]
+    ],
+    "direccion": "TV 1 ESTE 41A 28",
+    "link_google_map": ""
   },
   {
     "nid": "50520323596",
@@ -7641,7 +8011,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fe58ab2082-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7ebdcb8d62-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a8cfe58911-12.png"
-    ]
+    ],
+    "direccion": "Calle 20 # 68d - 66",
+    "link_google_map": ""
   },
   {
     "nid": "54604132742",
@@ -7685,7 +8057,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-abeb7e1f62-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fc81ae21e0-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-701bccf223-23.png"
-    ]
+    ],
+    "direccion": "CL 19A 68D 37",
+    "link_google_map": ""
   },
   {
     "nid": "37303872100",
@@ -7729,7 +8103,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-dd61a472b7-8.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-25f23c0f75-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8dea9bd569-11.png"
-    ]
+    ],
+    "direccion": "Carrera 141 # 136 - 21",
+    "link_google_map": ""
   },
   {
     "nid": "33148573871",
@@ -7771,7 +8147,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b65952f14a-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f2866c3869-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c4aef9b370-22.png"
-    ]
+    ],
+    "direccion": "Calle 59 sur # 65 - 73",
+    "link_google_map": ""
   },
   {
     "nid": "50692168510",
@@ -7812,7 +8190,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-71923ddf72-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-682912ab65-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e994eee3a7-9.png"
-    ]
+    ],
+    "direccion": "CALLE 19 A # 68 D - 51 ACCESO PEATONAL Y CALLE 19 A #68 D - 65 ACCESO VEHICULAR",
+    "link_google_map": ""
   },
   {
     "nid": "52476248416",
@@ -7837,7 +8217,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/52476248416/altavista-mirador---apartamento-venta-brisas-san-cristobal",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 4 # 1 - 46 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "41032023993",
@@ -7881,7 +8263,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e86a3cb00e-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0f252481fb-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e251dc8fdb-22.png"
-    ]
+    ],
+    "direccion": "KR 70D 65 60 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "40243518375",
@@ -7916,7 +8300,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5ae6ce1eec-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-921243940c-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d7e5c18a94-11.png"
-    ]
+    ],
+    "direccion": "Carrera 4 # 1 - 46 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "37082110336",
@@ -7960,7 +8346,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e4ff0c8daf-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3e09f942e2-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9465b1c140-22.png"
-    ]
+    ],
+    "direccion": "Calle 86A Sur #7-51 Este",
+    "link_google_map": ""
   },
   {
     "nid": "16969319475",
@@ -8002,7 +8390,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fef2ee7eb4-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8e9f325190-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f01f13d774-19.png"
-    ]
+    ],
+    "direccion": "CL 138A SUR 14I 28",
+    "link_google_map": "https://maps.app.goo.gl/tPpxffxmLbQBVem47"
   },
   {
     "nid": "40288017337",
@@ -8046,7 +8436,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5878f1ed8c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fdff571bd4-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a524f2ca0d-22.png"
-    ]
+    ],
+    "direccion": "Calle 19a # 68d - 51",
+    "link_google_map": ""
   },
   {
     "nid": "42254553875",
@@ -8090,7 +8482,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e7d8f9bff4-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c044d6c3af-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ff99a782e7-22.png"
-    ]
+    ],
+    "direccion": "Carrera 14i # 136a - 90sur",
+    "link_google_map": ""
   },
   {
     "nid": "32134931826",
@@ -8130,7 +8524,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-22abf43539-34.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2dc25c2d38-35.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-de41c68941-36.png"
-    ]
+    ],
+    "direccion": "Calle 138a Sur # 14i - 58",
+    "link_google_map": ""
   },
   {
     "nid": "18359251116",
@@ -8172,7 +8568,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-18ed9c7c96-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fadd655c81-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-90892825e0-19.png"
-    ]
+    ],
+    "direccion": "CL 136A SUR # 14 -90",
+    "link_google_map": "https://maps.app.goo.gl/zp113FgXcvw97hTVA"
   },
   {
     "nid": "50642671238",
@@ -8216,7 +8614,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ec8216bd6c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5ecbd396c8-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf91f641f7-22.png"
-    ]
+    ],
+    "direccion": "CL 20 68D 66",
+    "link_google_map": ""
   },
   {
     "nid": "11258053029",
@@ -8257,7 +8657,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-495f887515-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d4a2b07096-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cd8580182b-20.png"
-    ]
+    ],
+    "direccion": "KR 14I # 136A - 90 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "42803881897",
@@ -8296,7 +8698,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-70f2d1a7dc-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-444b6281ec-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-60df0ef584-16.png"
-    ]
+    ],
+    "direccion": "Carrera 13a # 38 - 89",
+    "link_google_map": ""
   },
   {
     "nid": "54842278770",
@@ -8340,7 +8744,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-07650dbf27-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4047f8f0ec-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-872457b779-22.png"
-    ]
+    ],
+    "direccion": "KR 13A 31 17",
+    "link_google_map": ""
   },
   {
     "nid": "52241191271",
@@ -8384,7 +8790,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0c14587fb4-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b534ef000c-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-47576e5cba-20.png"
-    ]
+    ],
+    "direccion": "KR 50A 174B 03",
+    "link_google_map": ""
   },
   {
     "nid": "45948388510",
@@ -8423,7 +8831,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6c71c46bf6-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5b25dbf803-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f51bca4ff8-17.png"
-    ]
+    ],
+    "direccion": "Carrera 116 # 152 - 99",
+    "link_google_map": ""
   },
   {
     "nid": "35304362800",
@@ -8467,7 +8877,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2621ba2885-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-08ad55a364-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b8a9344924-21.png"
-    ]
+    ],
+    "direccion": "Calle 114a # 58 - 65",
+    "link_google_map": ""
   },
   {
     "nid": "41567414711",
@@ -8511,7 +8923,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-577dc066b7-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-74a1095d1d-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4b4d4b27fe-21.png"
-    ]
+    ],
+    "direccion": "KR 50 125 06",
+    "link_google_map": ""
   },
   {
     "nid": "55562712441",
@@ -8555,7 +8969,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c1af3a307b-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9e1354cdce-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a21e3fe03b-21.png"
-    ]
+    ],
+    "direccion": "CL 106A 54 65",
+    "link_google_map": ""
   },
   {
     "nid": "36435325485",
@@ -8599,7 +9015,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-221ca9cb71-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-66b6e4660a-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-07f18be3d3-21.png"
-    ]
+    ],
+    "direccion": "Carrera 56 #153-15",
+    "link_google_map": ""
   },
   {
     "nid": "44612703321",
@@ -8624,7 +9042,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/44612703321/park-176---apartamento-venta-nueva-zelandia-suba",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 176 54 16",
+    "link_google_map": ""
   },
   {
     "nid": "42492112672",
@@ -8668,7 +9088,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e8ad32434b-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-75bd7e8108-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0eddeae01f-21.png"
-    ]
+    ],
+    "direccion": "Carrera 56 # 167C - 3",
+    "link_google_map": ""
   },
   {
     "nid": "38321112653",
@@ -8712,7 +9134,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0fe38694c5-24.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f032d572ee-26.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c092ebd507-27.png"
-    ]
+    ],
+    "direccion": "CL 161 54 18",
+    "link_google_map": ""
   },
   {
     "nid": "16941190938",
@@ -8756,7 +9180,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-00a42ab3ad-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bb4600eb6b-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9f992ae4b6-21.png"
-    ]
+    ],
+    "direccion": "Carrera 55A  # 167A 30",
+    "link_google_map": ""
   },
   {
     "nid": "54261453115",
@@ -8800,7 +9226,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2ed625de47-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-368cee2372-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e942487cf1-22.png"
-    ]
+    ],
+    "direccion": "Carrera 68B # 76A - 41",
+    "link_google_map": ""
   },
   {
     "nid": "42927157391",
@@ -8843,7 +9271,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d7a57e8a1d-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4a5662c96c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6cf8aba312-21.png"
-    ]
+    ],
+    "direccion": "Calle 137 b # 103 F - 32",
+    "link_google_map": "https://maps.app.goo.gl/72fzzVKxUXVbCyYm7"
   },
   {
     "nid": "51318446637",
@@ -8887,7 +9317,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c965778b43-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a291a4c4ca-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-95e7774af2-23.png"
-    ]
+    ],
+    "direccion": "Calle 152 # 56 - 75",
+    "link_google_map": ""
   },
   {
     "nid": "56848648028",
@@ -8927,7 +9359,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5688f5a9de-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9d0ca01915-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9ab4d17fd4-16.png"
-    ]
+    ],
+    "direccion": "CL 77 129 50",
+    "link_google_map": ""
   },
   {
     "nid": "21708397121",
@@ -8965,7 +9399,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-be14fb24a6-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-df5c0198f9-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d579ead567-15.png"
-    ]
+    ],
+    "direccion": "Carrera 19C # 85 - 63",
+    "link_google_map": ""
   },
   {
     "nid": "43417498715",
@@ -9009,7 +9445,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ca8fdcfb0b-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7aa3f65250-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ab0dc2c703-21.png"
-    ]
+    ],
+    "direccion": "Calle 151 # 111A-82",
+    "link_google_map": ""
   },
   {
     "nid": "37374896421",
@@ -9053,7 +9491,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2385aa0a67-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d5eab2526a-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bb88dca7bb-22.png"
-    ]
+    ],
+    "direccion": "Carrera 101 # 70 - 14",
+    "link_google_map": ""
   },
   {
     "nid": "33908364177",
@@ -9097,7 +9537,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b0e1c86d04-40.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf553c0bbb-41.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ff2db54e54-42.png"
-    ]
+    ],
+    "direccion": "Carrera 70 # 49 - 87",
+    "link_google_map": ""
   },
   {
     "nid": "43310608221",
@@ -9141,7 +9583,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ba839e0ca6-40.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b4048c5e74-41.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9875949db0-42.png"
-    ]
+    ],
+    "direccion": "Calle 94 # 72a - 99",
+    "link_google_map": ""
   },
   {
     "nid": "34908435235",
@@ -9183,7 +9627,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-cf71834f03-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-93d59e6789-2.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-873048305c-23.png"
-    ]
+    ],
+    "direccion": "Carrera 4a # 54 - 02",
+    "link_google_map": ""
   },
   {
     "nid": "52690087003",
@@ -9223,7 +9669,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9fbd99339a-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-039426b90d-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9aa8eb767d-17.png"
-    ]
+    ],
+    "direccion": "KR 14 71 44",
+    "link_google_map": ""
   },
   {
     "nid": "53683081088",
@@ -9267,7 +9715,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-895fe5aa72-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d2d4ce24f0-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-62dec9e651-21.png"
-    ]
+    ],
+    "direccion": "KR 45 93 42 TO A",
+    "link_google_map": ""
   },
   {
     "nid": "20515263615",
@@ -9311,7 +9761,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-75d2501f8c-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fea98a1b2d-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0c37fbef07-22.png"
-    ]
+    ],
+    "direccion": "Carrera 73 # 57R - 15 sur",
+    "link_google_map": ""
   },
   {
     "nid": "54120945080",
@@ -9352,7 +9804,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7f9e291968-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a21d1b5ce4-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f169e803ed-20.png"
-    ]
+    ],
+    "direccion": "KR 20 85 44",
+    "link_google_map": ""
   },
   {
     "nid": "43782544394",
@@ -9392,7 +9846,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-433185a773-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7f7ed21494-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-52638aab14-16.png"
-    ]
+    ],
+    "direccion": "AK 70C 57R 73 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "43199213732",
@@ -9422,7 +9878,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-643535a7ae-6.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ced9c9ce9a-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5035fa7c8a-8.png"
-    ]
+    ],
+    "direccion": "Calle 98 # 13 - 41",
+    "link_google_map": ""
   },
   {
     "nid": "41321035427",
@@ -9466,7 +9924,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a7f7158ab6-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-55149f6176-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-2f12fe0e6c-22.png"
-    ]
+    ],
+    "direccion": "Carrera 16 # 95 - 67",
+    "link_google_map": ""
   },
   {
     "nid": "43281476530",
@@ -9510,7 +9970,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-998d9cd020-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8d83733d4e-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b56dc63988-16.png"
-    ]
+    ],
+    "direccion": "Calle 17sur # 28 - 47",
+    "link_google_map": ""
   },
   {
     "nid": "53872731673",
@@ -9554,7 +10016,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-94dac8e69f-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-326af30d9a-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f93373ab4a-23.png"
-    ]
+    ],
+    "direccion": "CL 29A SUR 29 03",
+    "link_google_map": ""
   },
   {
     "nid": "39278662165",
@@ -9590,7 +10054,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-cd41dc11c9-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-47e6cf7d73-24.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-21351fbaee-25.png"
-    ]
+    ],
+    "direccion": "Avenida Caracas #56 - 23",
+    "link_google_map": ""
   },
   {
     "nid": "39987710361",
@@ -9624,7 +10090,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-93f7957b00-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f7112795f5-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b19ec7174a-11.png"
-    ]
+    ],
+    "direccion": "Carrera 15 # 53 - 45",
+    "link_google_map": "https://maps.app.goo.gl/93TT4XJoRvpFYpyb9"
   },
   {
     "nid": "51726648381",
@@ -9664,7 +10132,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b383986376-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ac1724b83f-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ebd3b488b3-18.png"
-    ]
+    ],
+    "direccion": "KR 15 50 63",
+    "link_google_map": ""
   },
   {
     "nid": "28893804164",
@@ -9695,7 +10165,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a8b3479522-6.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6228df9825-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1856f48dc4-8.png"
-    ]
+    ],
+    "direccion": "Carrera 29 # 11 - 93",
+    "link_google_map": ""
   },
   {
     "nid": "18982281371",
@@ -9739,7 +10211,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-296c07565d-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d517281663-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a8f8485b15-21.png"
-    ]
+    ],
+    "direccion": "AC 6 # 26-74",
+    "link_google_map": ""
   },
   {
     "nid": "49043222586",
@@ -9782,7 +10256,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c9674cec32-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f34eabb85a-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0891650fef-19.png"
-    ]
+    ],
+    "direccion": "CARRERA 18 #15-56/36, CL 15 # 17-60/50/40/20 SEGUNDO NIVEL-",
+    "link_google_map": ""
   },
   {
     "nid": "53383385175",
@@ -9826,7 +10302,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-a7bacecc01-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4704a0e28f-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-13941a9839-22.png"
-    ]
+    ],
+    "direccion": "Calle 18 # 20-51",
+    "link_google_map": ""
   },
   {
     "nid": "34298876043",
@@ -9868,7 +10346,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e5fae3b1a3-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ad4d00bc2d-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-426fdc21e8-10.png"
-    ]
+    ],
+    "direccion": "Calle 4b # 34a - 85",
+    "link_google_map": ""
   },
   {
     "nid": "43518100656",
@@ -9911,7 +10391,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c78a8fe89f-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4aad37a983-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-66116ffe19-20.png"
-    ]
+    ],
+    "direccion": "Calle 4F # 39b - 20",
+    "link_google_map": ""
   },
   {
     "nid": "39129688751",
@@ -9955,7 +10437,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d6dde9c9fd-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-845095452d-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dc7c24a281-24.png"
-    ]
+    ],
+    "direccion": "Carrera 39d # 5a - 52",
+    "link_google_map": ""
   },
   {
     "nid": "46310439190",
@@ -9993,7 +10477,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-186cf5c33b-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-519ea6bc14-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ceb4f7538f-15.png"
-    ]
+    ],
+    "direccion": "AC 3 36 80",
+    "link_google_map": ""
   },
   {
     "nid": "57211851124",
@@ -10030,7 +10516,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3d07b8727e-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6516dbaf29-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-edb72826b3-14.png"
-    ]
+    ],
+    "direccion": "AC 3 36 80",
+    "link_google_map": ""
   },
   {
     "nid": "44476772742",
@@ -10073,7 +10561,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9855f16bde-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-507e8e80ba-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f6117d0d09-19.png"
-    ]
+    ],
+    "direccion": "CL 48B SUR 5F 30",
+    "link_google_map": ""
   },
   {
     "nid": "38702904577",
@@ -10117,7 +10607,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5efc840d6e-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6cf30615ca-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cbcfc2722e-21.png"
-    ]
+    ],
+    "direccion": "Carrera 21 # 159 - 12",
+    "link_google_map": ""
   },
   {
     "nid": "13020041038",
@@ -10161,7 +10653,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c90c3d1ade-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7a9affbb82-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf3211c402-23.png"
-    ]
+    ],
+    "direccion": "CL 159A 13A 46",
+    "link_google_map": ""
   },
   {
     "nid": "45754190000",
@@ -10205,7 +10699,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7edc783411-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-573efd1651-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-deafbf5658-21.png"
-    ]
+    ],
+    "direccion": "KR 14 156 07",
+    "link_google_map": ""
   },
   {
     "nid": "38696844112",
@@ -10249,7 +10745,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-fc194e406b-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e64457bb76-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-05ee373dac-22.png"
-    ]
+    ],
+    "direccion": "Carrera 14a # 112 - 50",
+    "link_google_map": ""
   },
   {
     "nid": "41413669182",
@@ -10293,7 +10791,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-17000bde0f-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-ac114cea51-24.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6f5e8cef14-25.png"
-    ]
+    ],
+    "direccion": "Calle 114a # 18 - 86",
+    "link_google_map": ""
   },
   {
     "nid": "39385399341",
@@ -10332,7 +10832,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9b9d71fdc9-29.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-86b47eed87-30.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-09d894373e-31.png"
-    ]
+    ],
+    "direccion": "Calle 117 #11A - 46",
+    "link_google_map": ""
   },
   {
     "nid": "45354152750",
@@ -10375,7 +10877,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-bade479ff2-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-675018b270-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-96023fae33-20.png"
-    ]
+    ],
+    "direccion": "Carrera 11a # 117 - 24",
+    "link_google_map": ""
   },
   {
     "nid": "38511179549",
@@ -10417,7 +10921,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-36c6ad6821-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-249a90ef25-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-80bde9be7d-20.png"
-    ]
+    ],
+    "direccion": "Carrera 16 # 106 - 76",
+    "link_google_map": ""
   },
   {
     "nid": "19763301719",
@@ -10461,7 +10967,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-75558bad02-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a438b80416-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-33ac40e98f-21.png"
-    ]
+    ],
+    "direccion": "CL 120 22 18",
+    "link_google_map": ""
   },
   {
     "nid": "48639016294",
@@ -10505,7 +11013,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-70ae4bee88-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9874c3432d-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7dbf99aa83-23.png"
-    ]
+    ],
+    "direccion": "CL 103A 17 59",
+    "link_google_map": ""
   },
   {
     "nid": "17434737920",
@@ -10549,7 +11059,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b1f49e74f8-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b509ce859a-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fc2b5a40db-25.png"
-    ]
+    ],
+    "direccion": "ac 183 8 a 10 to b ap 302 direccion catastral, bogota d. c., bogota d.c., colombia",
+    "link_google_map": ""
   },
   {
     "nid": "20369016205",
@@ -10574,7 +11086,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/20369016205/torrentino-183---apartamento-venta-verbenal-usaquen",
     "images": [
       null
-    ]
+    ],
+    "direccion": "ac 183 9 50 to 2 705, bogota d. c., bogota d.c., colombia",
+    "link_google_map": "https://maps.app.goo.gl/fTfBx8k62afpMPpf7"
   },
   {
     "nid": "40923582822",
@@ -10618,7 +11132,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-168d43d044-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c86ca59b53-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f70f63045d-21.png"
-    ]
+    ],
+    "direccion": "Carrera 20 # 182 - 60",
+    "link_google_map": ""
   },
   {
     "nid": "39657828459",
@@ -10643,7 +11159,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/39657828459/colina-del-norte-5---apartamento-venta-horizontes-del-norte-usaquen",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 6 #183 - 10",
+    "link_google_map": ""
   },
   {
     "nid": "36674128167",
@@ -10677,7 +11195,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f22d91c39d-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-711ba57e41-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-801cad30db-11.png"
-    ]
+    ],
+    "direccion": "Calle 186 #8-14",
+    "link_google_map": ""
   },
   {
     "nid": "33702978313",
@@ -10721,7 +11241,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-392e8346ee-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1a338955de-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d40274a87f-14.png"
-    ]
+    ],
+    "direccion": "Carrera 9 191 48",
+    "link_google_map": ""
   },
   {
     "nid": "43166309702",
@@ -10765,7 +11287,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-00927a0494-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8f76ea8411-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3c28bd2d9d-20.png"
-    ]
+    ],
+    "direccion": "CL 180 12A 16",
+    "link_google_map": ""
   },
   {
     "nid": "51510449931",
@@ -10809,7 +11333,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1d755b2cd0-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6ad1af2492-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-665d2ae7c0-22.png"
-    ]
+    ],
+    "direccion": "KR 8 192 60",
+    "link_google_map": ""
   },
   {
     "nid": "43711187565",
@@ -10853,7 +11379,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-30cce95069-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d48a4ebcf2-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4b31d9c73a-22.png"
-    ]
+    ],
+    "direccion": "Calle 174 # 8-30",
+    "link_google_map": ""
   },
   {
     "nid": "53257723686",
@@ -10878,7 +11406,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/53257723686/bosquearroyo---apartamento-venta-codito-usaquen",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 175 6 60",
+    "link_google_map": ""
   },
   {
     "nid": "55869538316",
@@ -10922,7 +11452,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-912a87b2f3-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a221c80c1a-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f8de17da4e-21.png"
-    ]
+    ],
+    "direccion": "KR 17B 175 77 CA 8",
+    "link_google_map": ""
   },
   {
     "nid": "55001704796",
@@ -10966,7 +11498,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-768e6ac8ee-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-8e172ac083-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b1bdee3b4d-21.png"
-    ]
+    ],
+    "direccion": "KR 7B BIS  130B 41 ",
+    "link_google_map": ""
   },
   {
     "nid": "28390420592",
@@ -11010,7 +11544,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-20822af3f2-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9a0b4ca1aa-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-54b9a8cdfd-22.png"
-    ]
+    ],
+    "direccion": "KR 7B 140A 23",
+    "link_google_map": ""
   },
   {
     "nid": "54352457373",
@@ -11054,7 +11590,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-3ee6846067-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d26fe3b858-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9fecc7914f-22.png"
-    ]
+    ],
+    "direccion": "KR 13 149A 56",
+    "link_google_map": ""
   },
   {
     "nid": "51955515290",
@@ -11097,7 +11635,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e9276e0de1-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cf0facbc2d-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-30e8784c25-15.png"
-    ]
+    ],
+    "direccion": "Calle 145 # 13A-88",
+    "link_google_map": ""
   },
   {
     "nid": "55567140184",
@@ -11141,7 +11681,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-09d203402f-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-d25e040c9c-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a53215acd2-21.png"
-    ]
+    ],
+    "direccion": "Carrera 8A # 151-95",
+    "link_google_map": ""
   },
   {
     "nid": "43417932108",
@@ -11179,7 +11721,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-908c1b49b4-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3ffe225288-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-667d585142-13.png"
-    ]
+    ],
+    "direccion": "DG 57C SUR 69A 60 TO 2 AP 410",
+    "link_google_map": ""
   },
   {
     "nid": "31087328140",
@@ -11204,7 +11748,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/31087328140/senderos-del-porvenir-4-sector-2---apartamento-venta-parcela-porvenir-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 100 #50B-45 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "9490626565",
@@ -11246,7 +11792,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-c04851b1ad-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-62358bcb13-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c15990d0a1-19.png"
-    ]
+    ],
+    "direccion": "Carrera 100 # 50b-45 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "40328764336",
@@ -11283,7 +11831,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-7c3fa3ec9a-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-aadc83218e-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-37709fcf3d-14.png"
-    ]
+    ],
+    "direccion": "Calle 52sur # 93d - 98",
+    "link_google_map": "https://maps.app.goo.gl/nk3qzetTtDnEPNGA8"
   },
   {
     "nid": "45998597717",
@@ -11325,7 +11875,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-baf16bf540-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fdfd17c659-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-79436c23af-20.png"
-    ]
+    ],
+    "direccion": "Calle 55 # 104 - 48",
+    "link_google_map": ""
   },
   {
     "nid": "45107310148",
@@ -11369,7 +11921,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-1f7ee8a5e6-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b7bf26bf8b-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-98bf70dd22-22.png"
-    ]
+    ],
+    "direccion": "Carrera 100 #50B-45 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "45634298524",
@@ -11407,7 +11961,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-ec144431b3-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-38324df813-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-21678a6ae8-15.png"
-    ]
+    ],
+    "direccion": "Calle 56fsur # 106 - 22",
+    "link_google_map": "https://maps.app.goo.gl/wswk1BVJ4n5SpXRB7"
   },
   {
     "nid": "43297159761",
@@ -11432,7 +11988,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/43297159761/senderos-del-porvenir-1---apartamento-venta-corzo-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Calle 54F SUR # 93C-42",
+    "link_google_map": ""
   },
   {
     "nid": "37893547035",
@@ -11476,7 +12034,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-8bb56988b1-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6406b6a5ff-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-bb5d586894-22.png"
-    ]
+    ],
+    "direccion": "CL 52 SUR 93D 98",
+    "link_google_map": ""
   },
   {
     "nid": "30852210050",
@@ -11520,7 +12080,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-69ebe955f4-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1fd6958228-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a468c1d684-20.png"
-    ]
+    ],
+    "direccion": "Carrera 88 c # 63 - 67 Sur",
+    "link_google_map": ""
   },
   {
     "nid": "53262965666",
@@ -11560,7 +12122,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4fe6d3256f-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-172e708f3f-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4dee00e093-19.png"
-    ]
+    ],
+    "direccion": "DG 49 SUR 85 17",
+    "link_google_map": ""
   },
   {
     "nid": "50483331380",
@@ -11585,7 +12149,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/50483331380/bosque-tayrona---apartamento-venta-danubio-azul-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 56 SUR 81J 40",
+    "link_google_map": ""
   },
   {
     "nid": "21023908506",
@@ -11628,7 +12194,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-af8ef440a6-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5a7b66a33b-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6149b21afe-20.png"
-    ]
+    ],
+    "direccion": "Carrera 89BIS A # 72B 40 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "31098003530",
@@ -11659,7 +12227,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-9a89bfd23e-6.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-3d7bc87a7f-7.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-94d8302696-4.png"
-    ]
+    ],
+    "direccion": "Carrera 92 # 74 - 66",
+    "link_google_map": ""
   },
   {
     "nid": "41144345384",
@@ -11703,7 +12273,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4b03defb3a-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a67ac14a43-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-7f8baba5c9-20.png"
-    ]
+    ],
+    "direccion": "Calle 88 sur # 88c - 89",
+    "link_google_map": ""
   },
   {
     "nid": "41191460176",
@@ -11747,7 +12319,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d55b19c5f2-35.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e8269cc4bd-36.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a9bd0a0ffb-37.png"
-    ]
+    ],
+    "direccion": "Calle 88 sur # 88c - 89",
+    "link_google_map": ""
   },
   {
     "nid": "44678436766",
@@ -11786,7 +12360,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-527680019c-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-85ddb3dad1-6.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-392220cdc5-10.png"
-    ]
+    ],
+    "direccion": "CL 80 BIS SUR 94 75 MZ 9 TO 8 AP 101",
+    "link_google_map": ""
   },
   {
     "nid": "33895386218",
@@ -11828,7 +12404,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-24a317c14a-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-54fe3f225e-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b17605a2a7-19.png"
-    ]
+    ],
+    "direccion": "Carrera 94 # 87-80 SUR",
+    "link_google_map": ""
   },
   {
     "nid": "37141400995",
@@ -11853,7 +12431,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/37141400995/contados-sabana-3---apartamento-venta-ciudadela-recreo-2-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Calle 71 sur # 97c - 50",
+    "link_google_map": ""
   },
   {
     "nid": "34365766822",
@@ -11896,7 +12476,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-2716305eaf-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-fde2852e66-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-21d9cf57f7-20.png"
-    ]
+    ],
+    "direccion": "Calle 8 sur # 70 - 80",
+    "link_google_map": ""
   },
   {
     "nid": "36369376003",
@@ -11940,7 +12522,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d163a2c300-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f546413eef-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a3efa5c605-21.png"
-    ]
+    ],
+    "direccion": "Calle 25 SUR # 69 - 46",
+    "link_google_map": ""
   },
   {
     "nid": "35652116997",
@@ -11984,7 +12568,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-eb1d84ca0e-23.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a8209cdb77-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dcec4b7a14-26.png"
-    ]
+    ],
+    "direccion": "Carrera 82A # 06-16",
+    "link_google_map": ""
   },
   {
     "nid": "42106407200",
@@ -12024,7 +12610,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b9e89c14c8-15.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-804165524d-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-072c7222dd-17.png"
-    ]
+    ],
+    "direccion": "Calle 10 # 81A - 20",
+    "link_google_map": ""
   },
   {
     "nid": "29251198312",
@@ -12058,7 +12646,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-50e17099aa-9.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9c3bd6b8bd-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-e695da98a9-11.png"
-    ]
+    ],
+    "direccion": "Calle 10 # 81a - 20",
+    "link_google_map": ""
   },
   {
     "nid": "53208966991",
@@ -12102,7 +12692,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0f8f7a62e0-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5d382b0cf4-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-54ee436e00-22.png"
-    ]
+    ],
+    "direccion": "DG 3 83 02",
+    "link_google_map": ""
   },
   {
     "nid": "21820406843",
@@ -12139,7 +12731,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-4955e85f67-12.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-28021f078e-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-b89846f31e-14.png"
-    ]
+    ],
+    "direccion": "Carrera 87b # 8a - 38",
+    "link_google_map": ""
   },
   {
     "nid": "8561000226",
@@ -12183,7 +12777,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-44bb9a919c-58.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-9d828fc75c-59.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c55477e883-60.png"
-    ]
+    ],
+    "direccion": "Carrera 81j # 57c - 24 sur",
+    "link_google_map": ""
   },
   {
     "nid": "33504737284",
@@ -12208,7 +12804,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/33504737284/villa-veronica---apartamento-venta-marsella-kennedy",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 68G #9C - 97",
+    "link_google_map": ""
   },
   {
     "nid": "39510303060",
@@ -12252,7 +12850,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f181acf320-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-cb76e97dfd-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-91c3e18780-22.png"
-    ]
+    ],
+    "direccion": "Calle 8A # 92-71  ",
+    "link_google_map": ""
   },
   {
     "nid": "54215335820",
@@ -12277,7 +12877,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/54215335820/plazuelas-santa-ana---apartamento-venta-margaritas-bosa",
     "images": [
       null
-    ]
+    ],
+    "direccion": "CL 48 SUR 87 06",
+    "link_google_map": ""
   },
   {
     "nid": "36740748843",
@@ -12302,7 +12904,9 @@ export const INV = [
     "url_habi": "https://habi.co/venta-apartamentos/36740748843/brisas---apartamento-venta-modelia-fontibon",
     "images": [
       null
-    ]
+    ],
+    "direccion": "Carrera 72D #22A - 51",
+    "link_google_map": ""
   },
   {
     "nid": "46441905498",
@@ -12340,7 +12944,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-d14936c6be-25.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-be6b201d10-26.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5487ae16aa-27.png"
-    ]
+    ],
+    "direccion": "Calle 17f # 129 - 63",
+    "link_google_map": ""
   },
   {
     "nid": "52343335341",
@@ -12384,7 +12990,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5d72928924-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-4c212e8d5b-14.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-47e1f9542a-23.png"
-    ]
+    ],
+    "direccion": "AK 72 22D 54",
+    "link_google_map": ""
   },
   {
     "nid": "28888824916",
@@ -12428,7 +13036,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-85ebb97ab1-20.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-6c6b747c10-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-0a9b055a05-22.png"
-    ]
+    ],
+    "direccion": "Carrera 104A # 20 - 33",
+    "link_google_map": ""
   },
   {
     "nid": "29115132317",
@@ -12465,7 +13075,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f95a56bf6a-28.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-44c027b522-29.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-77cb3eb447-30.png"
-    ]
+    ],
+    "direccion": "Calle 16F #99 - 59",
+    "link_google_map": ""
   },
   {
     "nid": "29376005675",
@@ -12509,7 +13121,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-b7ffe5bd67-13.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-f0a25803a1-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-08fe1fff97-15.png"
-    ]
+    ],
+    "direccion": "Calle 16f # 99 - 72",
+    "link_google_map": ""
   },
   {
     "nid": "32385327495",
@@ -12551,7 +13165,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-e2daa235ea-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5feae16088-19.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-1726063540-20.png"
-    ]
+    ],
+    "direccion": "Carrera 123 #15A - 25",
+    "link_google_map": "https://maps.app.goo.gl/krvqnvYLFaCKuZMy8"
   },
   {
     "nid": "40234918456",
@@ -12592,7 +13208,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-0fec3de6c5-16.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-5c4b68274e-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-94951abbca-18.png"
-    ]
+    ],
+    "direccion": "Carrera 116A #15C - 70",
+    "link_google_map": ""
   },
   {
     "nid": "43439560111",
@@ -12636,7 +13254,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-f8997baa0c-21.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-65b0d4054b-22.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-917dae5319-23.png"
-    ]
+    ],
+    "direccion": "Calle 14B #119A - 76",
+    "link_google_map": ""
   },
   {
     "nid": "35668484698",
@@ -12671,6 +13291,8 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-08ec45a60a-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-709e1d4355-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-a74ef84b02-12.png"
-    ]
+    ],
+    "direccion": "CL 14B 119A 17",
+    "link_google_map": ""
   }
 ];

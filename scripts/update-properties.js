@@ -446,6 +446,8 @@ async function main() {
       precio_original: p.precio_anterior,
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
+      direccion: p.direccion || "",
+      link_google_map: p.link_google_map || "",
       images: p.images || [],
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
