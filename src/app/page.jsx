@@ -150,6 +150,12 @@ function getLocalidad(p){
   return cleanText(p?.localidad||p?.zona_grande||p?.zona||"");
 }
 
+function getGoogleMapsUrl(p){
+  if(p.googleMapsUrl)return p.googleMapsUrl;
+  const parts=[p.direccion,p.conjunto,p.zona_pequeña,p.zona_mediana,p.zona_grande,p.ciudad].filter(Boolean);
+  return parts.length?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}`:"";
+}
+
 function CreditSim({onClose,property}){
   const initVal=property?Math.max(80000000,Math.min(1500000000,num(property.precio_venta)||250000000)):250000000;
   const [val,setVal]=useState(initVal);
@@ -304,7 +310,7 @@ function Card({p,onClick,featured,onSimCredit}){
       <div style={{padding:"10px 12px"}}>
         <h3 style={{margin:0,fontSize:"clamp(11px,2.8vw,13px)",fontWeight:700,color:"#1B2A4A",lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.titulo}</h3>
         <p style={{margin:"2px 0 0",fontSize:"clamp(10px,2.4vw,11px)",color:"#5D6D7E",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p))].filter(Boolean).join(" · ")}</p>
-        {p.direccion&&<p style={{margin:"2px 0 0",fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{cleanText(p.direccion)}</p>}
+        {p.direccion&&<p style={{margin:"2px 0 0",fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{(()=>{const url=getGoogleMapsUrl(p);return url?<a href={url} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{color:"#1B4F72",textDecoration:"none",display:"inline-flex",alignItems:"center",gap:2}}><svg width="9" height="9" viewBox="0 0 24 24" fill="#1B4F72"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{cleanText(p.direccion)}</a>:cleanText(p.direccion);})()}</p>}
         <div style={{display:"flex",gap:6,marginTop:5,fontSize:"clamp(9px,2.2vw,10px)",color:"#7F8C8D",flexWrap:"wrap"}}>{p.area&&<span>{p.area}m²</span>}{p.habitaciones&&p.habitaciones!=="0"&&<span>{p.habitaciones} hab</span>}{(p["baños"]??p.banos)&&(p["baños"]??p.banos)!=="0"&&<span>{p["baños"]??p.banos} bañ</span>}{p.garaje&&p.garaje!=="0"&&<span>{p.garaje} parq</span>}</div>
         <div style={{marginTop:7,paddingTop:7,borderTop:"1px solid #EBF0F5",display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span></div>
@@ -427,7 +433,8 @@ function Modal({p,onClose,onSimCredit}){
             <div style={{flex:1,minWidth:0}}>
               <h2 style={{margin:0,fontSize:"clamp(15px,3.5vw,22px)",color:"#1B2A4A",fontFamily:"'Playfair Display',serif",lineHeight:1.2,wordWrap:"break-word"}}>{p.titulo}</h2>
               <p style={{margin:"4px 0",color:"#5D6D7E",fontSize:"clamp(11px,2.5vw,13px)",wordWrap:"break-word"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p)),cleanText(p.ciudad)].filter(Boolean).join(", ")}{p.conjunto?" · "+cleanText(p.conjunto):""}</p>
-              {p.nid&&<div style={{marginTop:5}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
+              {p.direccion&&(()=>{const url=getGoogleMapsUrl(p);return <div style={{marginTop:5}}><a href={url||"#"} target={url?"_blank":undefined} rel={url?"noopener noreferrer":undefined} style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#1B4F72",textDecoration:"none",background:"#EAF2FB",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="#1B4F72"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{cleanText(p.direccion)}</a></div>;})()}
+              {p.nid&&<div style={{marginTop:4}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
             </div>
             <div className="modal-price-col" style={{textAlign:"right",flexShrink:0}}>{d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through"}}>{fmtM(p.precio_original)}</div>}<div style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</div>{num(p.admin)>0&&<div style={{fontSize:10,color:"#7F8C8D"}}>Admin: {fmt(p.admin)}/mes</div>}</div>
           </div>
