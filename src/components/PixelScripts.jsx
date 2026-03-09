@@ -23,6 +23,7 @@ function initPixels() {
       s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
     window.fbq("init", META_PIXEL_ID);
+    window.fbq("track", "PageView");
   }
 
   // TikTok Pixel
@@ -66,7 +67,17 @@ export default function PixelScripts() {
     return () => window.removeEventListener("cookie_consent_granted", onConsent);
   }, []);
 
-  return null;
+  return (
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        style={{ display: "none" }}
+        src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+        alt=""
+      />
+    </noscript>
+  );
 }
 
 // --- Tracking helper functions ---
