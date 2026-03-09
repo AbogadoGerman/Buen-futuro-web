@@ -124,20 +124,26 @@ export default async function PropertyPage({ params }) {
         {/* Title & Price */}
         <div style={{ background: "white", borderRadius: 16, padding: 20, marginBottom: 16, boxShadow: "0 2px 12px rgba(27,79,114,0.07)" }}>
           <h1 style={{ fontSize: "clamp(16px,4vw,22px)", fontWeight: 800, color: "#1B2A4A", margin: "0 0 8px" }}>{p.titulo}</h1>
-          <div style={{ color: "#5D6D7E", fontSize: 13, marginBottom: 12, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <div style={{ color: "#5D6D7E", fontSize: 13, marginBottom: 4, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <span>{[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(" · ")}</span>
-            {(p.conjunto || p.barrio) && (
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([p.conjunto, p.barrio, p.ciudad].filter(Boolean).join(", "))}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none", background: "#EAF2FB", padding: "3px 8px", borderRadius: 6 }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Ver en mapa
-              </a>
-            )}
           </div>
+          {p.direccion && (() => {
+            const mapsQuery = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean).join(", ");
+            const mapsUrl = p.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`;
+            return (
+              <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "#1B4F72", fontWeight: 600, textDecoration: "none", background: "#EAF2FB", padding: "4px 10px", borderRadius: 6 }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                  {p.direccion} — Ver en mapa
+                </a>
+              </div>
+            );
+          })()}
 
           <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
             <span style={{ fontSize: "clamp(20px,5vw,28px)", fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_venta)}</span>

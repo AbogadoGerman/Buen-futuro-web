@@ -446,6 +446,14 @@ async function main() {
       precio_original: p.precio_anterior,
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
+      direccion: p.direccion || "",
+      zona_grande: p.zona_grande || "",
+      zona_mediana: p.zona_mediana || "",
+      zona_pequeña: p.zona_pequeña || "",
+      googleMapsUrl: (() => {
+        const parts = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean);
+        return parts.length ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}` : "";
+      })(),
       images: p.images || [],
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
