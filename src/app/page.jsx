@@ -274,12 +274,20 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
 }
 
 /* ============ CARD with 360 badge ============ */
+function hasRealImages(images){
+  if(!images||images.length===0)return false;
+  return images.some(img=>img&&img.startsWith("http")&&!img.includes("unsplash.com")&&!img.endsWith(".svg"));
+}
+
 function Card({p,onClick,featured,onSimCredit}){
   const [ii,setII]=useState(0);const imgs=p.images||[];const d=disc(p);
+  const realPhotos=hasRealImages(imgs);
+  const noPhotosNo360=!realPhotos&&!p.url_360;
   return(
     <div className="card-wrap" onClick={()=>onClick(p)} style={{background:"white",borderRadius:14,overflow:"hidden",cursor:"pointer",transition:"transform .2s, box-shadow .2s",boxShadow:"0 2px 12px rgba(27,79,114,0.07)",border:featured?"2px solid #FF6B35":"1px solid rgba(27,79,114,0.06)",minWidth:0}}>
       <div style={{position:"relative",paddingTop:"58%",overflow:"hidden",background:"#E8ECF0"}}>
-        <Image src={imgs[ii]||"https://via.placeholder.com/600x400"} alt={p.titulo} fill sizes="(max-width:768px) 100vw, 280px" style={{objectFit:"cover"}} />
+        {realPhotos?<Image src={imgs[ii]||"https://via.placeholder.com/600x400"} alt={p.titulo} fill sizes="(max-width:768px) 100vw, 280px" style={{objectFit:"cover"}} />:<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#1B2A4A,#2C3E50)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>}
+        {noPhotosNo360&&<div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%) rotate(-35deg)",background:"#E74C3C",color:"white",padding:"8px 40px",fontSize:16,fontWeight:900,letterSpacing:3,textTransform:"uppercase",whiteSpace:"nowrap",zIndex:5,boxShadow:"0 4px 20px rgba(231,76,60,0.5)"}}>VENDIDO</div>}
         {imgs.length>1&&<><button onClick={e=>{e.stopPropagation();setII(i=>i>0?i-1:imgs.length-1)}} style={{position:"absolute",left:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>‹</button><button onClick={e=>{e.stopPropagation();setII(i=>i<imgs.length-1?i+1:0)}} style={{position:"absolute",right:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>›</button></>}
         {imgs.length>1&&<div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3}}>{imgs.map((_,i)=><button key={i} onClick={e=>{e.stopPropagation();setII(i)}} style={{width:6,height:6,borderRadius:"50%",border:"1.5px solid white",cursor:"pointer",background:i===ii?"white":"rgba(255,255,255,0.3)",padding:0}} />)}</div>}
         {p.tipo&&<div style={{position:"absolute",top:8,left:8,background:"#1B4F72",color:"white",padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:600}}>{p.tipo}</div>}
@@ -309,6 +317,8 @@ function Modal({p,onClose,onSimCredit}){
   const [tab,setTab]=useState("fotos");
   const [valid360,setValid360]=useState(false);
   const imgs=p?.images||[];const d=p?disc(p):0;
+  const realPhotos=hasRealImages(imgs);
+  const noPhotosNo360=!realPhotos&&!valid360;
   const [emblaRef,emblaApi]=useEmblaCarousel({
     loop:imgs.length>1,
     align:"start",
@@ -337,11 +347,21 @@ function Modal({p,onClose,onSimCredit}){
 
   useEffect(()=>{
     setValid360(false);
-    if(!p?.url_360)return;
+    if(!p?.url_360){
+      setTab("fotos");
+      return;
+    }
     let cancelled=false;
     fetch('/api/check-360?url='+encodeURIComponent(p.url_360))
       .then(r=>r.json())
-      .then(d=>{if(!cancelled){if(d.valid)setValid360(true);else setTab(t=>t==='360'?'fotos':t);}})
+      .then(d=>{if(!cancelled){
+        if(d.valid){
+          setValid360(true);
+          if(!hasRealImages(p?.images))setTab("360");
+        }else{
+          setTab(t=>t==='360'?'fotos':t);
+        }
+      }})
       .catch(()=>{});
     return()=>{cancelled=true;};
   },[p?.url_360]);
@@ -353,19 +373,27 @@ function Modal({p,onClose,onSimCredit}){
       <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:750,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)",margin:"auto"}}>
         {/* Tabs */}
         <div style={{display:"flex",borderBottom:"2px solid #EBF0F5",position:"sticky",top:0,background:"white",zIndex:2,borderRadius:"20px 20px 0 0"}}>
-          <button onClick={()=>setTab("fotos")} style={{flex:1,padding:"14px",border:"none",background:tab==="fotos"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="fotos"?"#1B4F72":"#999",borderBottom:tab==="fotos"?"3px solid #1B4F72":"3px solid transparent",borderRadius:tab==="fotos"?"20px 0 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+          {realPhotos&&<button onClick={()=>setTab("fotos")} style={{flex:1,padding:"14px",border:"none",background:tab==="fotos"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="fotos"?"#1B4F72":"#999",borderBottom:tab==="fotos"?"3px solid #1B4F72":"3px solid transparent",borderRadius:tab==="fotos"?"20px 0 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             Fotos ({imgs.length})
-          </button>
-          {valid360&&<button onClick={()=>setTab("360")} style={{flex:1,padding:"14px",border:"none",background:tab==="360"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="360"?"#7B2FF7":"#999",borderBottom:tab==="360"?"3px solid #7B2FF7":"3px solid transparent",borderRadius:tab==="360"?"0 20px 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+          </button>}
+          {valid360&&<button onClick={()=>setTab("360")} style={{flex:1,padding:"14px",border:"none",background:tab==="360"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="360"?"#7B2FF7":"#999",borderBottom:tab==="360"?"3px solid #7B2FF7":"3px solid transparent",borderRadius:!realPhotos?"20px 20px 0 0":tab==="360"?"0 20px 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
             Vista 360°
           </button>}
           <button onClick={onClose} style={{padding:"14px 18px",border:"none",background:"#F8F9FA",cursor:"pointer",fontSize:18,color:"#999",borderRadius:"0 20px 0 0",flexShrink:0}}>✕</button>
         </div>
 
+        {/* VENDIDO banner when no photos and no 360 */}
+        {noPhotosNo360&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"linear-gradient(135deg,#1B2A4A,#2C3E50)",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
+          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div style={{background:"#E74C3C",color:"white",padding:"16px 60px",fontSize:"clamp(22px,5vw,36px)",fontWeight:900,letterSpacing:6,textTransform:"uppercase",transform:"rotate(-15deg)",boxShadow:"0 6px 30px rgba(231,76,60,0.5)",textAlign:"center",zIndex:1}}>VENDIDO</div>
+        </div>}
+
         {/* Photo carousel tab */}
-        {tab==="fotos"&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111"}}>
+        {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111"}}>
           <div className="embla-modal" ref={emblaRef}>
             <div className="embla-modal__container">
               {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative"}}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover"}} /></div>)}
