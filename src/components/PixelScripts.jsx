@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const META_PIXEL_ID = "925375136552561";
@@ -58,6 +58,7 @@ function initPixels() {
 
 export default function PixelScripts() {
   const pathname = usePathname();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (hasConsent()) {
@@ -72,8 +73,12 @@ export default function PixelScripts() {
     return () => window.removeEventListener("cookie_consent_granted", onConsent);
   }, []);
 
-  // TikTok PageView on SPA route changes
+  // TikTok PageView on SPA route changes (skip first render - initPixels already fires it)
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (hasConsent() && window.ttq) {
       window.ttq.page();
     }

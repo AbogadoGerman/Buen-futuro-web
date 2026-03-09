@@ -42,7 +42,7 @@ export default function PropertyCTAButtons({ property }) {
 
   useEffect(() => {
     trackViewContent(p);
-  }, [p]);
+  }, [p.nid]);
 
   function handleInfo() {
     const eventId = trackContact(p);
