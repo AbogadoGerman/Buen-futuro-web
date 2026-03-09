@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import Script from "next/script";
+import { usePathname } from "next/navigation";
 
 const META_PIXEL_ID = "925375136552561";
 const TIKTOK_PIXEL_ID = "D6NG0U3C77U75L0FFE4G";
 
 function hasConsent() {
   return typeof window !== "undefined" && localStorage.getItem("cookie_consent") === "accepted";
+}
+
+export function generateEventId() {
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 11);
 }
 
 function initPixels() {
@@ -53,6 +57,8 @@ function initPixels() {
 }
 
 export default function PixelScripts() {
+  const pathname = usePathname();
+
   useEffect(() => {
     if (hasConsent()) {
       initPixels();
@@ -66,6 +72,13 @@ export default function PixelScripts() {
     return () => window.removeEventListener("cookie_consent_granted", onConsent);
   }, []);
 
+  // TikTok PageView on SPA route changes
+  useEffect(() => {
+    if (hasConsent() && window.ttq) {
+      window.ttq.page();
+    }
+  }, [pathname]);
+
   return null;
 }
 
@@ -73,6 +86,7 @@ export default function PixelScripts() {
 
 export function trackViewContent(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   // Meta: ViewContent (for retargeting audiences)
   if (window.fbq) {
     window.fbq("track", "ViewContent", {
@@ -84,12 +98,14 @@ export function trackViewContent(property) {
       currency: "COP",
       city: property.ciudad || "",
       neighborhood: property.barrio || "",
-    });
+    }, { eventID: eventId });
   }
+  return eventId;
 }
 
 export function trackContact(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   // Meta: Contact
   if (window.fbq) {
     window.fbq("track", "Contact", {
@@ -98,7 +114,7 @@ export function trackContact(property) {
       content_type: "product",
       value: parseInt(property.precio_venta || 0, 10),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   // TikTok: ClickButton
   if (window.ttq) {
@@ -108,10 +124,12 @@ export function trackContact(property) {
       currency: "COP",
     });
   }
+  return eventId;
 }
 
 export function trackSchedule(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   // Meta: Schedule
   if (window.fbq) {
     window.fbq("track", "Schedule", {
@@ -120,7 +138,7 @@ export function trackSchedule(property) {
       content_type: "product",
       value: parseInt(property.precio_venta || 0, 10),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   // TikTok: SubmitForm
   if (window.ttq) {
@@ -130,4 +148,5 @@ export function trackSchedule(property) {
       currency: "COP",
     });
   }
+  return eventId;
 }

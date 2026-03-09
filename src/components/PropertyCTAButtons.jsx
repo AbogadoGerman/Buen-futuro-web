@@ -5,7 +5,7 @@ import { trackViewContent, trackContact, trackSchedule } from "./PixelScripts";
 
 const WA = "573108074915";
 
-function sendServerEvent(p, eventName) {
+function sendServerEvent(p, eventName, eventId) {
   const fbp = (document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/) || [])[1] || "";
   const fbc = (document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/) || [])[1] || "";
   fetch("/api/notify", {
@@ -21,6 +21,7 @@ function sendServerEvent(p, eventName) {
       banos: p.banos || "N/A",
       bonoHabi: "",
       eventName,
+      eventId,
       sourceUrl: window.location.href,
       fbp,
       fbc,
@@ -44,14 +45,14 @@ export default function PropertyCTAButtons({ property }) {
   }, [p]);
 
   function handleInfo() {
-    trackContact(p);
-    sendServerEvent(p, "Contact");
+    const eventId = trackContact(p);
+    sendServerEvent(p, "Contact", eventId);
     window.open(`https://wa.me/${WA}?text=${waMsg}`, "_blank");
   }
 
   function handleSchedule() {
-    trackSchedule(p);
-    sendServerEvent(p, "Schedule");
+    const eventId = trackSchedule(p);
+    sendServerEvent(p, "Schedule", eventId);
     window.open(`https://wa.me/${WA}?text=${waScheduleMsg}`, "_blank");
   }
 

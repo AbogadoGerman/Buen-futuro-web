@@ -1,14 +1,19 @@
 import nodemailer from "nodemailer";
-import crypto from "crypto";
 
 const META_PIXEL_ID = "925375136552561";
-const META_ACCESS_TOKEN = "EAAeWUmWmsZAoBQxJkP2yJ6VHDIKcDyZCcgybQm60Pq8d5sO6gsa9twkYaYKkAJvn0nfZBKpcixZAZCeiUVyLqQbq2esjkFiz1hZAqfVIGAyI4QDZAZBdn6Ho4hiU0PVOBfORLQfcoLCUZCx2BuLDidDzGy9BuKEJlWnNmLI8H4lLw6Gb78Fyr2CefqJ0QX9s7FLkZA3QZDZD";
+const META_ACCESS_TOKEN = process.env.META_CAPI_TOKEN;
 
-async function sendMetaConversionsEvent({ eventName, nid, titulo, precio, sourceUrl, userAgent, clientIp, fbp, fbc }) {
+async function sendMetaConversionsEvent({ eventName, eventId, nid, titulo, precio, sourceUrl, userAgent, clientIp, fbp, fbc }) {
+  if (!META_ACCESS_TOKEN) {
+    console.warn("META_CAPI_TOKEN not configured, skipping server event");
+    return;
+  }
+
   const eventData = {
     data: [
       {
         event_name: eventName,
+        event_id: eventId,
         event_time: Math.floor(Date.now() / 1000),
         action_source: "website",
         event_source_url: sourceUrl || "https://buenfuturo.vercel.app",
@@ -56,7 +61,7 @@ async function sendMetaConversionsEvent({ eventName, nid, titulo, precio, source
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { nid, titulo, ubicacion, precio, area, habitaciones, banos, bonoHabi, eventName, sourceUrl, fbp, fbc } = body;
+    const { nid, titulo, ubicacion, precio, area, habitaciones, banos, bonoHabi, eventName, eventId, sourceUrl, fbp, fbc } = body;
 
     if (!nid) {
       return Response.json({ error: "Falta el ID del inmueble" }, { status: 400 });
@@ -112,6 +117,7 @@ export async function POST(request) {
     const metaPromise = eventName
       ? sendMetaConversionsEvent({
           eventName,
+          eventId,
           nid,
           titulo,
           precio,
