@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import Script from "next/script";
 
 const META_PIXEL_ID = "925375136552561";
 const TIKTOK_PIXEL_ID = "D6NG0U3C77U75L0FFE4G";
+const TIKTOK_ACCESS_TOKEN = "021ed27c674007bb272c9491cce0d883fed397a7";
 
 function hasConsent() {
   return typeof window !== "undefined" && localStorage.getItem("cookie_consent") === "accepted";
@@ -53,6 +53,54 @@ function initPixels() {
   }
 }
 
+// --- TikTok Server-Side Events API ---
+async function sendTikTokServerEvent(eventName, property, extraProps = {}) {
+  try {
+    const ttp = (document.cookie.match(/(?:^|;\s*)_ttp=([^;]*)/) || [])[1] || "";
+    const ttclid = new URLSearchParams(window.location.search).get("ttclid") || "";
+    const payload = {
+      event_source: "web",
+      event_source_id: TIKTOK_PIXEL_ID,
+      data: [
+        {
+          event: eventName,
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          page: {
+            url: window.location.href,
+          },
+          user: {
+            ip: "",
+            user_agent: navigator.userAgent,
+            ttp: ttp || undefined,
+            ttclid: ttclid || undefined,
+          },
+          properties: {
+            currency: "COP",
+            value: parseInt(property?.precio_venta || 0, 10),
+            contents: [
+              {
+                content_id: String(property?.nid || ""),
+                content_type: "product",
+                content_name: property?.titulo || "",
+              },
+            ],
+            ...extraProps,
+          },
+        },
+      ],
+    };
+
+    await fetch(`/api/tiktok-event`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ payload, accessToken: TIKTOK_ACCESS_TOKEN }),
+    }).catch(() => {});
+  } catch (_) {}
+}
+
 export default function PixelScripts() {
   useEffect(() => {
     if (hasConsent()) {
@@ -84,7 +132,8 @@ export default function PixelScripts() {
 
 export function trackViewContent(property) {
   if (!hasConsent()) return;
-  // Meta: ViewContent (for retargeting audiences)
+
+  // Meta: ViewContent
   if (window.fbq) {
     window.fbq("track", "ViewContent", {
       content_name: property.titulo,
@@ -97,10 +146,29 @@ export function trackViewContent(property) {
       neighborhood: property.barrio || "",
     });
   }
+
+  // TikTok: ViewContent (cuando el usuario ve el catálogo / detalle de propiedad)
+  if (window.ttq) {
+    window.ttq.track("ViewContent", {
+      contents: [
+        {
+          content_id: String(property.nid),
+          content_type: "product",
+          content_name: property.titulo,
+        },
+      ],
+      value: parseInt(property.precio_venta || 0, 10),
+      currency: "COP",
+    });
+  }
+
+  // TikTok Server-Side: ViewContent
+  sendTikTokServerEvent("ViewContent", property);
 }
 
 export function trackContact(property) {
   if (!hasConsent()) return;
+
   // Meta: Contact
   if (window.fbq) {
     window.fbq("track", "Contact", {
@@ -111,18 +179,44 @@ export function trackContact(property) {
       currency: "COP",
     });
   }
-  // TikTok: ClickButton
+
+  // TikTok: Contact (botón WhatsApp "Quiero información")
   if (window.ttq) {
-    window.ttq.track("ClickButton", {
-      contents: [{ content_id: property.nid, content_name: property.titulo }],
+    window.ttq.track("Contact", {
+      contents: [
+        {
+          content_id: String(property.nid),
+          content_type: "product",
+          content_name: property.titulo,
+        },
+      ],
       value: parseInt(property.precio_venta || 0, 10),
       currency: "COP",
     });
   }
+
+  // TikTok: ClickButton (evento adicional para botones WhatsApp)
+  if (window.ttq) {
+    window.ttq.track("ClickButton", {
+      contents: [
+        {
+          content_id: String(property.nid),
+          content_type: "product",
+          content_name: property.titulo,
+        },
+      ],
+      value: parseInt(property.precio_venta || 0, 10),
+      currency: "COP",
+    });
+  }
+
+  // TikTok Server-Side: Contact
+  sendTikTokServerEvent("Contact", property);
 }
 
 export function trackSchedule(property) {
   if (!hasConsent()) return;
+
   // Meta: Schedule
   if (window.fbq) {
     window.fbq("track", "Schedule", {
@@ -133,12 +227,48 @@ export function trackSchedule(property) {
       currency: "COP",
     });
   }
-  // TikTok: SubmitForm
-  if (window.ttq) {
-    window.ttq.track("SubmitForm", {
-      contents: [{ content_id: property.nid, content_name: property.titulo }],
+
+  // Meta: Lead (agendar visita es un lead inmobiliario)
+  if (window.fbq) {
+    window.fbq("track", "Lead", {
+      content_name: property.titulo,
+      content_ids: [property.nid],
+      content_type: "product",
       value: parseInt(property.precio_venta || 0, 10),
       currency: "COP",
     });
   }
+
+  // TikTok: Lead (agendar visita)
+  if (window.ttq) {
+    window.ttq.track("SubmitForm", {
+      contents: [
+        {
+          content_id: String(property.nid),
+          content_type: "product",
+          content_name: property.titulo,
+        },
+      ],
+      value: parseInt(property.precio_venta || 0, 10),
+      currency: "COP",
+    });
+  }
+
+  // TikTok: ClickButton (botón WhatsApp "Agendar visita")
+  if (window.ttq) {
+    window.ttq.track("ClickButton", {
+      contents: [
+        {
+          content_id: String(property.nid),
+          content_type: "product",
+          content_name: property.titulo,
+        },
+      ],
+      value: parseInt(property.precio_venta || 0, 10),
+      currency: "COP",
+    });
+  }
+
+  // TikTok Server-Side: SubmitForm (Lead)
+  sendTikTokServerEvent("SubmitForm", property);
 }
