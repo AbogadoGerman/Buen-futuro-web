@@ -642,6 +642,7 @@ export default function App(){
           <button onClick={()=>{setCOpen(true);setSimProperty(null);setMobMenu(false);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI} alt="" width={32} height={12} style={{objectFit:"contain"}} />Crédito HABI</button>
           <input placeholder="Buscar..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value){setPage("catalogo");setMobMenu(false)}}} style={{fontSize:13,padding:"10px 14px",border:"2px solid #D5DBDB",borderRadius:12,outline:"none",width:"100%",background:"white",margin:"4px 0"}} />
         </div>}
+    
       </header>
 
       {/* ===== INICIO ===== */}

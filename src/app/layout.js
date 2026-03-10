@@ -3,10 +3,10 @@ import PixelScripts from "@/components/PixelScripts";
 import CookieConsent from "@/components/CookieConsent";
 
 export const metadata = {
-  metadataBase: new URL("https://buenfuturo.vercel.app"),
+  metadataBase: new URL("https://buenfuturo.co"),
   title: "Inmobiliaria Buen Futuro | Aliados HABI - Catálogo de Propiedades",
   description:
-    "Encuentra tu hogar ideal con Inmobiliaria Buen Futuro. 59 propiedades HABI con tours 360°, descuentos exclusivos y financiación. Aliados oficiales HABI en Colombia.",
+    "Encuentra tu hogar ideal con Inmobiliaria Buen Futuro. más de 100 propiedades HABI con tours 360°, descuentos exclusivos y financiación. Aliados oficiales HABI en Colombia.",
   openGraph: {
     title: "Inmobiliaria Buen Futuro | Aliados HABI",
     description:
@@ -33,6 +33,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
+      <head>
+        {/* TikTok Pixel Code Start */}
+        <script>
+          {`
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+  ttq.load('D6NG0U3C77U75L0FFE4G');
+  ttq.page();
+}(window, document, 'ttq');
+          `}
+        </script>
+        {/* TikTok Pixel Code End */}
+      </head>
       <body>
         <PixelScripts />
         {children}
