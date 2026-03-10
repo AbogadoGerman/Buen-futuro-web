@@ -328,9 +328,10 @@ function Modal({p,onClose,onSimCredit}){
   const [ii,setII]=useState(0);
   const [tab,setTab]=useState("fotos");
   const [valid360,setValid360]=useState(false);
+  const [checking360,setChecking360]=useState(false);
   const imgs=p?.images||[];const d=p?disc(p):0;
   const realPhotos=hasRealImages(imgs);
-  const noPhotosNo360=!realPhotos&&!valid360;
+  const noPhotosNo360=!realPhotos&&!valid360&&!checking360;
   const [emblaRef,emblaApi]=useEmblaCarousel({
     loop:imgs.length>1,
     align:"start",
@@ -360,13 +361,16 @@ function Modal({p,onClose,onSimCredit}){
   useEffect(()=>{
     setValid360(false);
     if(!p?.url_360){
+      setChecking360(false);
       setTab("fotos");
       return;
     }
+    setChecking360(true);
     let cancelled=false;
     fetch('/api/check-360?url='+encodeURIComponent(p.url_360))
       .then(r=>r.json())
       .then(d=>{if(!cancelled){
+        setChecking360(false);
         if(d.valid){
           setValid360(true);
           if(!hasRealImages(p?.images))setTab("360");
@@ -374,7 +378,7 @@ function Modal({p,onClose,onSimCredit}){
           setTab(t=>t==='360'?'fotos':t);
         }
       }})
-      .catch(()=>{});
+      .catch(()=>{if(!cancelled)setChecking360(false);});
     return()=>{cancelled=true;};
   },[p?.url_360]);
 
