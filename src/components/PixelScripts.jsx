@@ -10,6 +10,11 @@ function hasConsent() {
   return typeof window !== "undefined" && localStorage.getItem("cookie_consent") === "accepted";
 }
 
+// Genera un event_id único compartido entre navegador y servidor para deduplicación
+function generateEventId() {
+  return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
 // --- SHA-256 helper (para ttq.identify) ---
 async function sha256(str) {
   if (!str) return undefined;
@@ -91,7 +96,8 @@ function buildValue(property) {
 }
 
 // --- TikTok Server-Side Events API ---
-async function sendTikTokServerEvent(eventName, property, extraProps = {}) {
+// event_id se comparte con el navegador para deduplicación correcta
+async function sendTikTokServerEvent(eventName, property, eventId, extraProps = {}) {
   try {
     const ttp = (document.cookie.match(/(?:^|;\s*)_ttp=([^;]*)/) || [])[1] || "";
     const ttclid = new URLSearchParams(window.location.search).get("ttclid") || "";
@@ -102,7 +108,7 @@ async function sendTikTokServerEvent(eventName, property, extraProps = {}) {
         {
           event: eventName,
           event_time: Math.floor(Date.now() / 1000),
-          event_id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          event_id: eventId, // mismo ID que el navegador para deduplicar
           page: { url: window.location.href },
           user: {
             user_agent: navigator.userAgent,
@@ -148,11 +154,15 @@ export default function PixelScripts() {
 
 // ============================================================
 // TRACKING FUNCTIONS
+// Cada función genera un event_id único compartido entre
+// el píxel del navegador (ttq.track) y el servidor (API)
+// para que TikTok pueda deduplicar correctamente.
 // ============================================================
 
-// ViewContent — Botón catálogo / ver propiedad
+// ViewContent — Ver propiedad en catálogo
 export function trackViewContent(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "ViewContent", {
       content_name: property.titulo,
@@ -161,23 +171,22 @@ export function trackViewContent(property) {
       content_category: property.tipo || "Inmueble",
       value: buildValue(property),
       currency: "COP",
-      city: property.ciudad || "",
-      neighborhood: property.barrio || "",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
     window.ttq.track("ViewContent", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("ViewContent", property);
+  sendTikTokServerEvent("ViewContent", property, eventId);
 }
 
-// Contact + ClickButton — Botón WhatsApp "Quiero información"
+// Contact + ClickButton — WhatsApp "Quiero información"
 export function trackContact(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "Contact", {
       content_name: property.titulo,
@@ -185,27 +194,34 @@ export function trackContact(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
     window.ttq.track("Contact", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
     window.ttq.track("ClickButton", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: generateEventId() });
   }
-  sendTikTokServerEvent("Contact", property);
+  sendTikTokServerEvent("Contact", property, eventId);
 }
 
-// PlaceAnOrder + Lead + Schedule + ClickButton — Botón "Agendar visita" (WhatsApp)
-// PlaceAnOrder es requerido por TikTok para habilitar el enlace de producto en anuncios
+// PlaceAnOrder + CompleteRegistration + SubmitForm + ClickButton + Schedule
+// — Botón "Agendar visita" → habilita enlace de producto en TikTok Ads
 export function trackSchedule(property) {
   if (!hasConsent()) return;
+
+  const idPlaceAnOrder = generateEventId();
+  const idCompleteReg  = generateEventId();
+  const idSubmitForm   = generateEventId();
+  const idClickButton  = generateEventId();
+  const idSchedule     = generateEventId();
+
   if (window.fbq) {
     window.fbq("track", "Schedule", {
       content_name: property.titulo,
@@ -213,47 +229,60 @@ export function trackSchedule(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: idSchedule });
     window.fbq("track", "Lead", {
       content_name: property.titulo,
       content_ids: [property.nid],
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: generateEventId() });
   }
+
   if (window.ttq) {
-    // PlaceAnOrder: evento de pago completado requerido para enlace de producto TikTok
+    // PlaceAnOrder: requerido para enlace de producto TikTok
     window.ttq.track("PlaceAnOrder", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: idPlaceAnOrder });
+
+    // CompleteRegistration: confirma conversión para TikTok Ads
+    window.ttq.track("CompleteRegistration", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: idCompleteReg });
+
     window.ttq.track("SubmitForm", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: idSubmitForm });
+
     window.ttq.track("ClickButton", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: idClickButton });
+
     window.ttq.track("Schedule", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: idSchedule });
   }
-  // Server-side: PlaceAnOrder
-  sendTikTokServerEvent("PlaceAnOrder", property);
-  // Server-side: SubmitForm
-  sendTikTokServerEvent("SubmitForm", property);
+
+  // Server-side con el mismo event_id del navegador
+  sendTikTokServerEvent("PlaceAnOrder",          property, idPlaceAnOrder);
+  sendTikTokServerEvent("CompleteRegistration",  property, idCompleteReg);
+  sendTikTokServerEvent("SubmitForm",            property, idSubmitForm);
 }
 
-// PlaceAnOrder standalone — Pago / pedido completado
+// PlaceAnOrder standalone
 export function trackPlaceAnOrder(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "Purchase", {
       content_name: property.titulo,
@@ -261,21 +290,45 @@ export function trackPlaceAnOrder(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
     window.ttq.track("PlaceAnOrder", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("PlaceAnOrder", property);
+  sendTikTokServerEvent("PlaceAnOrder", property, eventId);
 }
 
-// Lead — Envío de formulario / solicitud de información
+// Purchase — Negocio cerrado
+export function trackPurchase(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.fbq) {
+    window.fbq("track", "Purchase", {
+      content_name: property.titulo,
+      content_ids: [property.nid],
+      content_type: "product",
+      value: buildValue(property),
+      currency: "COP",
+    }, { eventID: eventId });
+  }
+  if (window.ttq) {
+    window.ttq.track("Purchase", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("Purchase", property, eventId);
+}
+
+// Lead — Formulario de captación
 export function trackLead(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "Lead", {
       content_name: property.titulo,
@@ -283,168 +336,45 @@ export function trackLead(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
-    window.ttq.track("Plomo", {
+    window.ttq.track("Lead", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("Lead", property);
+  sendTikTokServerEvent("Lead", property, eventId);
 }
 
 // Search — Búsqueda de propiedades
 export function trackSearch(property, searchKeywords = "") {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "Search", {
       content_type: "product",
       search_string: searchKeywords,
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
-    window.ttq.track("Buscar", {
+    window.ttq.track("Search", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
       search_string: searchKeywords,
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("Search", property, { search_string: searchKeywords });
-}
-
-// Subscribe — Suscripción / notificaciones
-export function trackSubscribe(property) {
-  if (!hasConsent()) return;
-  if (window.ttq) {
-    window.ttq.track("Suscribirse", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("Subscribe", property);
-}
-
-// FindLocation — Buscar ubicación en mapa
-export function trackFindLocation(property) {
-  if (!hasConsent()) return;
-  if (window.ttq) {
-    window.ttq.track("BuscarUbicación", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("FindLocation", property);
-}
-
-// Download — Descargar brochure / ficha técnica
-export function trackDownload(property) {
-  if (!hasConsent()) return;
-  if (window.ttq) {
-    window.ttq.track("Descargar", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("Download", property);
-}
-
-// SubmitApplication — Enviar solicitud / formulario
-export function trackSubmitApplication(property) {
-  if (!hasConsent()) return;
-  if (window.fbq) {
-    window.fbq("track", "SubmitApplication", {
-      content_name: property.titulo,
-      content_ids: [property.nid],
-      content_type: "product",
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  if (window.ttq) {
-    window.ttq.track("Enviar solicitud", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("SubmitApplication", property);
-}
-
-// CompleteRegistration — Registro completado
-export function trackCompleteRegistration(property) {
-  if (!hasConsent()) return;
-  if (window.fbq) {
-    window.fbq("track", "CompleteRegistration", {
-      content_name: property.titulo,
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  if (window.ttq) {
-    window.ttq.track("RegistroCompletado", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("CompleteRegistration", property);
-}
-
-// InitiateCheckout — Inicio de proceso de contacto/cierre
-export function trackInitiateCheckout(property) {
-  if (!hasConsent()) return;
-  if (window.fbq) {
-    window.fbq("track", "InitiateCheckout", {
-      content_name: property.titulo,
-      content_ids: [property.nid],
-      content_type: "product",
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  if (window.ttq) {
-    window.ttq.track("Iniciar el pago", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("InitiateCheckout", property);
-}
-
-// Purchase — Negocio cerrado
-export function trackPurchase(property) {
-  if (!hasConsent()) return;
-  if (window.fbq) {
-    window.fbq("track", "Purchase", {
-      content_name: property.titulo,
-      content_ids: [property.nid],
-      content_type: "product",
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  if (window.ttq) {
-    window.ttq.track("Compra", {
-      contents: buildContents(property),
-      value: buildValue(property),
-      currency: "COP",
-    });
-  }
-  sendTikTokServerEvent("Purchase", property);
+  sendTikTokServerEvent("Search", property, eventId, { search_string: searchKeywords });
 }
 
 // AddToWishlist — Guardar propiedad favorita
 export function trackAddToWishlist(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "AddToWishlist", {
       content_name: property.titulo,
@@ -452,21 +382,22 @@ export function trackAddToWishlist(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
-    window.ttq.track("Añadir a la lista de deseos", {
+    window.ttq.track("AddToWishlist", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("AddToWishlist", property);
+  sendTikTokServerEvent("AddToWishlist", property, eventId);
 }
 
-// AddToCart — Agregar al carrito / seleccionar propiedad
+// AddToCart — Seleccionar propiedad
 export function trackAddToCart(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
     window.fbq("track", "AddToCart", {
       content_name: property.titulo,
@@ -474,56 +405,182 @@ export function trackAddToCart(property) {
       content_type: "product",
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { eventID: eventId });
   }
   if (window.ttq) {
-    window.ttq.track("Añadir al carrito", {
+    window.ttq.track("AddToCart", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("AddToCart", property);
+  sendTikTokServerEvent("AddToCart", property, eventId);
+}
+
+// AddPaymentInfo — Información de pago
+export function trackAddPaymentInfo(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.ttq) {
+    window.ttq.track("AddPaymentInfo", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("AddPaymentInfo", property, eventId);
+}
+
+// InitiateCheckout — Inicio proceso de cierre
+export function trackInitiateCheckout(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.fbq) {
+    window.fbq("track", "InitiateCheckout", {
+      content_name: property.titulo,
+      content_ids: [property.nid],
+      content_type: "product",
+      value: buildValue(property),
+      currency: "COP",
+    }, { eventID: eventId });
+  }
+  if (window.ttq) {
+    window.ttq.track("InitiateCheckout", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("InitiateCheckout", property, eventId);
+}
+
+// CompleteRegistration — Registro completado
+export function trackCompleteRegistration(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.fbq) {
+    window.fbq("track", "CompleteRegistration", {
+      content_name: property.titulo,
+      value: buildValue(property),
+      currency: "COP",
+    }, { eventID: eventId });
+  }
+  if (window.ttq) {
+    window.ttq.track("CompleteRegistration", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("CompleteRegistration", property, eventId);
+}
+
+// Subscribe — Suscripción / notificaciones
+export function trackSubscribe(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.ttq) {
+    window.ttq.track("Subscribe", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("Subscribe", property, eventId);
+}
+
+// FindLocation — Mapa / ubicación
+export function trackFindLocation(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.ttq) {
+    window.ttq.track("FindLocation", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("FindLocation", property, eventId);
+}
+
+// Download — Ficha técnica / brochure
+export function trackDownload(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.ttq) {
+    window.ttq.track("Download", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("Download", property, eventId);
+}
+
+// SubmitApplication — Enviar solicitud
+export function trackSubmitApplication(property) {
+  if (!hasConsent()) return;
+  const eventId = generateEventId();
+  if (window.fbq) {
+    window.fbq("track", "SubmitApplication", {
+      content_name: property.titulo,
+      content_ids: [property.nid],
+      content_type: "product",
+      value: buildValue(property),
+      currency: "COP",
+    }, { eventID: eventId });
+  }
+  if (window.ttq) {
+    window.ttq.track("SubmitForm", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    }, { event_id: eventId });
+  }
+  sendTikTokServerEvent("SubmitForm", property, eventId);
 }
 
 // PageView — Vista de página personalizada
 export function trackPageView(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.fbq) {
-    window.fbq("track", "PageView");
+    window.fbq("track", "PageView", {}, { eventID: eventId });
   }
   if (window.ttq) {
-    window.ttq.track("Página vista", {
+    window.ttq.track("ViewContent", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("PageView", property);
+  sendTikTokServerEvent("ViewContent", property, eventId);
 }
 
-// StartTrial — Prueba / cita agendada
+// StartTrial — Cita agendada
 export function trackStartTrial(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.ttq) {
-    window.ttq.track("Iniciar prueba", {
+    window.ttq.track("StartTrial", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("StartTrial", property);
+  sendTikTokServerEvent("StartTrial", property, eventId);
 }
 
 // ApplicationApproval — Aprobación de solicitud
 export function trackApplicationApproval(property) {
   if (!hasConsent()) return;
+  const eventId = generateEventId();
   if (window.ttq) {
-    window.ttq.track("Aprobación de la aplicación", {
+    window.ttq.track("ApplicationApproval", {
       contents: buildContents(property),
       value: buildValue(property),
       currency: "COP",
-    });
+    }, { event_id: eventId });
   }
-  sendTikTokServerEvent("ApplicationApproval", property);
+  sendTikTokServerEvent("ApplicationApproval", property, eventId);
 }
