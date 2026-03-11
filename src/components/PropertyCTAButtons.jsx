@@ -32,11 +32,11 @@ export default function PropertyCTAButtons({ property }) {
   const p = property;
 
   const waMsg = encodeURIComponent(
-    `Hola, estoy interesado(a) en el inmueble:\n\n📋 NID: ${p.nid}\n🏡 Inmueble: ${p.titulo}\n📍 Ubicación: ${[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(", ")}\n💰 Precio: ${p.precioFormateado}\n\n¿Me podrían dar más información?`
+    `Hola, estoy interesado(a) en el inmueble:\n\n\u{1F4CB} NID: ${p.nid}\n\u{1F3E1} Inmueble: ${p.titulo}\n\u{1F4CD} Ubicaci\u00f3n: ${[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(", ")}\n\u{1F4B0} Precio: ${p.precioFormateado}\n\n\u00bfMe podr\u00edan dar m\u00e1s informaci\u00f3n?`
   );
 
   const waScheduleMsg = encodeURIComponent(
-    `Hola, quiero agendar una visita para el inmueble:\n\n📋 NID: ${p.nid}\n🏡 ${p.titulo}\n📍 ${[p.barrio, p.ciudad].filter(Boolean).join(", ")}`
+    `Hola, quiero agendar una visita para el inmueble:\n\n\u{1F4CB} NID: ${p.nid}\n\u{1F3E1} ${p.titulo}\n\u{1F4CD} ${[p.barrio, p.ciudad].filter(Boolean).join(", ")}`
   );
 
   useEffect(() => {
@@ -49,8 +49,11 @@ export default function PropertyCTAButtons({ property }) {
     window.open(`https://wa.me/${WA}?text=${waMsg}`, "_blank");
   }
 
+  // Agendar visita: dispara PlaceAnOrder + Schedule + Lead + ClickButton
+  // PlaceAnOrder es necesario para que TikTok habilite el enlace de producto en anuncios
   function handleSchedule() {
-    trackSchedule(p);
+    trackSchedule(p);        // incluye PlaceAnOrder, SubmitForm, ClickButton, Schedule
+    sendServerEvent(p, "PlaceAnOrder");
     sendServerEvent(p, "Schedule");
     window.open(`https://wa.me/${WA}?text=${waScheduleMsg}`, "_blank");
   }
@@ -78,7 +81,7 @@ export default function PropertyCTAButtons({ property }) {
           textDecoration: "none", border: "2px solid #1B4F72", cursor: "pointer"
         }}
       >
-        📅 Agendar visita
+        \u{1F4C5} Agendar visita
       </button>
     </div>
   );

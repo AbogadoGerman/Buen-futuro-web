@@ -75,7 +75,7 @@ function initPixels() {
   }
 }
 
-// --- Helper: construye contenido estandarizado para eventos TikTok ---
+// --- Helpers ---
 function buildContents(property) {
   return [
     {
@@ -202,7 +202,8 @@ export function trackContact(property) {
   sendTikTokServerEvent("Contact", property);
 }
 
-// Lead + Schedule + ClickButton — Botón WhatsApp "Agendar visita"
+// PlaceAnOrder + Lead + Schedule + ClickButton — Botón "Agendar visita" (WhatsApp)
+// PlaceAnOrder es requerido por TikTok para habilitar el enlace de producto en anuncios
 export function trackSchedule(property) {
   if (!hasConsent()) return;
   if (window.fbq) {
@@ -222,6 +223,12 @@ export function trackSchedule(property) {
     });
   }
   if (window.ttq) {
+    // PlaceAnOrder: evento de pago completado requerido para enlace de producto TikTok
+    window.ttq.track("PlaceAnOrder", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    });
     window.ttq.track("SubmitForm", {
       contents: buildContents(property),
       value: buildValue(property),
@@ -238,7 +245,32 @@ export function trackSchedule(property) {
       currency: "COP",
     });
   }
+  // Server-side: PlaceAnOrder
+  sendTikTokServerEvent("PlaceAnOrder", property);
+  // Server-side: SubmitForm
   sendTikTokServerEvent("SubmitForm", property);
+}
+
+// PlaceAnOrder standalone — Pago / pedido completado
+export function trackPlaceAnOrder(property) {
+  if (!hasConsent()) return;
+  if (window.fbq) {
+    window.fbq("track", "Purchase", {
+      content_name: property.titulo,
+      content_ids: [property.nid],
+      content_type: "product",
+      value: buildValue(property),
+      currency: "COP",
+    });
+  }
+  if (window.ttq) {
+    window.ttq.track("PlaceAnOrder", {
+      contents: buildContents(property),
+      value: buildValue(property),
+      currency: "COP",
+    });
+  }
+  sendTikTokServerEvent("PlaceAnOrder", property);
 }
 
 // Lead — Envío de formulario / solicitud de información
@@ -470,7 +502,7 @@ export function trackPageView(property) {
   sendTikTokServerEvent("PageView", property);
 }
 
-// AppointmentScheduled — Prueba / cita agendada
+// StartTrial — Prueba / cita agendada
 export function trackStartTrial(property) {
   if (!hasConsent()) return;
   if (window.ttq) {
