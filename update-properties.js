@@ -15,12 +15,12 @@ const CONFIG = {
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
   propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
   placeholderImage: "/window.svg",
+  maxImages: 20,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
   delayBetweenRequestsMs: 800
 };
 
 async function getGoogleDriveClient() {
-  // Buscar service-account.json en la raíz del proyecto o via variable de entorno
   const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_PATH
     || path.join(ROOT, "service-account.json");
 
@@ -65,7 +65,6 @@ async function scrapeImages(url) {
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const images = [];
 
-    // 1. Extract from JSON "image" array embedded in HABI pages
     const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
     if (imgArrayMatch) {
       try {
@@ -77,7 +76,6 @@ async function scrapeImages(url) {
       } catch {}
     }
 
-    // 2. Fallback: extract from og:image and img tags via cheerio
     if (images.length === 0) {
       const $ = cheerio.load(data);
       const ogImage = $('meta[property="og:image"]').attr("content");
@@ -89,7 +87,7 @@ async function scrapeImages(url) {
       });
     }
 
-    return [...new Set(images)].slice(0, 10);
+    return [...new Set(images)].slice(0, CONFIG.maxImages);
   } catch {
     return [];
   }
@@ -106,7 +104,9 @@ async function validate360(url) {
       validateStatus: null
     });
     if (oembedResp.status === 200 && oembedResp.data?.html) return true;
-    if (oembedResp.status === 404 || oembedResp.status === 403 || oembedResp.status === 400) return false;
+
+    // Do NOT return false on 404/403/400 – oEmbed is unreliable for some models.
+    // Always fall through to the direct page check below.
 
     // Fallback: fetch the page and check for error indicators
     const { data, status } = await axios.get(url, {
@@ -126,7 +126,6 @@ async function validate360(url) {
     ];
     if (errorPatterns.some((p) => p.test(data))) return false;
 
-    // Must have showcase-specific content (present on valid model pages, not error pages)
     return data.includes("showcase") && data.includes("matterport");
   } catch {
     return false;
@@ -164,13 +163,13 @@ async function main() {
       ]);
 
       if (!is360Valid && p.url_360) {
-        console.log(`  ⚠️  360 inválido (404/error) - se eliminará: ${p.url_360}`);
+        console.log(`  ⚠️  360 inválido (error confirmado) - se eliminará: ${p.url_360}`);
       }
       console.log(`  📸 ${images.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
 
       enriched.push({
         ...p,
-        images: images.length > 0 ? images : [CONFIG.placeholderImage],
+        images: images.length > 0 ? images : [],
         url_360: is360Valid ? p.url_360 : "",
         precio: parseInt(p.precio_venta || 0)
       });
@@ -179,45 +178,51 @@ async function main() {
 
     const jsonData = JSON.stringify(enriched, null, 2);
 
-    // Guardar en src/data/ para imports
     if (!fs.existsSync(path.dirname(CONFIG.outputPath))) fs.mkdirSync(path.dirname(CONFIG.outputPath), { recursive: true });
     fs.writeFileSync(CONFIG.outputPath, jsonData);
 
-    // Guardar en public/data/ para fetch desde el frontend
     if (!fs.existsSync(path.dirname(CONFIG.publicOutputPath))) fs.mkdirSync(path.dirname(CONFIG.publicOutputPath), { recursive: true });
     fs.writeFileSync(CONFIG.publicOutputPath, jsonData);
 
-    // Generar properties.js con el formato que usa el frontend
+    // ✅ CORREGIDO: pageFormatted ahora incluye TODOS los campos que usa page.jsx
     const pageFormatted = enriched.map((p) => ({
       nid: p.nid,
       titulo: p.titulo,
-      tipo: p.tipo_de_propiedad,
-      barrio: p.barrio,
-      conjunto: p.conjunto,
-      ciudad: p.ciudad,
-      descripcion: p.descripcion,
-      area: p.area,
-      habitaciones: p.num_habitaciones,
-      baños: p.banos,
-      garaje: p.garajes,
-      piso: p.num_piso,
-      estrato: p.estrato,
+      tipo: p.tipo_de_propiedad || p.tipo || "",
+      barrio: p.barrio || "",
+      conjunto: p.conjunto || "",
+      ciudad: p.ciudad || "",
+      // ✅ Campos de localización que antes faltaban
+      localidad: p.localidad || "",
+      zona_grande: p.zona_grande || "",
+      zona_mediana: p.zona_mediana || "",
+      zona_pequeña: p.zona_pequeña || p["zona_pequeña"] || "",
+      direccion: p.direccion || "",
+      googleMapsUrl: p.googleMapsUrl || "",
+      descripcion: p.descripcion || "",
+      area: p.area || "",
+      habitaciones: p.num_habitaciones || p.habitaciones || "",
+      baños: p.banos || p["baños"] || "",
+      garaje: p.garajes || p.garaje || "",
+      piso: p.num_piso || p.piso || "",
+      estrato: p.estrato || "",
       ascensor: p.tiene_ascensor === "1" || p.tiene_ascensor === 1
         ? true
         : p.tiene_ascensor === "0" || p.tiene_ascensor === 0
         ? false
         : null,
-      bonoHabi: parseInt(p.bonus_value || 0),
-      admin: parseInt(p.costo_administracion || 0),
-      precio_venta: p.precio_venta,
-      precio_original: p.precio_anterior,
+      bonoHabi: parseInt(p.bonus_value || p.bonoHabi || 0),
+      admin: parseInt(p.costo_administracion || p.admin || 0),
+      precio_venta: p.precio_venta || "",
+      precio_original: p.precio_anterior || p.precio_original || "",
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
       images: p.images || [],
     }));
+
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
     fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
-    console.log("✅ ¡Inventario actualizado con éxito!");
+    console.log(`✅ ¡Inventario actualizado! Total inmuebles: ${enriched.length}`);
   } catch (err) {
     console.error("❌ Error fatal:", err.message);
   }
