@@ -19198,7 +19198,26 @@ export const INV = [
     "zona_pequeña": "",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Carrera%2082A%20%23%2006-16%2C%20Tabaku%20de%20Las%20Am%C3%A9ricas%2C%20Castilla%2C%20Kennedy%2C%20Bogot%C3%A1",
     "images": [
-      null
+      "https://d3hzflklh28tts.cloudfront.net/venta-f47b1fe924-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-cf19fca7b8-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-babcb804c7-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-0125a8b648-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-838e202de5-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-628a03b2db-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-9e0d6f8484-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-9308a525e0-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-8790892bcd-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-2e128a6545-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-76a48fa558-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-63acb2b72b-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-a56d8e50f0-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-71ff31df2a-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-02a7b072f6-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-36efb036c6-21.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c2d52a20db-22.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-eb1d84ca0e-23.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-a8209cdb77-25.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-dcec4b7a14-26.png"
     ]
   },
   {
