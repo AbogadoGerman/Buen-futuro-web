@@ -1166,22 +1166,7 @@ export const INV = [
     "zona_pequeña": "",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Carrera%2072D%20%2322A%20-%2051%2C%20Las%20Brisas%20%2C%20Modelia%2C%20Fontibon%2C%20Bogot%C3%A1",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-d323ad3e78-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1b8b1a5a00-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-32ade4742e-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ca47200ba3-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3519ac6b77-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fad54d23fb-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-80eca228df-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-720763aa90-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-29a9f7490e-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-41305b2ae0-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9233fb8c9d-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-05025401bd-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-14c37adfb8-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e80a5fd2c2-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ee5239be54-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-083f49573a-18.png"
+      null
     ]
   },
   {
@@ -8097,21 +8082,7 @@ export const INV = [
     "zona_pequeña": "",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Calle%202%20%23%2093d%20-%2066%2C%20PARQUE%20CENTRAL%20TINTAL%203%20ETAPA%202%2C%20Calandaima%2C%20Kennedy%2C%20Bogot%C3%A1",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-030c922de3-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-40c3b0660f-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c306af962f-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fae9ba598b-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bdd7f5f8b5-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-70ee1e2eca-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9d14b45924-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-83a91fc953-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-65650158fc-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3dbf0c858a-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9821732d62-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a14776f826-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-72024b0085-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8639d202e9-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-335010faaf-17.png"
+      null
     ]
   },
   {
@@ -19030,7 +19001,26 @@ export const INV = [
     "zona_pequeña": "",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Carrera%2068G%20%239C%20-%2097%2C%20Villa%20Ver%C3%B3nica%2C%20Bavaria%2C%20Kennedy%2C%20Bogot%C3%A1",
     "images": [
-      null
+      "https://d3hzflklh28tts.cloudfront.net/venta-df42e0fd39-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-ab3364983e-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-ed9f3f7339-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c6a5a015cc-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-014fe2d797-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-28f8312f77-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-ef53d54917-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c0e8d27176-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-be62d2ea32-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-3b5248eef2-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-70cf2a46d8-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-05541d613c-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-2cbb690327-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-55cdbd57c4-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-f7fbf991ac-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-13a841389b-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-cc5076de6d-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-5fcaa58dfa-19.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d49f96d134-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-4bc8d22495-21.png"
     ]
   },
   {
