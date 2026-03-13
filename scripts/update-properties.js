@@ -14,6 +14,7 @@ const CONFIG = {
   outputPath: path.join(ROOT, "src", "data", "inventory.json"),
   publicOutputPath: path.join(ROOT, "public", "data", "inventory.json"),
   propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
+  placeholderImage: "/window.svg",
   minImages: 1,
   maxImages: 20,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
@@ -424,36 +425,37 @@ async function main() {
     const pageFormatted = enriched.map((p) => ({
       nid: p.nid,
       titulo: p.titulo,
-      tipo: p.tipo_de_propiedad,
-      barrio: p.barrio,
-      conjunto: p.conjunto,
-      ciudad: p.ciudad,
-      descripcion: p.descripcion,
-      area: p.area,
-      habitaciones: p.num_habitaciones,
-      baños: p.banos,
-      garaje: p.garajes,
-      piso: p.num_piso,
-      estrato: p.estrato,
+      tipo: p.tipo_de_propiedad || p.tipo || "",
+      barrio: p.barrio || "",
+      conjunto: p.conjunto || "",
+      ciudad: p.ciudad || "",
+      localidad: p.localidad || "",
+      zona_grande: p.zona_grande || "",
+      zona_mediana: p.zona_mediana || "",
+      zona_pequeña: p.zona_pequeña || p["zona_pequeña"] || "",
+      direccion: p.direccion || "",
+      googleMapsUrl: p.googleMapsUrl || (() => {
+        const parts = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean);
+        return parts.length ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}` : "";
+      })(),
+      descripcion: p.descripcion || "",
+      area: p.area || "",
+      habitaciones: p.num_habitaciones || p.habitaciones || "",
+      baños: p.banos || p["baños"] || "",
+      garaje: p.garajes || p.garaje || "",
+      piso: p.num_piso || p.piso || "",
+      estrato: p.estrato || "",
       ascensor: p.tiene_ascensor === "1" || p.tiene_ascensor === 1
         ? true
         : p.tiene_ascensor === "0" || p.tiene_ascensor === 0
         ? false
         : null,
-      bonoHabi: parseInt(p.bonus_value || 0),
-      admin: parseInt(p.costo_administracion || 0),
-      precio_venta: p.precio_venta,
-      precio_original: p.precio_anterior,
+      bonoHabi: parseInt(p.bonus_value || p.bonoHabi || 0),
+      admin: parseInt(p.costo_administracion || p.admin || 0),
+      precio_venta: p.precio_venta || "",
+      precio_original: p.precio_anterior || p.precio_original || "",
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
-      direccion: p.direccion || "",
-      zona_grande: p.zona_grande || "",
-      zona_mediana: p.zona_mediana || "",
-      zona_pequeña: p.zona_pequeña || "",
-      googleMapsUrl: (() => {
-        const parts = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean);
-        return parts.length ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}` : "";
-      })(),
       images: p.images || [],
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
