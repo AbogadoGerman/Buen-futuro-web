@@ -81,7 +81,7 @@ export default function PropertyCTAButtons({ property }) {
           textDecoration: "none", border: "2px solid #1B4F72", cursor: "pointer"
         }}
       >
-        \u{1F4C5} Agendar visita
+        {"\u{1F4C5}"} Agendar visita
       </button>
     </div>
   );
