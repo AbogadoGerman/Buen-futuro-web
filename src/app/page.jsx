@@ -602,6 +602,7 @@ export default function App(){
           .mob-btn{display:flex!important}
           .footer-g{flex-direction:column!important;align-items:center!important;text-align:center!important}
           .search-wrap{display:none!important}
+          .search-wrap-mob{display:block!important}
           .reviews-embla__slide{flex-basis:100%!important}
           .sort-bar{flex-direction:column!important;align-items:stretch!important;gap:8px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
@@ -617,7 +618,7 @@ export default function App(){
           .hero-imgs img{height:90px!important;border-radius:8px!important}
           .house-deco{display:none!important}
         }
-        @media(min-width:769px){.mob-btn{display:none!important}.mob-menu{display:none!important}}
+        @media(min-width:769px){.mob-btn{display:none!important}.mob-menu{display:none!important}.search-wrap-mob{display:none!important}}
       `}</style>
 
       {/* HEADER */}
@@ -634,13 +635,13 @@ export default function App(){
               {fCount>0&&<span style={{position:"absolute",top:-5,right:-5,background:"#F7C948",color:"#1B2A4A",width:18,height:18,borderRadius:"50%",fontSize:10,fontWeight:900,display:"flex",alignItems:"center",justifyContent:"center"}}>{fCount}</span>}
             </button>
             <div className="search-wrap" style={{position:"relative"}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2" style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)"}}><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="NID, Barrio, Zona..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value)setPage("catalogo")}} style={{fontSize:13,padding:"8px 14px 8px 32px",border:"2px solid #D5DBDB",borderRadius:20,outline:"none",width:180,background:"white"}} /></div>
+            <div className="search-wrap-mob" style={{position:"relative",minWidth:0,width:130}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2" style={{position:"absolute",left:9,top:"50%",transform:"translateY(-50%)"}}><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="Barrio, zona..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value)setPage("catalogo")}} style={{fontSize:12,padding:"7px 10px 7px 27px",border:"2px solid #D5DBDB",borderRadius:20,outline:"none",width:"100%",background:"white",boxSizing:"border-box"}} /></div>
           </div>
           <button className="mob-btn" onClick={()=>setMobMenu(!mobMenu)} style={{background:"none",border:"none",cursor:"pointer",padding:6}}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B2A4A" strokeWidth="2">{mobMenu?<path d="M18 6L6 18M6 6l12 12"/>:<path d="M3 12h18M3 6h18M3 18h18"/>}</svg></button>
         </div>
         {mobMenu&&<div className="mob-menu" style={{padding:"8px 16px 16px",display:"flex",flexDirection:"column",gap:4}}>
           {[["Inicio","inicio"],["Catálogo","catalogo"]].map(([l,id])=><button key={id} onClick={()=>{setPage(id);setMobMenu(false)}} style={{fontWeight:600,fontSize:14,color:"#1B2A4A",padding:"10px 14px",borderRadius:8,border:"none",background:page===id?"#EBF0F5":"transparent",cursor:"pointer",textAlign:"left"}}>{l}</button>)}
           <button onClick={()=>{setCOpen(true);setSimProperty(null);setMobMenu(false);}} style={{fontWeight:700,fontSize:14,color:"#7B2FF7",padding:"10px 14px",borderRadius:8,border:"none",background:"transparent",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI} alt="" width={32} height={12} style={{objectFit:"contain"}} />Crédito HABI</button>
-          <input placeholder="Buscar..." value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value){setPage("catalogo");setMobMenu(false)}}} style={{fontSize:13,padding:"10px 14px",border:"2px solid #D5DBDB",borderRadius:12,outline:"none",width:"100%",background:"white",margin:"4px 0"}} />
         </div>}
     
       </header>
