@@ -409,7 +409,7 @@ function Modal({p,onClose,onSimCredit}){
         </div>}
 
         {/* Photo carousel tab */}
-        {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111"}}>
+        {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111",overflow:"hidden"}}>
           <div className="embla-modal" ref={emblaRef}>
             <div className="embla-modal__container">
               {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative"}}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover"}} /></div>)}
@@ -589,7 +589,7 @@ export default function App(){
         .embla-modal{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
         .embla-modal:active{cursor:grabbing}
         .embla-modal__container{display:flex;height:100%}
-        .embla-modal__slide{flex:0 0 100%;min-width:0;position:relative}
+        .embla-modal__slide{flex:0 0 100%;min-width:0;position:relative;background:#111}
         .embla-modal__slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.01);transition:transform .35s ease}
         /* ---- MOBILE 768 ---- */
         @media(max-width:768px){
