@@ -27,26 +27,7 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/31723863395/bonavista-2---apartamento-venta-ensueno-ciudad-bolivar",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-c75fbad553-30.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-67f0f235f5-31.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ea6e63d719-32.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-faac60bbc3-33.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-765a9b35b2-34.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5f1072250c-35.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-99a96d69aa-36.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e2aa855bd7-37.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c3ccf660cc-38.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9f52919445-39.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9a96fec969-40.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8de28d2367-41.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-557de3eb7b-42.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a7b39034a6-43.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-33d0c34824-45.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-391ed0ad87-46.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-72d86bdc48-47.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9e86f33ce3-48.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cf159b03f4-49.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cd685aba04-50.png"
+      "/window.svg"
     ]
   },
   {
@@ -1950,20 +1931,7 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/38017722973/castilla-central---apartamento-venta-vergel-oriental-kennedy",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-c72f424781-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e33f314164-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-66fdbf6dcf-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-855e25cf4d-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2d8f360544-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dfb5a5f562-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e00b43ecf7-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-feb701c9cd-21.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2b98237a99-22.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f01128977f-23.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b472fd7aa1-24.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e8ccb66502-25.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5e80a0edbd-26.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0710fd4f36-27.png"
+      "/window.svg"
     ]
   },
   {
@@ -4769,7 +4737,26 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/21487368024/grandeza-3---apartamento-venta-hogares-soacha",
     "images": [
-      "/window.svg"
+      "https://d3hzflklh28tts.cloudfront.net/venta-095705fa7a-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-65ec35f6c6-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d369f5619a-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-8cd843df7a-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-20bc2ca76e-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-dff5f25521-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c8d9393e38-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-cd37fb1f9b-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-20414b5ba6-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-9829d9c6ea-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-b5f3549d6a-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-030dd88bd0-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-caaba18240-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-5e5afba0b1-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-9802995ca1-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c6e96e3ef3-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-81999e8516-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-446bb44f26-19.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-76aa7a1c8f-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-05791eef61-21.png"
     ]
   },
   {
@@ -4831,7 +4818,22 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=usBaXT3mCTU",
     "url_habi": "https://habi.co/venta-apartamentos/34241943219/progreso-1---apartamento-venta-hogares-soacha",
     "images": [
-      "/window.svg"
+      "https://d3hzflklh28tts.cloudfront.net/venta-11d9701ad3-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-99de5bf8f2-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-b694b3499b-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-a753e06bf3-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d9e5c1698d-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d416922eca-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-5cfe27c18b-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-5fb3bda347-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-7984651ed8-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-aa2f3284e2-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-fb1a7c0bce-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-3fd75163a4-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-9d572702dd-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-83a0e7b483-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-53d722a86c-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-4f3bde2332-17.png"
     ]
   },
   {
@@ -5240,26 +5242,7 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/41672082980/malva---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-19268a5410-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-359e7efff5-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f5d2893dbe-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4f206418f7-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e8d72cfc18-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-423ae8c6ad-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b010ee0591-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5a31a54ae7-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6ff4bad0b0-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-87e072cba5-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-70ff1babc3-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-88b766a942-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3e8a0d91fc-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-63a0ff18da-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-98723e71ad-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a2a72c219c-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2f772e5df1-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8a61ee86ef-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c456330450-21.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-02367f54bb-22.png"
+      "/window.svg"
     ]
   },
   {
@@ -5338,19 +5321,7 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/38748446326/azucena---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-61edb9005d-32.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4db6982db1-33.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-63dec1d4e1-34.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-780b6478a4-35.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-04b089b02c-36.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c7e4ff9d72-44.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-facc1c1eab-45.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-926858c734-46.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6ffdba6e9f-47.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e07f814dc0-48.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0b5b972800-49.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8d0b618ee4-50.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c0f5934a6b-51.png"
+      "/window.svg"
     ]
   },
   {
@@ -5655,7 +5626,24 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/33725593926/acanto-1---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "/window.svg"
+      "https://d3hzflklh28tts.cloudfront.net/venta-1308496a13-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-13a5ffd60e-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-de9995b8d7-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d4f894bfd6-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-afb42915df-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-120b3a3504-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-ada628ea27-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-b1c23975c3-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-2c96b8119f-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c125851312-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-6b6548a66e-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-076fcac1dd-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d045343a5b-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-2e77044cbe-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-006319e98d-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-b2fdc4d2e1-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-770376152c-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-a53f1b425c-19.png"
     ]
   },
   {
@@ -6433,26 +6421,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=Qb8ivrXsysb",
     "url_habi": "https://habi.co/venta-apartamentos/43361421359/altos-ipanema---apartamento-venta-osorio-kennedy-kennedy",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-539e5f8ebb-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fe77687b03-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cac9e2982e-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-282ab1b6c6-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a9eb9aa034-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d4dd70a2fc-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-86844b4510-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-eacb9a739f-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-360c5a54f7-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-42985ad41a-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2c173b808f-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e8441e2b35-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cd4534fb6c-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3df4bb1da9-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f0e5a5edcc-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4eaa1177da-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-901fc6df0a-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7c1e6bbd37-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9b37519aeb-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-48b83ab23f-20.png"
+      "/window.svg"
     ]
   },
   {
@@ -6483,18 +6452,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=33wsZCjXiFp",
     "url_habi": "https://habi.co/venta-apartamentos/47755862582/reserva-lago-1---apartamento-venta-misterio-cajica",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-a27ac6790a-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b75f7d13ce-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ff1b432894-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d3db7cbe1b-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5b2e67b4f8-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dd3871bcb1-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c943fa3864-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-adeedef535-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fecfc9f1ee-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6e6af38c1e-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f10961d8c6-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5eaa1953f6-13.png"
+      "/window.svg"
     ]
   },
   {
@@ -7125,26 +7083,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=56n3FDwHJKv",
     "url_habi": "https://habi.co/venta-apartamentos/34890046335/santa-catalina---apartamento-venta-bosconia-kennedy",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-4e3630265f-45.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1c65bfdcc0-46.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-56f018a313-47.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2999e46ab2-33.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-15c0774854-32.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-52893f82be-34.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d09e477d17-31.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ddfccf137c-30.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c8d3fe1eca-38.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d2174d1f3f-39.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3c8489eda2-40.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-10a462fadc-41.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f08b3106a1-42.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7d4c8ca208-36.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6a2a199d0a-35.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-054df248b0-37.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b635c69a36-43.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-786d601428-44.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-aa6c5e0a4d-49.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-62126f77e9-50.png"
+      "/window.svg"
     ]
   },
   {
@@ -7425,24 +7364,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=SZUJiL3p2if",
     "url_habi": "https://habi.co/venta-apartamentos/43788217651/macondo-santa-lucia---apartamento-venta-granjas-san-pablo-rafael-uribe-uribe",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-31645e0da6-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fdd3fcc415-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6952cde8b7-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5afbf4a5f8-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-64f68fc9b3-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b97cb97c20-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5618d3f09b-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8d85f68aae-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ac67e90b63-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-419c841746-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-69a5cbdce0-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9da8014e84-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f9c02877dc-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3057b785bb-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b95a0cd3a7-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0e6973a5ca-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-092c84eb52-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5ca03fd319-19.png"
+      "/window.svg"
     ]
   },
   {
@@ -8919,26 +8841,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=U61uKbe1o9j",
     "url_habi": "https://habi.co/venta-apartamentos/43413963371/primavera-6-39---apartamento-venta-primavera-occidental-puente-aranda",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-cc74a6101a-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-327a83366b-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a094d747d0-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-83b4d444fb-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4df3e7a682-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-28cd76f7b0-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-447af720de-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0ae64ac694-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-92607f818c-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2455a48d72-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ff19c6f49d-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b98fefbe1b-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-76cc264092-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-eb505af98a-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c167f136f4-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4575fb7e6b-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-15e3bc41c3-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1496a5ba5e-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-00a0ec5302-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ab423dfd34-9.png"
+      "/window.svg"
     ]
   },
   {
@@ -9096,26 +8999,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=cQ8J5EDXGsA",
     "url_habi": "https://habi.co/venta-apartamentos/44764105576/park-living---apartaestudio-venta-mazuren-suba",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-189909b657-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dd63e2c8c3-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-00f98336b1-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1246d381d7-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1352246e76-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9878c4d840-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9ef7c7ec80-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fdf27b6fd1-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ca6b720591-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a2c28be011-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bc9fb77408-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-84e2505e86-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e61ea9cfb9-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5d464b4fd4-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6624381407-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-adc8319539-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5709a33c75-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-21159fefc1-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1869890920-22.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2af1a08433-23.png"
+      "/window.svg"
     ]
   },
   {
@@ -10473,26 +10357,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=HuCsZta6xHD",
     "url_habi": "https://habi.co/venta-apartamentos/57411331418/cedro---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-1bfbe82ef2-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b4be2c2460-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4d033b89e1-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b4b25f64d4-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-64b6bc7376-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-414df9e1e0-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-34d07eee83-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8b51d54c5c-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-96d4ab6497-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1e699af629-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6d328a116a-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f5efdb0865-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8086eb2376-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7abe980de7-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-47bb119d90-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bdcfd4be85-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e6ef3991ee-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6c5335bf24-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f9329063a1-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-850b888668-10.png"
+      "/window.svg"
     ]
   },
   {
@@ -11926,26 +11791,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=3QvrSDpLY1j",
     "url_habi": "https://habi.co/venta-apartamentos/46699473960/serralta---apartamento-venta-cerrito-chia",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-8e29dd2093-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ce5fee8518-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d7ae4d93c6-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-356ab85ae4-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-eec6e7f6c2-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4166d195e2-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5dbce142ea-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-59bbe0d713-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b4f9f1408d-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dd8991e87a-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ccc5a22e1d-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0924cfa404-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-028f5607f6-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-98f05ed9f1-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9ef5542c1c-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5c90faeba3-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8be6403703-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1f7edc11d4-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8f68e3d8ac-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d821a639cc-21.png"
+      "/window.svg"
     ]
   },
   {
@@ -14910,22 +14756,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=mPCVnNo7CAH",
     "url_habi": "https://habi.co/venta-apartamentos/39136261281/peral---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-9794629359-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2726d56e1f-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4f390cbcc7-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7f7d686c1f-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4bd4d23340-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1ba00ad22d-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dfc87b3ac8-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f8b28d290f-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-96f504dc64-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-631d484a73-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9167371d56-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b607d68fdd-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5bb6bfaf7b-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f21c4c7a09-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1edc109fa3-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5363f7e2bf-20.png"
+      "/window.svg"
     ]
   },
   {
@@ -19121,15 +18952,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=3MbApG8yRTc",
     "url_habi": "https://habi.co/venta-apartamentos/51952801120/parque-central-tintal-2---apartamento-venta-osorio-3-kennedy",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-c416b3af93-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0860709ad4-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-256ac2834d-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c041daf0b1-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3da0498ddd-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d1dbd52ffb-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-57275ce1d2-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a3243357f6-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2779a7812d-10.png"
+      "/window.svg"
     ]
   },
   {
@@ -19709,26 +19532,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=yF982m3axB6",
     "url_habi": "https://habi.co/venta-apartamentos/45754190000/calamari-reservado---apartamento-venta-liberia-usaquen",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-f5095e2c8b-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0e3dff1568-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-74dae0b3fd-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ba3ba203e6-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ca04c6cc4d-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-98a80331da-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1691ec3b9d-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-62963ec941-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-76e6de8a73-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c6cef6445b-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1046f52dc1-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7d7c1ffe6a-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8e5d749dbe-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-be142d19d1-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c463b3ed00-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-35d1033c5e-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8f25aaa70c-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7edc783411-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-573efd1651-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-deafbf5658-21.png"
+      "/window.svg"
     ]
   },
   {
@@ -20814,7 +20618,15 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-6a159f20f8-10.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-c751f96145-11.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-df9208fe26-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a3ac8bb0b4-13.png"
+      "https://d3hzflklh28tts.cloudfront.net/venta-a3ac8bb0b4-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-011aaa5dfd-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-003f5d6840-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-1cba56ae58-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-39c59d5dbf-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-c80dd79cb2-19.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-041473813e-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-870264a679-21.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-033fd04d5d-22.png"
     ]
   },
   {
@@ -20942,26 +20754,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=W7jRLRFsNkH",
     "url_habi": "https://habi.co/venta-apartamentos/56281794576/pradera---apartamento-venta-ciudad-hayuelos-fontibon",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-704919c72a-1.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3f123754d9-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f98c88968f-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a2a8a4461b-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b2859ace6e-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-574292b046-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-589dff0273-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3dccdf60de-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-dbd690ee54-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-27e5e3aa70-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8109d9058d-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e50a1092a7-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0c7897c9bc-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-65ce041847-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-eea38224a4-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-61136cab93-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1d083b0d38-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ab64f5fb35-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cc8744a41d-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-579a96ca40-20.png"
+      "/window.svg"
     ]
   },
   {
@@ -21582,7 +21375,9 @@ export const INV = [
       "https://d3hzflklh28tts.cloudfront.net/venta-5b93cef797-17.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-598844b0ec-18.png",
       "https://d3hzflklh28tts.cloudfront.net/venta-dd618fe57c-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-339a60dba6-20.png"
+      "https://d3hzflklh28tts.cloudfront.net/venta-339a60dba6-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-543d6028ba-22.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-85a1719ddd-23.png"
     ]
   },
   {
@@ -21660,19 +21455,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=ACSVDCQiMHb",
     "url_habi": "https://habi.co/venta-apartamentos/56659507775/portal-colina---apartamento-duplex-venta-san-jose-del-prado-suba",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-5902f6c629-35.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d6a33f416a-36.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3408535413-34.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3ff2d92398-37.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-57a3d9a3c5-38.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f678bcdc6e-31.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fbff830603-29.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-58ac797c75-30.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d9f674bb4d-32.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8ef182895f-41.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2e712726da-39.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c448bc7a3a-40.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-61f6c85ad1-33.png"
+      "/window.svg"
     ]
   },
   {
@@ -21982,7 +21765,26 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=TcZNrSH3X4k",
     "url_habi": "https://habi.co/venta-apartamentos/35487271842/palestina---casa-venta-chia-chia",
     "images": [
-      "/window.svg"
+      "https://d3hzflklh28tts.cloudfront.net/venta-59b3dec63a-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-6c7c2ee21e-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-eef19a0dde-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-2398fd43e5-5.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-222d477399-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-8526461c93-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-15a9684844-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-e07e18ff3e-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-18853482e5-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-194d4e43eb-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-3b2362bb8e-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-edd0bc8382-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-e155d2dbc1-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-82863c28c7-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-50cc00c41a-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-b394291827-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-5c36aded9c-19.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-de363f4914-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-6e4d7f8193-21.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-93fea129ac-22.png"
     ]
   },
   {
@@ -22281,26 +22083,7 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/36720495533/parque-campestre-13---apartamento-venta-parque-campestre-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-5f3e41d0a4-27.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bcfcdb3507-28.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-daf4e61a5e-29.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9b3e293207-30.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e19a85ede8-31.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d79d107a4b-32.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8817df69ef-33.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-eb7a0ecd3d-34.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1a90cedbff-35.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3d9f3f8080-36.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c32dde41c3-37.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3c6830a26b-38.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-44280e058d-40.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-26894b1f1f-41.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-085bf4a9be-42.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bc2bfb92e1-43.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ec78d3683e-44.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1e5ef7c43d-45.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-777680fcf6-46.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-09c6a894aa-47.png"
+      "/window.svg"
     ]
   },
   {
@@ -23346,26 +23129,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=5Gh8ZBGrrYK",
     "url_habi": "https://habi.co/venta-apartamentos/36659921694/condado-americas---casa-venta-igualdad-kennedy",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-fb94433be0-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-6b5743a6d9-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8bb5000565-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-e658acf846-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-382489289a-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-146953c7a2-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-03fd5fe18f-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-157a6e5890-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-0fc69686b8-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5899dfc383-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5a06a05945-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c35d2b67d5-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4210e6834a-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d30359e9d9-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8c83a4be36-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-9e8e1b7b23-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1c627d0f75-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-735d589949-21.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-536584aa91-22.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cc395f1173-23.png"
+      "/window.svg"
     ]
   },
   {
@@ -24012,26 +23776,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=z9tL1oZ1Csy",
     "url_habi": "https://habi.co/venta-apartamentos/22833401756/sauce-2---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-4bd4617506-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-588814ade9-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-aa8d16cad9-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ed9bcbf587-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5359d810f2-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-fe800c0f22-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-21c1d50b5f-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cd6aa618c6-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1907ac7ef8-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c91bc857bf-11.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b7d095d3fa-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8f8847c0ca-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ede34846f0-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-12e81d7eaa-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ec49f5952c-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-533c2466b2-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b1b8233fdd-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cdb916be99-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c0751cbc2a-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-87d52c2944-21.png"
+      "/window.svg"
     ]
   },
   {
@@ -24631,26 +24376,26 @@ export const INV = [
     "url_360": "",
     "url_habi": "https://habi.co/venta-apartamentos/49702743213/eva---apartamento-venta-mosquera-mosquera",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-c23a61a652-24.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d69243db17-20.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-81f96e5435-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-3e02457144-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-c97000cd22-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2ec1ac1873-18.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1986202fbf-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-b949b03f76-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-64651ca321-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-4205cbb732-27.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-7d370661e8-26.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a4fc466f48-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-73748d4364-19.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ee6b9a127d-28.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-01c9f4ce96-25.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f0f00bfb6b-22.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-bcedf10585-21.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-49c27f6f06-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-cc519cacd0-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5908131b82-8.png"
+      "https://d3hzflklh28tts.cloudfront.net/venta-3a4667a796-2.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-95a9e97f3c-3.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-a2b3486a88-4.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-add4b8c573-6.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-7524ee9849-7.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-245366b86f-8.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-89c83f51f9-9.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-8d46b8e99f-10.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-ff770aecb2-11.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-fa7056ddd4-12.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-d5c8f4afe7-13.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-0d79f49379-14.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-804f0c45fa-15.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-7711d2b479-16.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-8de5ac9acc-17.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-4955ced924-18.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-843b1cfe5a-19.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-cde050ac70-20.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-21e678f934-21.png",
+      "https://d3hzflklh28tts.cloudfront.net/venta-04f5ae4509-22.png"
     ]
   },
   {
@@ -25007,22 +24752,7 @@ export const INV = [
     "url_360": "https://my.matterport.com/show/?m=msJDHxR1P7Q",
     "url_habi": "https://habi.co/venta-apartamentos/52942594388/nogal---apartamento-venta-ciudad-verde-soacha",
     "images": [
-      "https://d3hzflklh28tts.cloudfront.net/venta-5e86cdef4a-3.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-2737099ac3-6.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-f0bf7a3baf-4.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-78cac86d89-5.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-42ad6787f4-7.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-8c1aba6ab4-8.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-ff4a8ac6e5-16.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-d8599b2249-9.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a4b20306c9-10.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-825e6a9d02-12.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-a1a2308616-13.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5faee187ae-14.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-1a133492c2-15.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-5b777d35a9-17.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-00c34b0b21-2.png",
-      "https://d3hzflklh28tts.cloudfront.net/venta-66aa0dd0bb-18.png"
+      "/window.svg"
     ]
   },
   {
