@@ -89,6 +89,45 @@ function getGatsbyPageDataUrl(listingUrl) {
   }
 }
 
+// Busca recursivamente arrays de imágenes dentro de un objeto JSON arbitrario.
+// Devuelve el array de mayor tamaño encontrado que parezca contener URLs de imágenes.
+function findImagesInJson(obj, depth = 0) {
+  if (!obj || typeof obj !== "object" || depth > 12) return [];
+
+  if (Array.isArray(obj)) {
+    // ¿Es un array de imágenes?
+    const imageItems = obj.filter(
+      (item) =>
+        typeof item === "string"
+          ? /\.(jpe?g|png|webp|avif)/i.test(item) || item.includes("cloudfront.net")
+          : item && typeof item === "object" && (item.url || item.src || item.image)
+    );
+    if (imageItems.length > 0) return obj;
+
+    // Buscar dentro de cada elemento del array
+    let best = [];
+    for (const item of obj) {
+      const found = findImagesInJson(item, depth + 1);
+      if (found.length > best.length) best = found;
+    }
+    return best;
+  }
+
+  const IMAGE_KEYS = ["images", "photos", "gallery", "media", "carouselImages", "allImages", "propertyImages"];
+  let best = [];
+
+  for (const [key, val] of Object.entries(obj)) {
+    const k = key.toLowerCase();
+    if (IMAGE_KEYS.includes(k) && Array.isArray(val) && val.length > 0) {
+      if (val.length > best.length) best = val;
+    }
+    const found = findImagesInJson(val, depth + 1);
+    if (found.length > best.length) best = found;
+  }
+
+  return best;
+}
+
 async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
   const pageDataUrl = getGatsbyPageDataUrl(url);
   if (!pageDataUrl) return [];
@@ -99,21 +138,29 @@ async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
       headers: { "User-Agent": CONFIG.userAgent }
     });
 
+    // Intentar múltiples rutas conocidas en la estructura de Gatsby/Habi
     const carousel =
       data?.result?.pageContext?.propertyDetail?.property?.images ||
       data?.result?.pageContext?.property?.images ||
-      [];
+      data?.result?.pageContext?.propertyDetail?.images ||
+      data?.result?.pageContext?.images ||
+      data?.result?.data?.property?.images ||
+      data?.result?.data?.propertiesDetail?.nodes?.[0]?.images ||
+      data?.result?.data?.allPropertiesDetail?.nodes?.[0]?.images ||
+      data?.result?.data?.propertyDetail?.property?.images ||
+      // Si ninguna ruta directa funciona, buscar recursivamente
+      findImagesInJson(data);
 
     if (!Array.isArray(carousel) || !carousel.length) return [];
 
     const mapped = carousel
       .map((img) => {
-        const raw = typeof img === "string" ? img : img?.url;
+        const raw = typeof img === "string" ? img : (img?.url || img?.src || img?.image || img?.path);
         const full = buildImageUrl(raw, imageBaseUrl);
         if (!full) return null;
         return {
           url: full,
-          order: typeof img === "object" ? Number(img?.order || 0) : 0
+          order: typeof img === "object" ? Number(img?.order ?? img?.position ?? img?.index ?? 0) : 0
         };
       })
       .filter(Boolean)
@@ -235,6 +282,56 @@ async function findLatestFile(drive) {
 
 const HABI_CDN = "https://d3hzflklh28tts.cloudfront.net/";
 
+async function extractImagesFromInlineScripts(html, imageBaseUrl) {
+  const results = [];
+
+  // Patrones de estado inicial que Gatsby/Next.js incrustan en el HTML
+  const windowPatterns = [
+    /window\.__GATSBY_INITIAL_DATA__\s*=\s*(\{[\s\S]*?\});\s*(?:window|<\/script>)/,
+    /window\.__INITIAL_STATE__\s*=\s*(\{[\s\S]*?\});\s*(?:window|<\/script>)/,
+    /window\.__PRELOADED_STATE__\s*=\s*(\{[\s\S]*?\});\s*(?:window|<\/script>)/,
+  ];
+
+  for (const pattern of windowPatterns) {
+    const match = html.match(pattern);
+    if (match) {
+      try {
+        const obj = JSON.parse(match[1]);
+        const imgs = findImagesInJson(obj);
+        for (const img of imgs) {
+          const raw = typeof img === "string" ? img : (img?.url || img?.src);
+          const full = buildImageUrl(raw, imageBaseUrl);
+          if (full && isValidImageUrl(full)) results.push(full);
+        }
+        if (results.length > 0) break;
+      } catch { /* seguir con el siguiente patrón */ }
+    }
+  }
+
+  // Buscar en tags <script type="application/json"> (Gatsby usa esto en algunos builds)
+  const $ = cheerio.load(html);
+  $('script[type="application/json"]').each((_, el) => {
+    const content = $(el).text().trim();
+    if (!content) return;
+    try {
+      const obj = JSON.parse(content);
+      const imgs = findImagesInJson(obj);
+      for (const img of imgs) {
+        const raw = typeof img === "string" ? img : (img?.url || img?.src);
+        const full = buildImageUrl(raw, imageBaseUrl);
+        if (full && isValidImageUrl(full)) results.push(full);
+      }
+    } catch { /* JSON inválido, ignorar */ }
+  });
+
+  const uniqueByKey = new Map();
+  for (const imgUrl of results) {
+    const key = imageKey(imgUrl);
+    if (!uniqueByKey.has(key)) uniqueByKey.set(key, imgUrl);
+  }
+  return [...uniqueByKey.values()];
+}
+
 async function scrapeImages(url) {
   try {
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
@@ -254,8 +351,13 @@ async function scrapeImages(url) {
     // 2) Gatsby page-data carousel (usually has the FULL image set)
     const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
 
-    // Pick whichever source returned more images
-    const bestPrimary = carouselImages.length >= jsonLdImages.length ? carouselImages : jsonLdImages;
+    // 3) Scripts incrustados (window.__GATSBY_INITIAL_DATA__ etc.)
+    const inlineScriptImages = await extractImagesFromInlineScripts(data, imageBaseUrl);
+
+    // Seleccionar la fuente con más imágenes entre los métodos primarios
+    const primarySources = [carouselImages, jsonLdImages, inlineScriptImages];
+    const bestPrimary = primarySources.reduce((best, src) => src.length > best.length ? src : best, []);
+
     if (bestPrimary.length >= CONFIG.minImages) {
       return bestPrimary.slice(0, CONFIG.maxImages);
     }
@@ -396,9 +498,17 @@ async function main() {
       ]);
 
       if (!is360Valid && p.url_360) {
-        console.log(`  ⚠️  360 inválido (404/error) - se eliminará: ${p.url_360}`);
+        console.log(`  ⚠️  360 inválido (404/error) - se eliminará del campo: ${p.url_360}`);
       }
       console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+
+      // Si no hay fotos Y el Matterport tampoco funciona, eliminar la propiedad
+      if (scrapedImages.length === 0 && !is360Valid) {
+        removedWithoutMedia++;
+        console.log(`  🗑️  Propiedad eliminada: sin fotos ni Matterport válido (nid: ${p.nid || i})`);
+        await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
+        continue;
+      }
 
       const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
 
