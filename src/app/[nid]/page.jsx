@@ -99,6 +99,7 @@ export default async function PropertyPage({ params }) {
               sizes="(max-width:768px) 100vw, 780px"
               priority
               style={{ objectFit: "cover" }}
+              unoptimized
             />
             {descuento > 0 && (
               <div style={{ position: "absolute", top: 12, left: 12, background: "#E74C3C", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 13, fontWeight: 800 }}>
@@ -117,7 +118,7 @@ export default async function PropertyPage({ params }) {
         {realPhotos && imgs.length > 1 && (
           <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 4 }}>
             {imgs.slice(1).map((img, i) => (
-              <Image key={i} src={img} alt="" width={80} height={60} style={{ objectFit: "cover", borderRadius: 8, flexShrink: 0 }} />
+              <Image key={i} src={img} alt="" width={80} height={60} style={{ objectFit: "cover", borderRadius: 8, flexShrink: 0 }} unoptimized />
             ))}
           </div>
         )}
