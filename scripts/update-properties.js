@@ -17,7 +17,7 @@ const CONFIG = {
   placeholderImage: "/window.svg",
   minImages: 1,
   maxImages: 20,
-  userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
+  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
   delayBetweenRequestsMs: 800
 };
 
@@ -135,7 +135,13 @@ async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
   try {
     const { data } = await axios.get(pageDataUrl, {
       timeout: 12000,
-      headers: { "User-Agent": CONFIG.userAgent }
+      headers: {
+        "User-Agent": CONFIG.userAgent,
+        "Accept": "application/json, */*",
+        "Accept-Language": "es-CO,es;q=0.9,en;q=0.8",
+        "Referer": url,
+        "Cache-Control": "no-cache"
+      }
     });
 
     // Intentar múltiples rutas conocidas en la estructura de Gatsby/Habi
@@ -334,7 +340,20 @@ async function extractImagesFromInlineScripts(html, imageBaseUrl) {
 
 async function scrapeImages(url) {
   try {
-    const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
+    const { data } = await axios.get(url, {
+      timeout: 15000,
+      headers: {
+        "User-Agent": CONFIG.userAgent,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "es-CO,es;q=0.9,en;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none"
+      }
+    });
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
 
@@ -396,14 +415,42 @@ async function scrapeImages(url) {
       }
     });
 
-    // 4) Gatsby venta-* file names
-    const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
+    // 4) Habi slider: <ul class="slider"><li class="slide"><img src="..."> (si está en el HTML)
+    $('ul.slider li.slide img, li.slide img').each((_, el) => {
+      const src = $(el).attr("src") || $(el).attr("data-src");
+      if (src) candidates.push(src);
+    });
+
+    // 5) Venta-* en el HTML: patrón real es venta-{hash}-{index}-{size}.ext
+    //    e.g. venta-42535f8a2c-2-765.png  (índice + variante de ancho)
+    const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
     for (const match of ventaMatches) {
-      const full = buildImageUrl(match, imageBaseUrl);
-      if (full) candidates.push(full);
+      // Usar URL completa de CloudFront directamente
+      candidates.push(`${HABI_CDN}${match}`);
+    }
+    // También sin variante de tamaño: venta-{hash}-{index}.ext
+    const ventaMatchesShort = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
+    for (const match of ventaMatchesShort) {
+      candidates.push(`${HABI_CDN}${match}`);
     }
 
-    // 5) Fallback regex over whole HTML
+    // 6) Buscar en TODOS los tags <script> del HTML (Gatsby/React incrusta data en bundles)
+    //    Busca URLs completas de CloudFront con patrón venta-*
+    $("script").each((_, el) => {
+      const scriptContent = $(el).text();
+      if (!scriptContent || !scriptContent.includes("cloudfront.net")) return;
+      const cfMatches = scriptContent.match(
+        /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/venta-[a-z0-9-]+\.(?:jpe?g|png|webp|avif)/gi
+      ) || [];
+      candidates.push(...cfMatches);
+      // Filenames relativos dentro de scripts
+      const ventaInScript = scriptContent.match(/venta-[a-z0-9]+-[0-9]+(?:-[0-9]+)?\.(?:jpe?g|png|webp|avif)/gi) || [];
+      for (const match of ventaInScript) {
+        candidates.push(`${HABI_CDN}${match}`);
+      }
+    });
+
+    // 7) Fallback regex over whole HTML
     const regexMatches = data.match(/https?:\/\/[^\s"'<>]+\.(?:jpe?g|png|webp|avif)(?:\?[^\s"'<>]*)?/gi) || [];
     candidates.push(...regexMatches);
 
