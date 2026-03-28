@@ -332,13 +332,37 @@ async function extractImagesFromInlineScripts(html, imageBaseUrl) {
   return [...uniqueByKey.values()];
 }
 
+function scrapeCarouselFromDom($, imageBaseUrl) {
+  const imgs = [];
+  // Selector específico para el carrusel de Habi: ul.slider > li.slide > img
+  $("ul.slider li.slide img, li.slide img").each((_, el) => {
+    const src =
+      $(el).attr("src") ||
+      $(el).attr("data-src") ||
+      $(el).attr("data-lazy-src");
+    if (!src) return;
+    const full = normalizeImageUrl(src, imageBaseUrl);
+    if (full && isValidImageUrl(full)) imgs.push(full);
+  });
+
+  const uniqueByKey = new Map();
+  for (const imgUrl of imgs) {
+    const key = imageKey(imgUrl);
+    if (!uniqueByKey.has(key)) uniqueByKey.set(key, imgUrl);
+  }
+  return [...uniqueByKey.values()];
+}
+
 async function scrapeImages(url) {
   try {
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
 
-    // 1) JSON "image" array embedded in HABI/Gatsby pages (e.g. JSON-LD structured data)
+    // 1) Extracción directa del DOM del carrusel (ul.slider li.slide img) — fuente primaria
+    const domCarouselImages = scrapeCarouselFromDom($, imageBaseUrl);
+
+    // 2) JSON "image" array embedded in HABI/Gatsby pages (e.g. JSON-LD structured data)
     let jsonLdImages = [];
     const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
     if (imgArrayMatch) {
@@ -348,14 +372,14 @@ async function scrapeImages(url) {
       } catch {}
     }
 
-    // 2) Gatsby page-data carousel (usually has the FULL image set)
+    // 3) Gatsby page-data carousel (usually has the FULL image set)
     const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
 
-    // 3) Scripts incrustados (window.__GATSBY_INITIAL_DATA__ etc.)
+    // 4) Scripts incrustados (window.__GATSBY_INITIAL_DATA__ etc.)
     const inlineScriptImages = await extractImagesFromInlineScripts(data, imageBaseUrl);
 
     // Seleccionar la fuente con más imágenes entre los métodos primarios
-    const primarySources = [carouselImages, jsonLdImages, inlineScriptImages];
+    const primarySources = [domCarouselImages, carouselImages, jsonLdImages, inlineScriptImages];
     const bestPrimary = primarySources.reduce((best, src) => src.length > best.length ? src : best, []);
 
     if (bestPrimary.length >= CONFIG.minImages) {
@@ -396,8 +420,8 @@ async function scrapeImages(url) {
       }
     });
 
-    // 4) Gatsby venta-* file names
-    const ventaMatches = data.match(/venta-[a-z0-9]+-[0-9]+\.(?:jpe?g|png|webp|avif)/gi) || [];
+    // 4) Gatsby venta-* file names — patrón extendido para cubrir venta-xxx-2-765.png
+    const ventaMatches = data.match(/venta-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpe?g|png|webp|avif)/gi) || [];
     for (const match of ventaMatches) {
       const full = buildImageUrl(match, imageBaseUrl);
       if (full) candidates.push(full);
@@ -500,7 +524,7 @@ async function main() {
       if (!is360Valid && p.url_360) {
         console.log(`  ⚠️  360 inválido (404/error) - se eliminará del campo: ${p.url_360}`);
       }
-      console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"}`);
+      console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"} | url: ${habiUrl}`);
 
       // Si no hay fotos Y el Matterport tampoco funciona, eliminar la propiedad
       if (scrapedImages.length === 0 && !is360Valid) {
