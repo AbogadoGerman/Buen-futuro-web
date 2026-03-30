@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { INV } from "@/data/properties";
 import useEmblaCarousel from "embla-carousel-react";
@@ -228,6 +228,8 @@ function CreditSim({onClose,property}){
 }
 
 function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
+function buildCatalogURL(applied,search,sort){const p=new URLSearchParams();p.set("cat","1");if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);return"/?"+p.toString();}
+function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia"};}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
   if(!open)return null;
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
@@ -474,11 +476,13 @@ export default function App(){
   const [sel,setSel]=useState(null);
   useEffect(()=>{
     if(sel){window.history.pushState(null,'','/'+sel.nid);}
-    else{const p=window.location.pathname;if(p&&p!=='/')window.history.pushState(null,'','/');}
+    else{const p=window.location.pathname;if(p&&p!=='/')window.history.replaceState(null,'',catalogURL.current);}
   },[sel]);
   useEffect(()=>{
     const nid=window.location.pathname.replace('/','');
     if(nid){const p=INV.find(x=>x.nid===nid);if(p)setSel(p);}
+    const parsed=parseURLFilters();
+    if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;setFCount(c);}
   },[]);
   const [reviewRef,reviewApi]=useEmblaCarousel({
     loop:false,
@@ -495,6 +499,7 @@ export default function App(){
   const [applied,setApplied]=useState(dflt);
   const [fCount,setFCount]=useState(0);
   const [sort,setSort]=useState("relevancia");
+  const catalogURL=useRef("/");
   const reviewPrev=useCallback(()=>reviewApi&&reviewApi.scrollPrev(),[reviewApi]);
   const reviewNext=useCallback(()=>reviewApi&&reviewApi.scrollNext(),[reviewApi]);
 
@@ -504,6 +509,13 @@ export default function App(){
     const t=setInterval(()=>reviewApi.scrollNext(),5000);
     return()=>clearInterval(t);
   },[reviewApi]);
+
+  // Sync URL params whenever catalog state changes (not while a property is open)
+  useEffect(()=>{
+    if(sel)return; // sel effect manages URL while property is open
+    if(page==="catalogo"){const u=buildCatalogURL(applied,search,sort);catalogURL.current=u;window.history.replaceState(null,'',u);}
+    else{catalogURL.current="/";window.history.replaceState(null,'','/');}
+  },[applied,search,sort,page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
