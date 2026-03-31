@@ -493,10 +493,16 @@ export default function App(){
     }
   },[cOpen,simProperty]);
   useEffect(()=>{
+    const url=new URL(window.location.href);
+    if(fOpen){url.searchParams.set('filtros','1');window.history.replaceState(null,'',url.pathname+url.search);}
+    else{if(url.searchParams.has('filtros')){url.searchParams.delete('filtros');window.history.replaceState(null,'',url.pathname+(url.search||''));}}
+  },[fOpen]);
+  useEffect(()=>{
     const nid=window.location.pathname.replace('/','');
     if(nid){const p=INV.find(x=>x.nid===nid);if(p)setSel(p);}
     const hcNid=new URLSearchParams(window.location.search).get('habicredit');
     if(hcNid){const prop=hcNid!=='1'?INV.find(x=>x.nid===hcNid)||null:null;if(prop)setSimProperty(prop);setCOpen(true);}
+    if(new URLSearchParams(window.location.search).get('filtros')==='1')setFOpen(true);
     const parsed=parseURLFilters();
     if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;setFCount(c);}
   },[]);
