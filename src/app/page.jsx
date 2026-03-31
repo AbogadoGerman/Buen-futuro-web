@@ -238,8 +238,8 @@ function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"T
 function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
 function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareUrl}){
-  if(!open)return null;
   const [filtCopied,setFiltCopied]=useState(false);
+  if(!open)return null;
   function handleFiltShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}catch(e){}});}
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
   const localidades=[...new Set(inv.map(p=>prettyLocalidad(getLocalidad(p))).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
@@ -527,9 +527,9 @@ export default function App(){
   // Sync URL params whenever catalog state changes (not while a property is open)
   useEffect(()=>{
     if(sel)return; // sel effect manages URL while property is open
-    if(page==="catalogo"){const u=buildCatalogURL(applied,search,sort);catalogURL.current=u;window.history.replaceState(null,'',u);}
+    if(page==="catalogo"){const u=buildCatalogURL(applied,search,sort,cOpen,cOpen&&simProperty?.nid||null,fOpen);catalogURL.current=u;window.history.replaceState(null,'',u);}
     else{catalogURL.current="/";window.history.replaceState(null,'','/');}
-  },[applied,search,sort,page]); // eslint-disable-line react-hooks/exhaustive-deps
+  },[applied,search,sort,page,cOpen,fOpen,simProperty]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
