@@ -158,12 +158,14 @@ function getGoogleMapsUrl(p){
   return parts.length?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}`:"";
 }
 
-function CreditSim({onClose,property}){
+function CreditSim({onClose,property,shareUrl}){
   const initVal=property?Math.max(80000000,Math.min(1500000000,num(property.precio_venta)||250000000)):250000000;
   const [val,setVal]=useState(initVal);
   const [cuotaP,setCuotaP]=useState(30);
   const [anos,setAnos]=useState(15);
   const [tipo,setTipo]=useState("pesos");
+  const [simCopied,setSimCopied]=useState(false);
+  function handleSimShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setSimCopied(true);setTimeout(()=>setSimCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setSimCopied(true);setTimeout(()=>setSimCopied(false),2500);}catch(e){}});}
   const tasaPesos=0.1150;const tasaUVR=0.0850;
   const tasa=tipo==="pesos"?tasaPesos:(tasaUVR+0.035);
   const mensual=Math.pow(1+tasa,1/12)-1;
@@ -178,7 +180,12 @@ function CreditSim({onClose,property}){
             <Image src={LOGO_HABI_W} alt="HABI" width={64} height={24} style={{objectFit:"contain"}} />
             <div><h2 style={{color:"white",fontFamily:"'Outfit'",fontSize:18,fontWeight:800,margin:0}}>Simulador de Crédito</h2><p style={{color:"rgba(255,255,255,0.7)",fontSize:11,margin:0}}>Alianza Buen Futuro x HABI</p></div>
           </div>
-          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <button onClick={handleSimShare} title="Compartir simulador" style={{background:simCopied?"rgba(255,255,255,0.35)":"rgba(255,255,255,0.15)",border:"none",borderRadius:20,padding:"6px 12px",cursor:"pointer",color:"white",fontSize:12,fontWeight:700,display:"flex",alignItems:"center",gap:5,flexShrink:0,transition:"background .2s",whiteSpace:"nowrap"}}>
+              {simCopied?<><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>¡Copiado!</>:<><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Compartir</>}
+            </button>
+            <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",color:"white",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
+          </div>
         </div>
         <div style={{padding:"20px 24px",display:"flex",flexDirection:"column",gap:18}}>
           <div style={{display:"flex",alignItems:"center",gap:10,background:"#F3E8FF",padding:"10px 14px",borderRadius:12}}>
@@ -228,10 +235,12 @@ function CreditSim({onClose,property}){
 }
 
 function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
-function buildCatalogURL(applied,search,sort){const p=new URLSearchParams();p.set("cat","1");if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);return"/?"+p.toString();}
-function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia"};}
-function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
+function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
+function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
+function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareUrl}){
   if(!open)return null;
+  const [filtCopied,setFiltCopied]=useState(false);
+  function handleFiltShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}catch(e){}});}
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
   const localidades=[...new Set(inv.map(p=>prettyLocalidad(getLocalidad(p))).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   const barrios=[...new Set(inv.filter(p=>f.localidad==="Todas"||normText(prettyLocalidad(getLocalidad(p)))===normText(f.localidad)).map(p=>cleanText(p.barrio)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
@@ -243,7 +252,12 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
       <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,width:"92%",maxWidth:500,margin:"0 auto 40px",boxShadow:"0 20px 60px rgba(0,0,0,0.25)"}}>
         <div style={{padding:"20px 20px 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:20,fontWeight:800,color:"#1B2A4A",margin:0}}><span style={{background:"linear-gradient(135deg,#FF6B35,#F7C948)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Buscar</span> inmueble</h2>
-          <button onClick={onClose} style={{background:"#F0F3F7",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",color:"#5D6D7E"}}>✕</button>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <button onClick={handleFiltShare} title="Compartir búsqueda" style={{background:filtCopied?"#E8F5E9":"#F0F3F7",border:"none",borderRadius:20,padding:"6px 12px",cursor:"pointer",color:filtCopied?"#2E7D32":"#5D6D7E",fontSize:12,fontWeight:700,display:"flex",alignItems:"center",gap:5,transition:"all .2s",whiteSpace:"nowrap"}}>
+              {filtCopied?<><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>¡Copiado!</>:<><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Compartir</>}
+            </button>
+            <button onClick={onClose} style={{background:"#F0F3F7",border:"none",borderRadius:"50%",width:32,height:32,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",color:"#5D6D7E"}}>✕</button>
+          </div>
         </div>
         <div style={{padding:"16px 20px 24px",display:"flex",flexDirection:"column",gap:16}}>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Tipo</div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["Todos","Apartamento","Casa"].map(t=><button key={t} onClick={()=>u("tipo",t)} style={{padding:"9px 18px",borderRadius:20,border:"2px solid",borderColor:f.tipo===t?"#1B4F72":"#E0E0E0",background:f.tipo===t?"#1B4F72":"white",color:f.tipo===t?"white":"#5D6D7E",fontWeight:600,fontSize:13,cursor:"pointer",transition:"all .15s"}}>{t}</button>)}</div></div>
@@ -482,7 +496,7 @@ export default function App(){
     const nid=window.location.pathname.replace('/','');
     if(nid){const p=INV.find(x=>x.nid===nid);if(p)setSel(p);}
     const parsed=parseURLFilters();
-    if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;setFCount(c);}
+    if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;setFCount(c);if(parsed.simOpen){setCOpen(true);if(parsed.simNid){const sp=INV.find(x=>x.nid===parsed.simNid);if(sp)setSimProperty(sp);}}if(parsed.filtersOpen){setFOpen(true);}}
   },[]);
   const [reviewRef,reviewApi]=useEmblaCarousel({
     loop:false,
@@ -742,8 +756,8 @@ export default function App(){
 
       <a className="wf" href={"https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, estoy interesado en los inmuebles de Buen Futuro")} target="_blank" rel="noopener noreferrer"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
 
-      <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} />
-      {cOpen&&<CreditSim key={simProperty?.nid||"generic"} property={simProperty} onClose={()=>{setCOpen(false);setSimProperty(null);}} />}
+      <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,false,null,true):""} />
+      {cOpen&&<CreditSim key={simProperty?.nid||"generic"} property={simProperty} onClose={()=>{setCOpen(false);setSimProperty(null);}} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,true,simProperty?.nid||null):""} />}
       {sel&&<Modal p={sel} onClose={()=>setSel(null)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} />}
     </div>
   );
