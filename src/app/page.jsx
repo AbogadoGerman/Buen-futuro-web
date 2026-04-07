@@ -87,6 +87,16 @@ function cleanText(v){return (v||"").replace(/\s+/g," ").trim()}
 function normText(v){return (v||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim()}
 function tipoLabel(t){if(!t)return t;const n=normText(t);if(n==="casa con conjunto cerrado"||n==="casa en conjunto cerrado")return "Casa en conjunto cerrado";return t.charAt(0).toUpperCase()+t.slice(1)}
 const LOCALIDAD_BOGOTA_MAP={"usaquen":"Usaquén","chapinero":"Chapinero","fontibon":"Fontibón","engativa":"Engativá","suba":"Suba","barrios unidos":"Barrios Unidos","teusaquillo":"Teusaquillo","kennedy":"Kennedy","puente aranda":"Puente Aranda","la candelaria":"La Candelaria","rafael uribe uribe":"Rafael Uribe Uribe","ciudad bolivar":"Ciudad Bolívar","bosa":"Bosa","san cristobal":"San Cristóbal","antonio narino":"Antonio Nariño","los martires":"Los Mártires","tunjuelito":"Tunjuelito","santa fe":"Santa Fe","sumapaz":"Sumapaz"};
+// Zonas geográficas de Bogotá y Sabana — los valores son normText(localidad)
+const ZONA_LOCALIDADES={
+  "Bogotá Norte":["usaquen","chapinero","suba","barrios unidos","engativa"],
+  "Bogotá Centro":["teusaquillo","fontibon","puente aranda","los martires","santa fe","antonio narino","la candelaria"],
+  "Bogotá Sur / Soacha":["kennedy","bosa","ciudad bolivar","tunjuelito","rafael uribe uribe","san cristobal","soacha","usme"],
+  "Funza":["funza"],
+  "Mosquera":["mosquera"],
+  "Chía":["chia"],
+};
+const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía"];
 function extractFeatures(desc){const kw=[["balcón","balcon","balkony"],["cocina integral","cocina"],["zona de estudio","estudio"],["depósito","deposito","bodega"],["zona de lavandería","lavanderia"],["vista exterior","vista"],["ascensor","elevador"]];return kw.map(([k,...a])=>{const d=normText(desc);return (d.includes(normText(k))||a.some(x=>d.includes(normText(x))))?k:null}).filter(Boolean)}
 function waMsg(p){return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(p.banos||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
 function notifyAndWhatsApp(p,waUrl,eventName){fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nid:p.nid,titulo:p.titulo||"",ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", "),precio:fmt(p.precio_venta),area:p.area||"N/A",habitaciones:p.habitaciones||"N/A",banos:p.banos||"N/A",bonoHabi:p.bonoHabi?fmt(p.bonoHabi):"",eventName:eventName||"Contact",sourceUrl:typeof window!=="undefined"?window.location.href:"",fbp:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||"":"",fbc:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||"":""})}).catch(()=>{});window.open(waUrl,"_blank")}
@@ -234,17 +244,18 @@ function CreditSim({onClose,property,shareUrl}){
   );
 }
 
-function dflt(){return{tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
-function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
-function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
+function dflt(){return{zona:"Todas",tipo:"Todos",localidad:"Todas",barrio:"Todos",conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",garaje:false,ascensor:false,bonoHabi:false}}
+function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.zona&&applied.zona!=="Todas")p.set("zona",applied.zona);if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidad!=="Todas")p.set("localidad",applied.localidad);if(applied.barrio!=="Todos")p.set("barrio",applied.barrio);if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
+function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("zona"))f.zona=p.get("zona");if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidad"))f.localidad=p.get("localidad");if(p.has("barrio"))f.barrio=p.get("barrio");if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareUrl}){
   const [filtCopied,setFiltCopied]=useState(false);
   if(!open)return null;
   function handleFiltShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}catch(e){}});}
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
-  const localidades=[...new Set(inv.map(p=>prettyLocalidad(getLocalidad(p))).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
-  const barrios=[...new Set(inv.filter(p=>f.localidad==="Todas"||normText(prettyLocalidad(getLocalidad(p)))===normText(f.localidad)).map(p=>cleanText(p.barrio)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
-  const conjuntos=[...new Set(inv.filter(p=>(f.localidad==="Todas"||normText(prettyLocalidad(getLocalidad(p)))===normText(f.localidad))&&(f.barrio==="Todos"||normText(cleanText(p.barrio))===normText(f.barrio))).map(p=>cleanText(p.conjunto)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const zonaLocs=f.zona!=="Todas"?(ZONA_LOCALIDADES[f.zona]||[]):null;
+  const localidades=[...new Set(inv.filter(p=>!zonaLocs||zonaLocs.includes(normText(getLocalidad(p)))).map(p=>prettyLocalidad(getLocalidad(p))).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const barrios=[...new Set(inv.filter(p=>(f.localidad==="Todas"||normText(prettyLocalidad(getLocalidad(p)))===normText(f.localidad))&&(!zonaLocs||zonaLocs.includes(normText(getLocalidad(p))))).map(p=>cleanText(p.barrio)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const conjuntos=[...new Set(inv.filter(p=>(f.localidad==="Todas"||normText(prettyLocalidad(getLocalidad(p)))===normText(f.localidad))&&(!zonaLocs||zonaLocs.includes(normText(getLocalidad(p))))&&(f.barrio==="Todos"||normText(cleanText(p.barrio))===normText(f.barrio))).map(p=>cleanText(p.conjunto)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   const precios=[["Todos","",""],["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];
   const setP=(tag,mn,mx)=>sf(prev=>({...prev,precioTag:tag,precioMin:mn,precioMax:mx}));
   return(
@@ -260,6 +271,12 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareU
           </div>
         </div>
         <div style={{padding:"16px 20px 24px",display:"flex",flexDirection:"column",gap:16}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Zona</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              {["Todas",...ZONA_ORDEN].map(z=><button key={z} onClick={()=>sf(prev=>({...prev,zona:z,localidad:"Todas",barrio:"Todos",conjunto:"Todos"}))} style={{padding:"7px 13px",borderRadius:20,border:"2px solid",borderColor:f.zona===z?"#1B4F72":"#E0E0E0",background:f.zona===z?"#1B4F72":"white",color:f.zona===z?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>{z}</button>)}
+            </div>
+          </div>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Tipo</div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["Todos","Apartamento","Casa"].map(t=><button key={t} onClick={()=>u("tipo",t)} style={{padding:"9px 18px",borderRadius:20,border:"2px solid",borderColor:f.tipo===t?"#1B4F72":"#E0E0E0",background:f.tipo===t?"#1B4F72":"white",color:f.tipo===t?"white":"#5D6D7E",fontWeight:600,fontSize:13,cursor:"pointer",transition:"all .15s"}}>{t}</button>)}</div></div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
             <div>
@@ -533,7 +550,7 @@ export default function App(){
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
-    let c=0;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
+    let c=0;if(na.zona&&na.zona!=="Todas")c++;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
     setFCount(c);setFOpen(false);setPage("catalogo");
   };
 
@@ -541,6 +558,7 @@ export default function App(){
     const q=search.toLowerCase();
     if(q&&![p.titulo,p.barrio,p.conjunto,p.nid,p.ciudad,p.tipo,getLocalidad(p),p.zona_mediana].some(f=>(f||"").toString().toLowerCase().includes(q)))return false;
     const af=applied;
+    if(af.zona&&af.zona!=="Todas"){const zLocs=ZONA_LOCALIDADES[af.zona]||[];if(!zLocs.includes(normText(getLocalidad(p))))return false;}
     if(af.tipo!=="Todos"&&normText(p.tipo||"")!==normText(af.tipo)&&!(af.tipo==="Casa"&&normText(p.tipo||"").startsWith("casa")))return false;
     if(af.localidad!=="Todas"&&normText(prettyLocalidad(getLocalidad(p)))!==normText(af.localidad))return false;
     if(af.barrio!=="Todos"&&normText(cleanText(p.barrio))!==normText(af.barrio))return false;
