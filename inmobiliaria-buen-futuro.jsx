@@ -216,14 +216,19 @@ function CreditSim({onClose}){
 }
 
 /* ============ FILTER PANEL ============ */
-function dflt(){return{tipo:[],precioTag:"",precioMin:"",precioMax:"",habitaciones:[],banos:[],garaje:false,ascensor:false,bonoHabi:false,localidad:[]}}
+function dflt(){return{tipo:[],precioTag:"",precioMin:"",precioMax:"",habitaciones:"",banos:"",garaje:false,ascensor:false,bonoHabi:false,localidad:[],localidadCustom:[]}}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
   if(!open)return null;
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
   const tog=(k,v)=>sf(prev=>{const arr=prev[k]||[];return{...prev,[k]:arr.includes(v)?arr.filter(x=>x!==v):[...arr,v]};});
+  const sel=(k,v)=>sf(prev=>({...prev,[k]:prev[k]===v?"":v}));
   const precios=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];
   const setP=(tag,mn,mx)=>sf(prev=>({...prev,precioTag:prev.precioTag===tag?"":tag,precioMin:prev.precioTag===tag?"":mn,precioMax:prev.precioTag===tag?"":mx}));
   const localidades=[...new Set(inv.map(p=>p.zona_grande).filter(Boolean))].sort();
+  const addCustom=()=>sf(prev=>({...prev,localidadCustom:[...(prev.localidadCustom||[]),""] }));
+  const updCustom=(i,val)=>sf(prev=>{const arr=[...(prev.localidadCustom||[])];arr[i]=val;return{...prev,localidadCustom:arr};});
+  const remCustom=(i)=>sf(prev=>({...prev,localidadCustom:(prev.localidadCustom||[]).filter((_,j)=>j!==i)}));
+  const chipBtn=(active,sp)=>({padding:"7px 13px",borderRadius:18,border:"2px solid",borderColor:active?(sp?"#7B2FF7":"#1B4F72"):"#E0E0E0",background:active?(sp?"#7B2FF7":"#1B4F72"):"white",color:active?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s"});
   return(
     <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",zIndex:1100,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:60,overflowY:"auto",animation:"fadeIn .2s"}}>
       <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,width:"92%",maxWidth:500,margin:"0 auto 40px",boxShadow:"0 20px 60px rgba(0,0,0,0.25)"}}>
@@ -233,10 +238,10 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[]}){
         </div>
         <div style={{padding:"16px 20px 24px",display:"flex",flexDirection:"column",gap:16}}>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Tipo <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varios)</span></div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["Apartamento","Casa"].map(t=><button key={t} onClick={()=>tog("tipo",t)} style={{padding:"9px 18px",borderRadius:20,border:"2px solid",borderColor:f.tipo.includes(t)?"#1B4F72":"#E0E0E0",background:f.tipo.includes(t)?"#1B4F72":"white",color:f.tipo.includes(t)?"white":"#5D6D7E",fontWeight:600,fontSize:13,cursor:"pointer",transition:"all .15s"}}>{t}</button>)}</div></div>
-          {localidades.length>0&&<div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Localidad / Zona <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varias)</span></div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{localidades.map(z=><button key={z} onClick={()=>tog("localidad",z)} style={{padding:"7px 13px",borderRadius:18,border:"2px solid",borderColor:f.localidad.includes(z)?"#1B4F72":"#E0E0E0",background:f.localidad.includes(z)?"#1B4F72":"white",color:f.localidad.includes(z)?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s"}}>{z}</button>)}</div></div>}
+          {localidades.length>0&&<div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Localidad / Zona <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varias)</span></div><div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}}>{localidades.map(z=><button key={z} onClick={()=>tog("localidad",z)} style={chipBtn(f.localidad.includes(z),false)}>{z}</button>)}{(f.localidadCustom||[]).map((z,i)=><div key={i} style={{display:"flex",alignItems:"center",border:"2px solid #1B4F72",borderRadius:18,background:"white",overflow:"hidden"}}><input autoFocus={i===(f.localidadCustom.length-1)} value={z} onChange={e=>updCustom(i,e.target.value)} placeholder="Escribe zona..." style={{border:"none",outline:"none",padding:"6px 10px",fontSize:12,fontWeight:600,color:"#1B2A4A",width:120,background:"transparent"}} /><button onClick={()=>remCustom(i)} style={{border:"none",background:"none",cursor:"pointer",color:"#9AA5B4",padding:"0 8px",fontSize:13,lineHeight:1}}>✕</button></div>)}<button onClick={addCustom} style={{width:30,height:30,borderRadius:"50%",border:"2px solid #E0E0E0",background:"white",color:"#5D6D7E",fontWeight:800,fontSize:17,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,lineHeight:1}}>+</button></div></div>}
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Precio</div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{precios.map(([label,mn,mx])=><button key={label} onClick={()=>setP(label,mn,mx)} style={{padding:"8px 14px",borderRadius:18,border:"2px solid",borderColor:f.precioTag===label?"#B7791F":"#F7C948",background:f.precioTag===label?"#F59E0B":"#FFF8E1",color:f.precioTag===label?"white":"#92400E",fontWeight:700,fontSize:11,cursor:"pointer",transition:"all .15s"}}>{label}</button>)}</div></div>
-          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Habitaciones <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varias)</span></div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["1","2","3","4","5+"].map(n=><button key={n} onClick={()=>tog("habitaciones",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.habitaciones.includes(n)?"#1B4F72":"#E0E0E0",background:f.habitaciones.includes(n)?"#1B4F72":"white",color:f.habitaciones.includes(n)?"white":"#5D6D7E",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
-          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Baños <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varios)</span></div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["1","2","3","4+"].map(n=><button key={n} onClick={()=>tog("banos",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.banos.includes(n)?"#1B4F72":"#E0E0E0",background:f.banos.includes(n)?"#1B4F72":"white",color:f.banos.includes(n)?"white":"#5D6D7E",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
+          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Habitaciones <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(mínimo)</span></div><div style={{display:"flex",gap:6}}>{["1","2","3","4","5+"].map(n=><button key={n} onClick={()=>sel("habitaciones",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.habitaciones===n?"#1B4F72":"#E0E0E0",background:f.habitaciones===n?"#1B4F72":"white",color:f.habitaciones===n?"white":"#5D6D7E",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
+          <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Baños <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(mínimo)</span></div><div style={{display:"flex",gap:6}}>{["1","2","3","4+"].map(n=><button key={n} onClick={()=>sel("banos",n)} style={{width:40,height:40,borderRadius:"50%",border:"2px solid",borderColor:f.banos===n?"#1B4F72":"#E0E0E0",background:f.banos===n?"#1B4F72":"white",color:f.banos===n?"white":"#5D6D7E",fontWeight:700,fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{n}</button>)}</div></div>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Extras <span style={{fontWeight:400,color:"#9AA5B4",fontSize:11}}>(selecciona varios)</span></div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{[["Parqueadero","garaje",false],["Ascensor","ascensor",false],["Bono HABI","bonoHabi",true]].map(([l,k,sp])=><button key={k} onClick={()=>u(k,!f[k])} style={{padding:"9px 16px",borderRadius:20,border:"2px solid",borderColor:f[k]?(sp?"#7B2FF7":"#1B4F72"):"#E0E0E0",background:f[k]?(sp?"#7B2FF7":"#1B4F72"):"white",color:f[k]?"white":"#5D6D7E",fontWeight:700,fontSize:12,cursor:"pointer"}}>{l}</button>)}</div></div>
           <div style={{display:"flex",gap:10}}><button onClick={()=>sf(dflt())} style={{flex:1,padding:12,borderRadius:12,border:"2px solid #D5DBDB",background:"white",fontWeight:700,fontSize:14,cursor:"pointer",color:"#5D6D7E"}}>Limpiar</button><button onClick={onApply} style={{flex:2,padding:12,borderRadius:12,border:"none",background:"linear-gradient(135deg,#FF6B35,#E74C3C)",color:"white",fontWeight:800,fontSize:15,cursor:"pointer"}}>Aplicar filtros</button></div>
         </div>
@@ -362,7 +367,7 @@ export default function App(){
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
-    let c=0;if(na.tipo.length>0)c++;if(na.localidad.length>0)c++;if(na.precioTag)c++;if(na.habitaciones.length>0)c++;if(na.banos.length>0)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
+    let c=0;if(na.tipo.length>0)c++;if(na.localidad.length>0||(na.localidadCustom||[]).some(z=>z.trim()))c++;if(na.precioTag)c++;if(na.habitaciones)c++;if(na.banos)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;
     setFCount(c);setFOpen(false);setPage("catalogo");
   };
 
@@ -371,11 +376,12 @@ export default function App(){
     if(q&&![p.titulo,p.barrio,p.conjunto,p.nid,p.ciudad,p.tipo,p.zona].some(f=>(f||"").toLowerCase().includes(q)))return false;
     const af=applied;
     if(af.tipo.length>0&&!af.tipo.includes(p.tipo))return false;
-    if(af.localidad.length>0&&!af.localidad.includes(p.zona_grande))return false;
+    const customZones=(af.localidadCustom||[]).map(z=>z.trim().toLowerCase()).filter(Boolean);
+    if(af.localidad.length>0||customZones.length>0){const presetOk=af.localidad.includes(p.zona_grande);const customOk=customZones.some(z=>[p.zona_grande,p.barrio,p.zona,p.zona_pequeña,p.zona_mediana,p.conjunto].some(f=>(f||"").toLowerCase().includes(z)));if(!presetOk&&!customOk)return false;}
     if(af.precioMin&&parseInt(p.precio_venta||0)<parseInt(af.precioMin))return false;
     if(af.precioMax&&parseInt(p.precio_venta||0)>parseInt(af.precioMax))return false;
-    if(af.habitaciones.length>0){const h=parseInt(p.habitaciones||0);if(!af.habitaciones.some(n=>n==="5+"?h>=5:parseInt(n)===h))return false}
-    if(af.banos.length>0){const b=parseInt(p.banos||0);if(!af.banos.some(n=>n==="4+"?b>=4:parseInt(n)===b))return false}
+    if(af.habitaciones){const h=parseInt(p.habitaciones||0);const min=af.habitaciones==="5+"?5:parseInt(af.habitaciones);if(h<min)return false}
+    if(af.banos){const b=parseInt(p.banos||0);const min=af.banos==="4+"?4:parseInt(af.banos);if(b<min)return false}
     if(af.garaje&&(!p.garaje||p.garaje==="0"))return false;
     if(af.ascensor&&!p.ascensor)return false;
     if(af.bonoHabi&&(!p.bonoHabi||p.bonoHabi<=0))return false;
