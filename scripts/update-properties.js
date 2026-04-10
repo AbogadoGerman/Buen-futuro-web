@@ -591,6 +591,7 @@ async function main() {
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
       images: p.images || [],
+      deposito: /dep[oó]sito/i.test(p.descripcion || "") || /dep[oó]sito/i.test(p.titulo || ""),
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
     fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);

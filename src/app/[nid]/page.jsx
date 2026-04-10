@@ -177,6 +177,7 @@ export default async function PropertyPage({ params }) {
               ["🏢 Piso", p.piso],
               ["⚡ Estrato", p.estrato],
               ["🛗 Ascensor", p.ascensor ? "Sí" : p.ascensor === false ? "No" : null],
+              ["📦 Depósito", p.deposito ? "Sí" : null],
             ]
               .filter(([, v]) => v !== null && v !== undefined && v !== "" && v !== "0" && v !== 0)
               .map(([label, value]) => (
