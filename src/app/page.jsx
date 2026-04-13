@@ -287,13 +287,17 @@ function CreditSim({onClose,property,shareUrl}){
   );
 }
 
-function dflt(){return{zonas:[],tipo:"Todos",localidades:[],barrios:[],conjunto:"Todos",precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",pisoMax:"",garaje:false,ascensor:false,bonoHabi:false,duplex:false,deposito:false}}
-function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.zonas&&applied.zonas.length)p.set("zonas",applied.zonas.join(","));if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidades&&applied.localidades.length)p.set("localidades",applied.localidades.join(","));if(applied.barrios&&applied.barrios.length)p.set("barrios",applied.barrios.join(","));if(applied.conjunto!=="Todos")p.set("conjunto",applied.conjunto);if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.pisoMax)p.set("piso_max",applied.pisoMax);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(applied.duplex)p.set("duplex","1");if(applied.deposito)p.set("deposito","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
-function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("zonas"))f.zonas=p.get("zonas").split(",").filter(Boolean);if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidades"))f.localidades=p.get("localidades").split(",").filter(Boolean);if(p.has("barrios"))f.barrios=p.get("barrios").split(",").filter(Boolean);if(p.has("conjunto"))f.conjunto=p.get("conjunto");if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("piso_max"))f.pisoMax=p.get("piso_max");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;if(p.has("duplex"))f.duplex=true;if(p.has("deposito"))f.deposito=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
+function dflt(){return{zonas:[],tipo:"Todos",localidades:[],barrios:[],conjunto:[],precioTag:"",precioMin:"",precioMax:"",habitaciones:"Todas","baños":"Todos",pisoMax:"",garaje:false,ascensor:false,bonoHabi:false,duplex:false,deposito:false}}
+function buildCatalogURL(applied,search,sort,simOpen,simNid,filtersOpen){const p=new URLSearchParams();p.set("cat","1");if(applied.zonas&&applied.zonas.length)p.set("zonas",applied.zonas.join(","));if(applied.tipo!=="Todos")p.set("tipo",applied.tipo);if(applied.localidades&&applied.localidades.length)p.set("localidades",applied.localidades.join(","));if(applied.barrios&&applied.barrios.length)p.set("barrios",applied.barrios.join(","));if(applied.conjunto&&applied.conjunto.length)p.set("conjunto",applied.conjunto.join(","));if(applied.precioTag&&applied.precioTag!=="Todos")p.set("precio",applied.precioTag);if(applied.precioMin)p.set("pmin",applied.precioMin);if(applied.precioMax)p.set("pmax",applied.precioMax);if(applied.habitaciones!=="Todas")p.set("hab",applied.habitaciones);if(applied["baños"]!=="Todos")p.set("ban",applied["baños"]);if(applied.pisoMax)p.set("piso_max",applied.pisoMax);if(applied.garaje)p.set("garaje","1");if(applied.ascensor)p.set("ascensor","1");if(applied.bonoHabi)p.set("bono","1");if(applied.duplex)p.set("duplex","1");if(applied.deposito)p.set("deposito","1");if(search)p.set("q",search);if(sort&&sort!=="relevancia")p.set("sort",sort);if(simOpen)p.set("sim","1");if(simNid)p.set("sim_nid",simNid);if(filtersOpen)p.set("filtros","1");return"/?"+p.toString();}
+function parseURLFilters(){if(typeof window==="undefined")return null;const p=new URLSearchParams(window.location.search);if(!p.has("cat"))return null;const f=dflt();if(p.has("zonas"))f.zonas=p.get("zonas").split(",").filter(Boolean);if(p.has("tipo"))f.tipo=p.get("tipo");if(p.has("localidades"))f.localidades=p.get("localidades").split(",").filter(Boolean);if(p.has("barrios"))f.barrios=p.get("barrios").split(",").filter(Boolean);if(p.has("conjunto"))f.conjunto=p.get("conjunto").split(",").filter(Boolean);if(p.has("precio")){f.precioTag=p.get("precio");const pr=[["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];const m=pr.find(([t])=>t===p.get("precio"));if(m){f.precioMin=m[1];f.precioMax=m[2];}}if(p.has("pmin"))f.precioMin=p.get("pmin");if(p.has("pmax"))f.precioMax=p.get("pmax");if(p.has("hab"))f.habitaciones=p.get("hab");if(p.has("ban"))f["baños"]=p.get("ban");if(p.has("piso_max"))f.pisoMax=p.get("piso_max");if(p.has("garaje"))f.garaje=true;if(p.has("ascensor"))f.ascensor=true;if(p.has("bono"))f.bonoHabi=true;if(p.has("duplex"))f.duplex=true;if(p.has("deposito"))f.deposito=true;return{filters:f,search:p.get("q")||"",sort:p.get("sort")||"relevancia",simOpen:p.has("sim"),simNid:p.get("sim_nid")||null,filtersOpen:p.has("filtros")};}
 function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareUrl}){
   const [filtCopied,setFiltCopied]=useState(false);
-  const [locExpanded,setLocExpanded]=useState(false);
-  const [barrioExpanded,setBarrioExpanded]=useState(false);
+  const [extraLocRows,setExtraLocRows]=useState(0);
+  const [extraBarrioRows,setExtraBarrioRows]=useState(0);
+  const [extraConjRows,setExtraConjRows]=useState(0);
+  useEffect(()=>{if(f.localidades.length===0)setExtraLocRows(0);},[f.localidades.length]);
+  useEffect(()=>{if(f.barrios.length===0)setExtraBarrioRows(0);},[f.barrios.length]);
+  useEffect(()=>{if(f.conjunto.length===0)setExtraConjRows(0);},[f.conjunto.length]);
   if(!open)return null;
   function handleFiltShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setFiltCopied(true);setTimeout(()=>setFiltCopied(false),2500);}catch(e){}});}
   const u=(k,v)=>sf(prev=>({...prev,[k]:v}));
@@ -303,6 +307,9 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareU
   const conjuntos=[...new Set(inv.filter(p=>(f.localidades.length===0||f.localidades.some(l=>normText(prettyLocalidad(getLocalidad(p)))===normText(l)))&&(!zonaLocs||zonaLocs.includes(normText(getLocalidad(p))))&&(f.barrios.length===0||f.barrios.some(b=>normText(cleanText(p.barrio))===normText(b)))).map(p=>cleanText(p.conjunto)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   const precios=[["Todos","",""],["< 200M","0","200000000"],["200-400M","200000000","400000000"],["400-600M","400000000","600000000"],["600M-1B","600000000","1000000000"],["> 1B","1000000000",""]];
   const setP=(tag,mn,mx)=>sf(prev=>({...prev,precioTag:tag,precioMin:mn,precioMax:mx}));
+  const selStyle={flex:1,padding:"8px 10px",borderRadius:10,border:"2px solid #D5DBDB",fontSize:12,fontWeight:600,background:"white",cursor:"pointer",color:"#1B2A4A"};
+  const removeBtn={background:"#F0F3F7",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:15,color:"#5D6D7E",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0};
+  const addBtn={padding:"6px 12px",borderRadius:16,border:"2px solid #1B4F72",background:"white",color:"#1B4F72",fontWeight:800,fontSize:13,cursor:"pointer",marginTop:4,display:"inline-flex",alignItems:"center",gap:4};
   return(
     <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",zIndex:1100,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:60,overflowY:"auto",animation:"fadeIn .2s"}}>
       <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,width:"92%",maxWidth:500,margin:"0 auto 40px",boxShadow:"0 20px 60px rgba(0,0,0,0.25)"}}>
@@ -319,33 +326,82 @@ function FilterPanel({open,onClose,filters:f,setFilters:sf,onApply,inv=[],shareU
           <div>
             <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Zona</div>
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-              <button onClick={()=>sf(prev=>({...prev,zonas:[],localidades:[],barrios:[],conjunto:"Todos"}))} style={{padding:"7px 13px",borderRadius:20,border:"2px solid",borderColor:f.zonas.length===0?"#1B4F72":"#E0E0E0",background:f.zonas.length===0?"#1B4F72":"white",color:f.zonas.length===0?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>Todas</button>
-              {ZONA_ORDEN.map(z=>{const sel=f.zonas.includes(z);return <button key={z} onClick={()=>sf(prev=>{const nz=prev.zonas.includes(z)?prev.zonas.filter(x=>x!==z):[...prev.zonas,z];return{...prev,zonas:nz,localidades:[],barrios:[],conjunto:"Todos"}})} style={{padding:"7px 13px",borderRadius:20,border:"2px solid",borderColor:sel?"#1B4F72":"#E0E0E0",background:sel?"#1B4F72":"white",color:sel?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>{z}</button>})}
+              <button onClick={()=>sf(prev=>({...prev,zonas:[],localidades:[],barrios:[],conjunto:[]}))} style={{padding:"7px 13px",borderRadius:20,border:"2px solid",borderColor:f.zonas.length===0?"#1B4F72":"#E0E0E0",background:f.zonas.length===0?"#1B4F72":"white",color:f.zonas.length===0?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>Todas</button>
+              {ZONA_ORDEN.map(z=>{const sel=f.zonas.includes(z);return <button key={z} onClick={()=>sf(prev=>{const nz=prev.zonas.includes(z)?prev.zonas.filter(x=>x!==z):[...prev.zonas,z];return{...prev,zonas:nz,localidades:[],barrios:[],conjunto:[]}})} style={{padding:"7px 13px",borderRadius:20,border:"2px solid",borderColor:sel?"#1B4F72":"#E0E0E0",background:sel?"#1B4F72":"white",color:sel?"white":"#5D6D7E",fontWeight:600,fontSize:12,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>{z}</button>})}
             </div>
           </div>
           <div><div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Tipo</div><div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["Todos","Apartamento","Casa"].map(t=><button key={t} onClick={()=>u("tipo",t)} style={{padding:"9px 18px",borderRadius:20,border:"2px solid",borderColor:f.tipo===t?"#1B4F72":"#E0E0E0",background:f.tipo===t?"#1B4F72":"white",color:f.tipo===t?"white":"#5D6D7E",fontWeight:600,fontSize:13,cursor:"pointer",transition:"all .15s"}}>{t}</button>)}</div></div>
           <div>
             <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Localidad{f.localidades.length>0&&<span style={{color:"#1B4F72",marginLeft:4}}>({f.localidades.length})</span>}</div>
-            <div style={{display:"flex",gap:5,flexWrap:"wrap",alignItems:"center"}}>
-              <button onClick={()=>sf(prev=>({...prev,localidades:[],barrios:[],conjunto:"Todos"}))} style={{padding:"6px 11px",borderRadius:16,border:"2px solid",borderColor:f.localidades.length===0?"#1B4F72":"#E0E0E0",background:f.localidades.length===0?"#1B4F72":"white",color:f.localidades.length===0?"white":"#5D6D7E",fontWeight:600,fontSize:11,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>Todas</button>
-              {(locExpanded?localidades:localidades.slice(0,6)).map(loc=>{const sel=f.localidades.includes(loc);return <button key={loc} onClick={()=>sf(prev=>{const nl=prev.localidades.includes(loc)?prev.localidades.filter(l=>l!==loc):[...prev.localidades,loc];return{...prev,localidades:nl,barrios:[],conjunto:"Todos"}})} style={{padding:"6px 11px",borderRadius:16,border:"2px solid",borderColor:sel?"#1B4F72":"#E0E0E0",background:sel?"#1B4F72":"white",color:sel?"white":"#5D6D7E",fontWeight:600,fontSize:11,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>{loc}</button>})}
-              {localidades.length>6&&<button onClick={()=>setLocExpanded(!locExpanded)} style={{padding:"6px 11px",borderRadius:16,border:"2px solid #1B4F72",background:"white",color:"#1B4F72",fontWeight:800,fontSize:14,cursor:"pointer",transition:"all .15s",minWidth:32,lineHeight:1}}>{locExpanded?"−":"+"}</button>}
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {f.localidades.map((loc,idx)=>(
+                <div key={loc+idx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value={loc} onChange={e=>{const nv=e.target.value;if(!nv){sf(prev=>({...prev,localidades:prev.localidades.filter((_,i)=>i!==idx),barrios:[],conjunto:[]}));setExtraLocRows(r=>r+1);}else{sf(prev=>{const nl=[...prev.localidades];nl[idx]=nv;return{...prev,localidades:nl,barrios:[],conjunto:[]};});}}} style={selStyle}>
+                    <option value="">— quitar —</option>
+                    {localidades.filter(l=>!f.localidades.includes(l)||l===loc).map(l=><option key={l} value={l}>{l}</option>)}
+                  </select>
+                  <button onClick={()=>sf(prev=>({...prev,localidades:prev.localidades.filter((_,i)=>i!==idx),barrios:[],conjunto:[]}))} style={removeBtn}>✕</button>
+                </div>
+              ))}
+              {Array(extraLocRows+1).fill(null).map((_,eIdx)=>(
+                <div key={"loc-empty-"+eIdx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value="" onChange={e=>{const nv=e.target.value;if(nv){sf(prev=>({...prev,localidades:[...prev.localidades,nv],barrios:[],conjunto:[]}));setExtraLocRows(r=>Math.max(0,r-1));}}} style={selStyle}>
+                    <option value="">Seleccionar localidad…</option>
+                    {localidades.filter(l=>!f.localidades.includes(l)).map(l=><option key={l} value={l}>{l}</option>)}
+                  </select>
+                  {(f.localidades.length>0||eIdx>0)&&<button onClick={()=>setExtraLocRows(r=>Math.max(0,r-1))} style={removeBtn}>✕</button>}
+                </div>
+              ))}
+              <button onClick={()=>setExtraLocRows(r=>r+1)} style={addBtn}>+ Agregar localidad</button>
             </div>
           </div>
           <div>
             <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Barrio{f.barrios.length>0&&<span style={{color:"#1B4F72",marginLeft:4}}>({f.barrios.length})</span>}</div>
-            <div style={{display:"flex",gap:5,flexWrap:"wrap",alignItems:"center"}}>
-              <button onClick={()=>sf(prev=>({...prev,barrios:[],conjunto:"Todos"}))} style={{padding:"6px 11px",borderRadius:16,border:"2px solid",borderColor:f.barrios.length===0?"#1B4F72":"#E0E0E0",background:f.barrios.length===0?"#1B4F72":"white",color:f.barrios.length===0?"white":"#5D6D7E",fontWeight:600,fontSize:11,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>Todos</button>
-              {(barrioExpanded?barrios:barrios.slice(0,6)).map(b=>{const sel=f.barrios.includes(b);return <button key={b} onClick={()=>sf(prev=>{const nb=prev.barrios.includes(b)?prev.barrios.filter(x=>x!==b):[...prev.barrios,b];return{...prev,barrios:nb,conjunto:"Todos"}})} style={{padding:"6px 11px",borderRadius:16,border:"2px solid",borderColor:sel?"#1B4F72":"#E0E0E0",background:sel?"#1B4F72":"white",color:sel?"white":"#5D6D7E",fontWeight:600,fontSize:11,cursor:"pointer",transition:"all .15s",whiteSpace:"nowrap"}}>{b}</button>})}
-              {barrios.length>6&&<button onClick={()=>setBarrioExpanded(!barrioExpanded)} style={{padding:"6px 11px",borderRadius:16,border:"2px solid #1B4F72",background:"white",color:"#1B4F72",fontWeight:800,fontSize:14,cursor:"pointer",transition:"all .15s",minWidth:32,lineHeight:1}}>{barrioExpanded?"−":"+"}</button>}
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {f.barrios.map((b,idx)=>(
+                <div key={b+idx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value={b} onChange={e=>{const nv=e.target.value;if(!nv){sf(prev=>({...prev,barrios:prev.barrios.filter((_,i)=>i!==idx),conjunto:[]}));setExtraBarrioRows(r=>r+1);}else{sf(prev=>{const nb=[...prev.barrios];nb[idx]=nv;return{...prev,barrios:nb,conjunto:[]};});}}} style={selStyle}>
+                    <option value="">— quitar —</option>
+                    {barrios.filter(x=>!f.barrios.includes(x)||x===b).map(x=><option key={x} value={x}>{x}</option>)}
+                  </select>
+                  <button onClick={()=>sf(prev=>({...prev,barrios:prev.barrios.filter((_,i)=>i!==idx),conjunto:[]}))} style={removeBtn}>✕</button>
+                </div>
+              ))}
+              {Array(extraBarrioRows+1).fill(null).map((_,eIdx)=>(
+                <div key={"barrio-empty-"+eIdx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value="" onChange={e=>{const nv=e.target.value;if(nv){sf(prev=>({...prev,barrios:[...prev.barrios,nv],conjunto:[]}));setExtraBarrioRows(r=>Math.max(0,r-1));}}} style={selStyle}>
+                    <option value="">Seleccionar barrio…</option>
+                    {barrios.filter(x=>!f.barrios.includes(x)).map(x=><option key={x} value={x}>{x}</option>)}
+                  </select>
+                  {(f.barrios.length>0||eIdx>0)&&<button onClick={()=>setExtraBarrioRows(r=>Math.max(0,r-1))} style={removeBtn}>✕</button>}
+                </div>
+              ))}
+              <button onClick={()=>setExtraBarrioRows(r=>r+1)} style={addBtn}>+ Agregar barrio</button>
             </div>
           </div>
           <div>
-            <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:6}}>Conjunto</div>
-            <select value={f.conjunto} onChange={e=>u("conjunto",e.target.value)} style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"2px solid #D5DBDB",fontSize:12,fontWeight:600,background:"white",cursor:"pointer"}}>
-              <option value="Todos">Todos</option>
-              {conjuntos.map(v=><option key={v} value={v}>{v}</option>)}
-            </select>
+            <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Conjunto{f.conjunto.length>0&&<span style={{color:"#1B4F72",marginLeft:4}}>({f.conjunto.length})</span>}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {f.conjunto.map((c,idx)=>(
+                <div key={c+idx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value={c} onChange={e=>{const nv=e.target.value;if(!nv){sf(prev=>({...prev,conjunto:prev.conjunto.filter((_,i)=>i!==idx)}));setExtraConjRows(r=>r+1);}else{sf(prev=>{const nc=[...prev.conjunto];nc[idx]=nv;return{...prev,conjunto:nc};});}}} style={selStyle}>
+                    <option value="">— quitar —</option>
+                    {conjuntos.filter(x=>!f.conjunto.includes(x)||x===c).map(x=><option key={x} value={x}>{x}</option>)}
+                  </select>
+                  <button onClick={()=>sf(prev=>({...prev,conjunto:prev.conjunto.filter((_,i)=>i!==idx)}))} style={removeBtn}>✕</button>
+                </div>
+              ))}
+              {Array(extraConjRows+1).fill(null).map((_,eIdx)=>(
+                <div key={"conj-empty-"+eIdx} style={{display:"flex",gap:6,alignItems:"center"}}>
+                  <select value="" onChange={e=>{const nv=e.target.value;if(nv){sf(prev=>({...prev,conjunto:[...prev.conjunto,nv]}));setExtraConjRows(r=>Math.max(0,r-1));}}} style={selStyle}>
+                    <option value="">Seleccionar conjunto…</option>
+                    {conjuntos.filter(x=>!f.conjunto.includes(x)).map(x=><option key={x} value={x}>{x}</option>)}
+                  </select>
+                  {(f.conjunto.length>0||eIdx>0)&&<button onClick={()=>setExtraConjRows(r=>Math.max(0,r-1))} style={removeBtn}>✕</button>}
+                </div>
+              ))}
+              <button onClick={()=>setExtraConjRows(r=>r+1)} style={addBtn}>+ Agregar conjunto</button>
+            </div>
           </div>
           <div>
             <div style={{fontWeight:700,fontSize:12,color:"#1B2A4A",marginBottom:8}}>Extras</div>
@@ -560,7 +616,7 @@ export default function App(){
     const nid=window.location.pathname.replace('/','');
     if(nid){const p=INV.find(x=>x.nid===nid);if(p)setSel(p);}
     const parsed=parseURLFilters();
-    if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidad!=="Todas")c++;if(na.barrio!=="Todos")c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.pisoMax)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;if(na.deposito)c++;setFCount(c);if(parsed.simOpen){setCOpen(true);if(parsed.simNid){const sp=INV.find(x=>x.nid===parsed.simNid);if(sp)setSimProperty(sp);}}if(parsed.filtersOpen){setFOpen(true);}}
+    if(parsed){setFilters(parsed.filters);setApplied(parsed.filters);setSearch(parsed.search);setSort(parsed.sort);setPage("catalogo");let c=0;const na=parsed.filters;if(na.tipo!=="Todos")c++;if(na.localidades&&na.localidades.length)c++;if(na.barrios&&na.barrios.length)c++;if(na.conjunto&&na.conjunto.length)c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.pisoMax)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;if(na.deposito)c++;setFCount(c);if(parsed.simOpen){setCOpen(true);if(parsed.simNid){const sp=INV.find(x=>x.nid===parsed.simNid);if(sp)setSimProperty(sp);}}if(parsed.filtersOpen){setFOpen(true);}}
   },[]);
   const [reviewRef,reviewApi]=useEmblaCarousel({
     loop:false,
@@ -597,7 +653,7 @@ export default function App(){
 
   const applyF=()=>{
     const na={...filters};setApplied(na);
-    let c=0;if(na.zonas&&na.zonas.length)c++;if(na.tipo!=="Todos")c++;if(na.localidades&&na.localidades.length)c++;if(na.barrios&&na.barrios.length)c++;if(na.conjunto!=="Todos")c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.pisoMax)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;if(na.deposito)c++;
+    let c=0;if(na.zonas&&na.zonas.length)c++;if(na.tipo!=="Todos")c++;if(na.localidades&&na.localidades.length)c++;if(na.barrios&&na.barrios.length)c++;if(na.conjunto&&na.conjunto.length)c++;if(na.precioTag&&na.precioTag!=="Todos")c++;if(na.habitaciones!=="Todas")c++;if(na["baños"]!=="Todos")c++;if(na.pisoMax)c++;if(na.garaje)c++;if(na.ascensor)c++;if(na.bonoHabi)c++;if(na.deposito)c++;
     setFCount(c);setFOpen(false);setPage("catalogo");
   };
 
@@ -609,7 +665,7 @@ export default function App(){
     if(af.tipo!=="Todos"&&normText(p.tipo||"")!==normText(af.tipo)&&!(af.tipo==="Casa"&&normText(p.tipo||"").startsWith("casa")))return false;
     if(af.localidades&&af.localidades.length){const pLoc=normText(prettyLocalidad(getLocalidad(p)));if(!af.localidades.some(l=>normText(l)===pLoc))return false;}
     if(af.barrios&&af.barrios.length){const pB=normText(cleanText(p.barrio));if(!af.barrios.some(b=>normText(b)===pB))return false;}
-    if(af.conjunto!=="Todos"&&normText(cleanText(p.conjunto))!==normText(af.conjunto))return false;
+    if(af.conjunto&&af.conjunto.length&&!af.conjunto.some(c=>normText(cleanText(p.conjunto))===normText(c)))return false;
     if(af.precioMin&&parseInt(p.precio_venta||0)<parseInt(af.precioMin))return false;
     if(af.precioMax&&parseInt(p.precio_venta||0)>parseInt(af.precioMax))return false;
     if(af.habitaciones!=="Todas"){const h=parseInt(p.habitaciones||0);if(h<parseInt(af.habitaciones))return false}
