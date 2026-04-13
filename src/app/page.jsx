@@ -171,6 +171,7 @@ function getGoogleMapsUrl(p){
 function CreditSim({onClose,property,shareUrl}){
   const initVal=property?Math.max(80000000,Math.min(1500000000,num(property.precio_venta)||250000000)):250000000;
   const [val,setVal]=useState(initVal);
+  const [valStr,setValStr]=useState(String(Math.round(initVal/1000000)));
   const esVIS=val<=195000000;
   const minDown=esVIS?20:30;
   const maxAnos=esVIS?30:20;
@@ -179,6 +180,8 @@ function CreditSim({onClose,property,shareUrl}){
   const [tipo,setTipo]=useState("hipotecario");
   const [simCopied,setSimCopied]=useState(false);
   function handleSimShare(){if(!shareUrl)return;navigator.clipboard.writeText(shareUrl).then(()=>{setSimCopied(true);setTimeout(()=>setSimCopied(false),2500);}).catch(()=>{try{const ta=document.createElement("textarea");ta.value=shareUrl;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setSimCopied(true);setTimeout(()=>setSimCopied(false),2500);}catch(e){}});}
+  function handleValChange(e){const raw=e.target.value.replace(/\D/g,"");setValStr(raw);const p=parseInt(raw,10);if(!isNaN(p)&&p>=80&&p<=1500){const v=p*1000000;setVal(v);const newMin=v<=195000000?20:30;if(cuotaP<newMin)setCuotaP(newMin);const newMax=v<=195000000?30:20;if(anos>newMax)setAnos(newMax);}}
+  function handleValBlur(){const p=parseInt(valStr,10);let clamped=isNaN(p)||p<80?80:p>1500?1500:p;setValStr(String(clamped));const v=clamped*1000000;setVal(v);const newMin=v<=195000000?20:30;if(cuotaP<newMin)setCuotaP(newMin);const newMax=v<=195000000?30:20;if(anos>newMax)setAnos(newMax);}
   // Tasas M.V. (mensual vencida): hipotecario 0.80%, leasing 0.90%
   const tasaMV=tipo==="hipotecario"?0.008:0.009;
   const cuotaAjustada=Math.max(cuotaP,minDown);
@@ -232,14 +235,18 @@ function CreditSim({onClose,property,shareUrl}){
               </div>
             </div>
           </div>
-          {/* Valor del inmueble slider */}
+          {/* Valor del inmueble input */}
           <div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
               <label style={{fontWeight:700,fontSize:13,color:"#1B2A4A"}}>Valor del inmueble</label>
               {esVIS&&<span style={{background:"#E8F5E9",color:"#2E7D32",padding:"2px 8px",borderRadius:10,fontSize:10,fontWeight:700}}>VIS</span>}
             </div>
-            <input type="range" min={80000000} max={1500000000} step={5000000} value={val} onChange={e=>{const v=+e.target.value;setVal(v);const newMin=v<=195000000?20:30;if(cuotaP<newMin)setCuotaP(newMin);const newMax=v<=195000000?30:20;if(anos>newMax)setAnos(newMax);}} style={{width:"100%",accentColor:"#7B2FF7"}} />
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#999"}}><span>$80M</span><span>$1.500M</span></div>
+            <div style={{display:"flex",alignItems:"center",border:"2px solid #7B2FF7",borderRadius:12,background:"white",overflow:"hidden",boxShadow:"0 0 0 3px rgba(123,47,247,0.10)"}}>
+              <span style={{padding:"11px 6px 11px 14px",fontSize:15,fontWeight:800,color:"#7B2FF7",userSelect:"none"}}>$</span>
+              <input type="text" inputMode="numeric" value={valStr} onChange={handleValChange} onBlur={handleValBlur} placeholder="250" style={{flex:1,border:"none",outline:"none",fontSize:18,fontWeight:800,color:"#1B2A4A",padding:"11px 0",background:"transparent",minWidth:0}} />
+              <span style={{padding:"11px 14px 11px 4px",fontSize:13,fontWeight:600,color:"#5D6D7E",userSelect:"none",whiteSpace:"nowrap"}}>millones</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#AEB6BF",marginTop:5}}><span>Mín: $80M</span><span>Máx: $1.500M</span></div>
           </div>
           {/* Cuota inicial slider */}
           <div>
