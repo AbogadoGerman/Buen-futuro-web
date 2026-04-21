@@ -16,10 +16,83 @@ const CONFIG = {
   propertiesJsPath: path.join(ROOT, "src", "data", "properties.js"),
   placeholderImage: "/window.svg",
   minImages: 1,
-  maxImages: 20,
   userAgent: "Mozilla/5.0 (compatible; BuenFuturoBot/2.0)",
   delayBetweenRequestsMs: 800
 };
+
+// ——— Browser compartido para scraping con Puppeteer ———
+let _browser = null;
+
+async function getBrowser() {
+  if (_browser) return _browser;
+  try {
+    const puppeteer = require("puppeteer");
+    _browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"]
+    });
+    return _browser;
+  } catch (err) {
+    console.warn("  ⚠️  Puppeteer no disponible, se usará scraping estático:", err.message);
+    return null;
+  }
+}
+
+async function closeBrowser() {
+  if (_browser) {
+    try { await _browser.close(); } catch {}
+    _browser = null;
+  }
+}
+
+async function scrapeImagesWithBrowser(url) {
+  const browser = await getBrowser();
+  if (!browser) return null;
+
+  let page;
+  try {
+    page = await browser.newPage();
+    await page.setUserAgent(CONFIG.userAgent);
+    await page.setDefaultNavigationTimeout(30000);
+
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+
+    // Intentar hacer clic en el botón del carrusel para abrir todas las imágenes
+    try {
+      await page.waitForSelector('[data-id="listing-btn-allImages"]', { timeout: 8000 });
+      await page.click('[data-id="listing-btn-allImages"]');
+      // Esperar a que el modal/carrusel cargue todas las imágenes
+      await new Promise(r => setTimeout(r, 3000));
+    } catch {
+      // El botón no apareció; continuar con la página en su estado actual
+    }
+
+    const rawImages = await page.evaluate(() => {
+      const imgs = new Set();
+      document.querySelectorAll("img").forEach(img => {
+        ["src", "data-src", "data-lazy-src", "data-main-image"].forEach(attr => {
+          const val = img.getAttribute(attr);
+          if (val && val.startsWith("http")) imgs.add(val);
+        });
+        const srcset = img.getAttribute("srcset");
+        if (srcset) {
+          srcset.split(",").forEach(entry => {
+            const src = entry.trim().split(" ")[0];
+            if (src && src.startsWith("http")) imgs.add(src);
+          });
+        }
+      });
+      return [...imgs];
+    });
+
+    return rawImages;
+  } catch (err) {
+    console.log(`  ⚠️  Error scraping con browser: ${err.message}`);
+    return null;
+  } finally {
+    if (page) { try { await page.close(); } catch {} }
+  }
+}
 
 function getMatterportUrl(property) {
   const candidate = (property?.url_360 || "").trim();
@@ -174,7 +247,7 @@ async function scrapeCarouselImagesFromPageData(url, imageBaseUrl) {
       if (!uniqueByKey.has(key)) uniqueByKey.set(key, imgUrl);
     }
 
-    return [...uniqueByKey.values()].slice(0, CONFIG.maxImages);
+    return [...uniqueByKey.values()];
   } catch {
     return [];
   }
@@ -355,14 +428,31 @@ function scrapeCarouselFromDom($, imageBaseUrl) {
 
 async function scrapeImages(url) {
   try {
+    // ── MÉTODO PRIMARIO: browser headless con clic en botón del carrusel ──
+    const browserRaw = await scrapeImagesWithBrowser(url);
+    if (browserRaw !== null) {
+      const filtered = browserRaw
+        .map(raw => normalizeImageUrl(raw, url))
+        .filter(img => isValidImageUrl(img));
+
+      const uniqueByKey = new Map();
+      for (const img of filtered) {
+        const key = imageKey(img);
+        if (!uniqueByKey.has(key)) uniqueByKey.set(key, img);
+      }
+      const sorted = [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
+      if (sorted.length >= CONFIG.minImages) return sorted;
+    }
+
+    // ── FALLBACK: scraping estático cuando Puppeteer no está disponible ──
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
 
-    // 1) Extracción directa del DOM del carrusel (ul.slider li.slide img) — fuente primaria
+    // 1) DOM del carrusel (ul.slider li.slide img)
     const domCarouselImages = scrapeCarouselFromDom($, imageBaseUrl);
 
-    // 2) JSON "image" array embedded in HABI/Gatsby pages (e.g. JSON-LD structured data)
+    // 2) JSON-LD "image" array
     let jsonLdImages = [];
     const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
     if (imgArrayMatch) {
@@ -372,29 +462,24 @@ async function scrapeImages(url) {
       } catch {}
     }
 
-    // 3) Gatsby page-data carousel (usually has the FULL image set)
+    // 3) Gatsby page-data
     const carouselImages = await scrapeCarouselImagesFromPageData(url, imageBaseUrl);
 
     // 4) Scripts incrustados (window.__GATSBY_INITIAL_DATA__ etc.)
     const inlineScriptImages = await extractImagesFromInlineScripts(data, imageBaseUrl);
 
-    // Seleccionar la fuente con más imágenes entre los métodos primarios
     const primarySources = [domCarouselImages, carouselImages, jsonLdImages, inlineScriptImages];
     const bestPrimary = primarySources.reduce((best, src) => src.length > best.length ? src : best, []);
 
-    if (bestPrimary.length >= CONFIG.minImages) {
-      return bestPrimary.slice(0, CONFIG.maxImages);
-    }
+    if (bestPrimary.length >= CONFIG.minImages) return bestPrimary;
 
     const candidates = [];
 
-    // 1) Metadata images.
     const ogImage = $('meta[property="og:image"]').attr("content");
     const twitterImage = $('meta[name="twitter:image"]').attr("content");
     if (ogImage) candidates.push(ogImage);
     if (twitterImage) candidates.push(twitterImage);
 
-    // 2) Direct DOM images.
     $("img").each((_, el) => {
       const src =
         $(el).attr("src") ||
@@ -411,7 +496,6 @@ async function scrapeImages(url) {
       }
     });
 
-    // 3) Picture/source srcset.
     $("source").each((_, el) => {
       const srcset = $(el).attr("srcset");
       if (srcset) {
@@ -420,20 +504,18 @@ async function scrapeImages(url) {
       }
     });
 
-    // 4) Gatsby venta-* file names — patrón extendido para cubrir venta-xxx-2-765.png
     const ventaMatches = data.match(/venta-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpe?g|png|webp|avif)/gi) || [];
     for (const match of ventaMatches) {
       const full = buildImageUrl(match, imageBaseUrl);
       if (full) candidates.push(full);
     }
 
-    // 5) Fallback regex over whole HTML
     const regexMatches = data.match(/https?:\/\/[^\s"'<>]+\.(?:jpe?g|png|webp|avif)(?:\?[^\s"'<>]*)?/gi) || [];
     candidates.push(...regexMatches);
 
     const normalized = candidates
-      .map((raw) => normalizeImageUrl(raw, url))
-      .filter((imgUrl) => isValidImageUrl(imgUrl));
+      .map(raw => normalizeImageUrl(raw, url))
+      .filter(img => isValidImageUrl(img));
 
     const uniqueByKey = new Map();
     for (const img of normalized) {
@@ -441,8 +523,7 @@ async function scrapeImages(url) {
       if (!uniqueByKey.has(key)) uniqueByKey.set(key, img);
     }
 
-    const uniqueSorted = [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
-    return uniqueSorted.slice(0, CONFIG.maxImages);
+    return [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
   } catch {
     return [];
   }
@@ -592,6 +673,7 @@ async function main() {
       url_habi: p.url_habi || p.url || "",
       images: p.images || [],
       deposito: /dep[oó]sito/i.test(p.descripcion || "") || /dep[oó]sito/i.test(p.titulo || ""),
+      enSubasta: /^separado$/i.test((p.estado_del_inmueble || "").trim()),
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
     fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
@@ -600,6 +682,8 @@ async function main() {
     console.log(`🗑️ Propiedades eliminadas por falta de fotos/Matterport: ${removedWithoutMedia}`);
   } catch (err) {
     console.error("❌ Error fatal:", err.message);
+  } finally {
+    await closeBrowser();
   }
 }
 
