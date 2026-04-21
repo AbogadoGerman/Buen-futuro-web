@@ -62,19 +62,36 @@ const HABI_CDN = "https://d3hzflklh28tts.cloudfront.net/";
 
 async function scrapeImages(url) {
   try {
-    const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
+    const { data } = await axios.get(url, {
+      timeout: 12000,
+      headers: {
+        // User-agent real de Chrome para evitar el bloqueo 503 de habi.co
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept-Language": "es-CO,es;q=0.9,en-US;q=0.8,en;q=0.7",
+      }
+    });
     const images = [];
 
-    const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
-    if (imgArrayMatch) {
+    // Buscar en TODOS los bloques JSON-LD, no solo el primero.
+    // El primer bloque suele tener solo 3 imágenes para SEO; otros pueden tener más.
+    const jsonLdBlocks = data.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi) || [];
+    for (const block of jsonLdBlocks) {
+      const content = block.replace(/<[^>]+>/g, "");
+      const match = content.match(/"image":\s*\[([^\]]*)\]/);
+      if (!match) continue;
       try {
-        const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
+        const imgs = JSON.parse("[" + match[1] + "]");
         imgs.forEach(img => {
           const fullUrl = img.startsWith("http") ? img : HABI_CDN + img;
           images.push(fullUrl);
         });
       } catch {}
     }
+
+    // Buscar URLs del CDN de Habi directamente en el HTML (carrusel, estado JS, etc.)
+    const cdnRegex = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
+    const cdnMatches = data.match(cdnRegex) || [];
+    cdnMatches.forEach(u => images.push(u));
 
     if (images.length === 0) {
       const $ = cheerio.load(data);
