@@ -126,6 +126,11 @@ export default async function PropertyPage({ params }) {
         {/* Title & Price */}
         <div style={{ background: "white", borderRadius: 16, padding: 20, marginBottom: 16, boxShadow: "0 2px 12px rgba(27,79,114,0.07)" }}>
           <h1 style={{ fontSize: "clamp(16px,4vw,22px)", fontWeight: 800, color: "#1B2A4A", margin: "0 0 8px" }}>{p.titulo}</h1>
+          {p.enSubasta && (
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#F39C12,#D68910)", color: "white", padding: "5px 14px", borderRadius: 20, fontSize: 12, fontWeight: 800, marginBottom: 10 }}>
+              🔨 En Subasta
+            </div>
+          )}
           <div style={{ color: "#5D6D7E", fontSize: 13, marginBottom: 4, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <span>{[p.barrio, p.conjunto, p.ciudad].filter(Boolean).join(" · ")}</span>
           </div>
