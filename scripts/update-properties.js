@@ -57,18 +57,42 @@ async function scrapeImagesWithBrowser(url) {
 
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
+    // Dar tiempo a React/Gatsby para hidratar y renderizar el carrusel inicial
+    await new Promise(r => setTimeout(r, 2000));
+
     // Intentar hacer clic en el botón del carrusel para abrir todas las imágenes
     try {
       await page.waitForSelector('[data-id="listing-btn-allImages"]', { timeout: 8000 });
       await page.click('[data-id="listing-btn-allImages"]');
-      // Esperar a que el modal/carrusel cargue todas las imágenes
-      await new Promise(r => setTimeout(r, 3000));
+      // Esperar a que el modal/galería abra y cargue las primeras imágenes
+      await new Promise(r => setTimeout(r, 2000));
+
+      // Hacer scroll por el modal/galería para disparar el lazy loading de todas las fotos
+      await page.evaluate(async () => {
+        const modalSelectors = ['[role="dialog"]', '[class*="gallery"]', '[class*="modal"]', '[class*="lightbox"]', '[class*="carousel"]'];
+        let scrollTarget = null;
+        for (const sel of modalSelectors) {
+          const el = document.querySelector(sel);
+          if (el && el.scrollHeight > el.clientHeight + 100) { scrollTarget = el; break; }
+        }
+        const target = scrollTarget || document.documentElement;
+        const totalHeight = target.scrollHeight;
+        for (let y = 0; y <= totalHeight; y += 300) {
+          target.scrollTop = y;
+          window.scrollTo(0, y);
+          await new Promise(resolve => setTimeout(resolve, 120));
+        }
+      }).catch(() => {});
+
+      await new Promise(r => setTimeout(r, 1500));
     } catch {
       // El botón no apareció; continuar con la página en su estado actual
     }
 
     const rawImages = await page.evaluate(() => {
       const imgs = new Set();
+
+      // 1) Extraer de etiquetas <img> en el DOM (incluye imágenes ya cargadas por scroll)
       document.querySelectorAll("img").forEach(img => {
         ["src", "data-src", "data-lazy-src", "data-main-image"].forEach(attr => {
           const val = img.getAttribute(attr);
@@ -82,6 +106,31 @@ async function scrapeImagesWithBrowser(url) {
           });
         }
       });
+
+      // 2) Extraer del estado JavaScript de la app (Next.js / Gatsby)
+      //    Aquí viven TODAS las fotos del inmueble, no solo las visibles en pantalla.
+      const cdnPattern = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
+      const stateKeys = ["__NEXT_DATA__", "__GATSBY_INITIAL_DATA__", "__INITIAL_STATE__", "__PRELOADED_STATE__"];
+      for (const key of stateKeys) {
+        try {
+          const state = window[key];
+          if (!state) continue;
+          const str = JSON.stringify(state);
+          const matches = str.match(cdnPattern) || [];
+          for (const m of matches) imgs.add(m);
+        } catch (e) { /* ignorar */ }
+      }
+
+      // 3) Extraer de <script> sin src que contengan JSON con URLs de imágenes
+      document.querySelectorAll("script:not([src])").forEach(script => {
+        const content = script.textContent || "";
+        if (!content.includes("cloudfront.net")) return;
+        try {
+          const matches = content.match(cdnPattern) || [];
+          for (const m of matches) imgs.add(m);
+        } catch (e) { /* ignorar */ }
+      });
+
       return [...imgs];
     });
 
@@ -452,13 +501,18 @@ async function scrapeImages(url) {
     // 1) DOM del carrusel (ul.slider li.slide img)
     const domCarouselImages = scrapeCarouselFromDom($, imageBaseUrl);
 
-    // 2) JSON-LD "image" array
+    // 2) JSON-LD "image" arrays — buscar en TODOS los bloques <script type="application/ld+json">
+    //    (El primer bloque suele tener solo 3 imágenes para SEO; otros pueden tener más)
     let jsonLdImages = [];
-    const imgArrayMatch = data.match(/"image":\s*\[([^\]]*)\]/);
-    if (imgArrayMatch) {
+    const jsonLdBlocks = data.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi) || [];
+    for (const block of jsonLdBlocks) {
+      const content = block.replace(/<[^>]+>/g, "");
+      const match = content.match(/"image":\s*\[([^\]]*)\]/);
+      if (!match) continue;
       try {
-        const imgs = JSON.parse("[" + imgArrayMatch[1] + "]");
-        jsonLdImages = imgs.map(img => img.startsWith("http") ? img : HABI_CDN + img).filter(Boolean);
+        const imgs = JSON.parse("[" + match[1] + "]");
+        const urls = imgs.map(img => (img.startsWith("http") ? img : HABI_CDN + img)).filter(Boolean);
+        if (urls.length > jsonLdImages.length) jsonLdImages = urls;
       } catch {}
     }
 
@@ -468,10 +522,27 @@ async function scrapeImages(url) {
     // 4) Scripts incrustados (window.__GATSBY_INITIAL_DATA__ etc.)
     const inlineScriptImages = await extractImagesFromInlineScripts(data, imageBaseUrl);
 
-    const primarySources = [domCarouselImages, carouselImages, jsonLdImages, inlineScriptImages];
-    const bestPrimary = primarySources.reduce((best, src) => src.length > best.length ? src : best, []);
+    // 5) Regex directo sobre el HTML buscando URLs del CDN de Habi (cloudfront.net)
+    //    Esto captura fotos que están en el HTML pero fuera de los bloques anteriores.
+    const cdnRegex = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
+    const cdnMatches = (data.match(cdnRegex) || []).filter(isValidImageUrl);
 
-    if (bestPrimary.length >= CONFIG.minImages) return bestPrimary;
+    // Combinar TODAS las fuentes y deduplicar (en lugar de quedarse solo con la más grande)
+    const allPrimaryImages = [
+      ...domCarouselImages,
+      ...carouselImages,
+      ...inlineScriptImages,
+      ...jsonLdImages,
+      ...cdnMatches,
+    ];
+    const uniquePrimary = new Map();
+    for (const imgUrl of allPrimaryImages) {
+      const key = imageKey(imgUrl);
+      if (!uniquePrimary.has(key)) uniquePrimary.set(key, imgUrl);
+    }
+    const combinedPrimary = [...uniquePrimary.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
+
+    if (combinedPrimary.length >= CONFIG.minImages) return combinedPrimary;
 
     const candidates = [];
 
