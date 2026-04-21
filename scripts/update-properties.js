@@ -29,7 +29,17 @@ async function getBrowser() {
     const puppeteer = require("puppeteer");
     _browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"]
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        // Anti-detección: oculta que es un browser automatizado
+        "--disable-blink-features=AutomationControlled",
+        "--disable-features=IsolateOrigins,site-per-process",
+        "--disable-infobars",
+        "--window-size=1366,768",
+      ]
     });
     return _browser;
   } catch (err) {
@@ -52,89 +62,192 @@ async function scrapeImagesWithBrowser(url) {
   let page;
   try {
     page = await browser.newPage();
-    await page.setUserAgent(CONFIG.userAgent);
-    await page.setDefaultNavigationTimeout(30000);
 
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+    // User-agent de Chrome real para evitar la detección de bot (BuenFuturoBot causa 503)
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    );
+    await page.setViewport({ width: 1366, height: 768 });
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": "es-CO,es;q=0.9,en-US;q=0.8,en;q=0.7",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    });
+    await page.setDefaultNavigationTimeout(45000);
 
-    // Dar tiempo a React/Gatsby para hidratar y renderizar el carrusel inicial
-    await new Promise(r => setTimeout(r, 2000));
+    // Eliminar la propiedad navigator.webdriver que delata a Puppeteer
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+    });
 
-    // Intentar hacer clic en el botón del carrusel para abrir todas las imágenes
-    try {
-      await page.waitForSelector('[data-id="listing-btn-allImages"]', { timeout: 8000 });
-      await page.click('[data-id="listing-btn-allImages"]');
-      // Esperar a que el modal/galería abra y cargue las primeras imágenes
-      await new Promise(r => setTimeout(r, 2000));
+    // Interceptar respuestas de red: captura URLs de imágenes aunque no estén en el DOM
+    const networkImageUrls = new Set();
+    page.on("response", resp => {
+      const respUrl = resp.url();
+      if (
+        respUrl.includes("d3hzflklh28tts.cloudfront.net") &&
+        /\.(jpe?g|png|webp|avif)(\?|$)/i.test(respUrl)
+      ) {
+        networkImageUrls.add(respUrl);
+      }
+    });
 
-      // Hacer scroll por el modal/galería para disparar el lazy loading de todas las fotos
+    const navResponse = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+    // Si la página devuelve error HTTP (bot detectado), abortar
+    if (navResponse && navResponse.status() >= 400) {
+      console.log(`  ⚠️  HTTP ${navResponse.status()} al cargar ${url}`);
+      return null;
+    }
+
+    // Esperar hidratación de React/Gatsby
+    await new Promise(r => setTimeout(r, 3000));
+
+    // ── PASO 1: Extraer imágenes del estado JS antes de abrir el carrusel ──
+    // window.__NEXT_DATA__ / __GATSBY_INITIAL_DATA__ suelen contener TODAS las fotos
+    const stateImages = await page.evaluate(() => {
+      const cdnPattern = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
+      const imgs = new Set();
+      for (const key of ["__NEXT_DATA__", "__GATSBY_INITIAL_DATA__", "__INITIAL_STATE__", "__PRELOADED_STATE__"]) {
+        try {
+          const state = window[key];
+          if (!state) continue;
+          for (const m of JSON.stringify(state).match(cdnPattern) || []) imgs.add(m);
+        } catch {}
+      }
+      document.querySelectorAll("script:not([src])").forEach(s => {
+        const c = s.textContent || "";
+        if (!c.includes("cloudfront.net")) return;
+        for (const m of c.match(cdnPattern) || []) imgs.add(m);
+      });
+      return [...imgs];
+    });
+
+    // ── PASO 2: Clic en el botón "Ver todas las imágenes" para abrir el carrusel ──
+    const buttonSelectors = [
+      '[data-id="listing-btn-allImages"]',
+      '[data-testid="Carousel-button"]',
+      'button[data-id="listing-btn-allImages"]',
+    ];
+    let clicked = false;
+    for (const sel of buttonSelectors) {
+      try {
+        await page.waitForSelector(sel, { timeout: 8000 });
+        await page.click(sel);
+        clicked = true;
+        console.log(`    🖱️  Carrusel abierto con selector: ${sel}`);
+        break;
+      } catch {}
+    }
+
+    if (clicked) {
+      // Esperar a que el modal de galería abra y cargue imágenes iniciales
+      await new Promise(r => setTimeout(r, 3000));
+
+      // Scroll por la galería para disparar lazy loading de todas las fotos
       await page.evaluate(async () => {
-        const modalSelectors = ['[role="dialog"]', '[class*="gallery"]', '[class*="modal"]', '[class*="lightbox"]', '[class*="carousel"]'];
-        let scrollTarget = null;
-        for (const sel of modalSelectors) {
-          const el = document.querySelector(sel);
-          if (el && el.scrollHeight > el.clientHeight + 100) { scrollTarget = el; break; }
+        // Buscar el contenedor scrollable de la galería (el modal que abre el botón)
+        const galSelectors = [
+          '[role="dialog"]',
+          '[class*="allImages"]',
+          '[class*="gallery"]',
+          '[class*="Gallery"]',
+          '[class*="modal"]',
+          '[class*="Modal"]',
+          '[class*="lightbox"]',
+          '[class*="Lightbox"]',
+          '[class*="slider"]',
+          '[class*="carousel"]',
+          '[class*="Carousel"]',
+          '[class*="overlay"]',
+        ];
+
+        let container = null;
+        for (const s of galSelectors) {
+          const el = document.querySelector(s);
+          if (el && el.scrollHeight > el.clientHeight + 50) {
+            container = el;
+            break;
+          }
         }
-        const target = scrollTarget || document.documentElement;
-        const totalHeight = target.scrollHeight;
-        for (let y = 0; y <= totalHeight; y += 300) {
-          target.scrollTop = y;
-          window.scrollTo(0, y);
-          await new Promise(resolve => setTimeout(resolve, 120));
+
+        // Si no encontramos un contenedor específico, scrollear el body y la raíz
+        const targets = container ? [container, document.documentElement] : [document.documentElement, document.body];
+
+        for (const target of targets) {
+          const h = target.scrollHeight;
+          // Primera pasada rápida
+          for (let y = 0; y <= h + 500; y += 200) {
+            target.scrollTop = y;
+            window.scrollTo(0, y);
+            await new Promise(r => setTimeout(r, 100));
+          }
+          // Segunda pasada lenta para el lazy loading más profundo
+          target.scrollTop = 0;
+          await new Promise(r => setTimeout(r, 300));
+          for (let y = 0; y <= h + 500; y += 100) {
+            target.scrollTop = y;
+            await new Promise(r => setTimeout(r, 80));
+          }
         }
       }).catch(() => {});
 
-      await new Promise(r => setTimeout(r, 1500));
-    } catch {
-      // El botón no apareció; continuar con la página en su estado actual
+      // Dar tiempo adicional para que los requests de imágenes finalicen
+      await new Promise(r => setTimeout(r, 2500));
     }
 
-    const rawImages = await page.evaluate(() => {
+    // ── PASO 3: Extraer TODAS las imágenes del DOM (con carrusel abierto) ──
+    const domImages = await page.evaluate(() => {
       const imgs = new Set();
+      const cdnPattern = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
 
-      // 1) Extraer de etiquetas <img> en el DOM (incluye imágenes ya cargadas por scroll)
+      // Tags <img>: todos los atributos posibles incluyendo lazy-load
       document.querySelectorAll("img").forEach(img => {
-        ["src", "data-src", "data-lazy-src", "data-main-image"].forEach(attr => {
-          const val = img.getAttribute(attr);
-          if (val && val.startsWith("http")) imgs.add(val);
-        });
-        const srcset = img.getAttribute("srcset");
-        if (srcset) {
-          srcset.split(",").forEach(entry => {
-            const src = entry.trim().split(" ")[0];
-            if (src && src.startsWith("http")) imgs.add(src);
+        for (const attr of ["src", "data-src", "data-lazy-src", "data-main-image", "data-original"]) {
+          const v = img.getAttribute(attr);
+          if (v && v.startsWith("http")) imgs.add(v);
+        }
+        for (const attr of ["srcset", "data-srcset"]) {
+          const ss = img.getAttribute(attr) || "";
+          ss.split(",").forEach(e => {
+            const s = e.trim().split(" ")[0];
+            if (s && s.startsWith("http")) imgs.add(s);
           });
         }
       });
 
-      // 2) Extraer del estado JavaScript de la app (Next.js / Gatsby)
-      //    Aquí viven TODAS las fotos del inmueble, no solo las visibles en pantalla.
-      const cdnPattern = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
-      const stateKeys = ["__NEXT_DATA__", "__GATSBY_INITIAL_DATA__", "__INITIAL_STATE__", "__PRELOADED_STATE__"];
-      for (const key of stateKeys) {
+      // Tags <source> de elementos <picture>
+      document.querySelectorAll("source").forEach(src => {
+        for (const attr of ["srcset", "data-srcset"]) {
+          const ss = src.getAttribute(attr) || "";
+          ss.split(",").forEach(e => {
+            const s = e.trim().split(" ")[0];
+            if (s && s.startsWith("http")) imgs.add(s);
+          });
+        }
+      });
+
+      // Re-extraer del estado JS (puede haber actualizado tras el clic)
+      for (const key of ["__NEXT_DATA__", "__GATSBY_INITIAL_DATA__", "__INITIAL_STATE__", "__PRELOADED_STATE__"]) {
         try {
           const state = window[key];
           if (!state) continue;
-          const str = JSON.stringify(state);
-          const matches = str.match(cdnPattern) || [];
-          for (const m of matches) imgs.add(m);
-        } catch (e) { /* ignorar */ }
+          for (const m of JSON.stringify(state).match(cdnPattern) || []) imgs.add(m);
+        } catch {}
       }
 
-      // 3) Extraer de <script> sin src que contengan JSON con URLs de imágenes
-      document.querySelectorAll("script:not([src])").forEach(script => {
-        const content = script.textContent || "";
-        if (!content.includes("cloudfront.net")) return;
-        try {
-          const matches = content.match(cdnPattern) || [];
-          for (const m of matches) imgs.add(m);
-        } catch (e) { /* ignorar */ }
+      // Scripts inline actualizados
+      document.querySelectorAll("script:not([src])").forEach(s => {
+        const c = s.textContent || "";
+        if (!c.includes("cloudfront.net")) return;
+        for (const m of c.match(cdnPattern) || []) imgs.add(m);
       });
 
       return [...imgs];
     });
 
-    return rawImages;
+    // Combinar: estado JS + DOM abierto + URLs interceptadas en red
+    const allUrls = [...new Set([...stateImages, ...domImages, ...networkImageUrls])];
+    console.log(`    📡 Fuentes: estado=${stateImages.length} dom=${domImages.length} red=${networkImageUrls.size}`);
+    return allUrls;
   } catch (err) {
     console.log(`  ⚠️  Error scraping con browser: ${err.message}`);
     return null;
