@@ -427,6 +427,7 @@ function hasRealImages(images){
 function Card({p,onClick,featured,onSimCredit}){
   const [ii,setII]=useState(0);const [dir,setDir]=useState(1);const imgs=p.images||[];const d=disc(p);
   const realPhotos=hasRealImages(imgs);
+  const showSoonPhotosTag=realPhotos&&imgs.length===2;
   const noPhotosNo360=!realPhotos&&!p.url_360;
   const goPrev=e=>{e.stopPropagation();setDir(-1);setII(i=>i>0?i-1:imgs.length-1);};
   const goNext=e=>{e.stopPropagation();setDir(1);setII(i=>i<imgs.length-1?i+1:0);};
@@ -439,6 +440,7 @@ function Card({p,onClick,featured,onSimCredit}){
         {imgs.length>1&&<><button onClick={goPrev} style={{position:"absolute",left:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,zIndex:2}}>‹</button><button onClick={goNext} style={{position:"absolute",right:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,zIndex:2}}>›</button></>}
         {imgs.length>1&&<div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3,zIndex:2}}>{imgs.map((_,i)=><button key={i} onClick={e=>goDot(e,i)} style={{width:6,height:6,borderRadius:"50%",border:"1.5px solid white",cursor:"pointer",background:i===ii?"white":"rgba(255,255,255,0.3)",padding:0}} />)}</div>}
         {p.tipo&&<div style={{position:"absolute",top:8,left:8,background:"#1B4F72",color:"white",padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:600}}>{tipoLabel(p.tipo)}</div>}
+          {showSoonPhotosTag&&<div style={{position:"absolute",top:8,left:p.tipo?(p.tipo.length*6.5+34):8,background:"#F39C12",color:"white",padding:"2px 8px",borderRadius:12,fontSize:9,fontWeight:800,letterSpacing:"0.2px",zIndex:3}}>Fotos Pronto Disponibles</div>}
           {d>0&&<div style={{position:"absolute",top:8,right:8,background:"#E74C3C",color:"white",padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:800}}>{d}% OFF</div>}
           {p.enSubasta&&<div style={{position:"absolute",bottom:5,right:8,background:"linear-gradient(135deg,#F39C12,#D68910)",color:"white",padding:"2px 9px",borderRadius:12,fontSize:9,fontWeight:800,letterSpacing:"0.3px",zIndex:3}}>🔨 En Subasta</div>}
           {num(p.bonoHabi)>0&&<div style={{position:"absolute",bottom:22,left:8,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"2px 8px",borderRadius:12,fontSize:9,fontWeight:800,display:"flex",alignItems:"center",gap:3}}><Image src={LOGO_HABI_W} alt="" width={24} height={9} style={{objectFit:"contain"}} />Bono {fmtM(p.bonoHabi)}</div>}

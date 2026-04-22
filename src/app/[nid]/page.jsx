@@ -56,6 +56,7 @@ export default async function PropertyPage({ params }) {
 
   const imgs = p.images || [];
   const realPhotos = hasRealImages(imgs);
+  const showSoonPhotosTag = realPhotos && imgs.length === 2;
   const has360 = Boolean(p.url_360);
   const precioOriginal = parseInt(p.precio_original || 0);
   const precioVenta = parseInt(p.precio_venta || 0);
@@ -109,6 +110,11 @@ export default async function PropertyPage({ params }) {
             {p.tipo && (
               <div style={{ position: "absolute", top: 12, right: 12, background: "#1B4F72", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
                 {p.tipo}
+              </div>
+            )}
+            {showSoonPhotosTag && (
+              <div style={{ position: "absolute", top: 12, left: descuento > 0 ? 95 : 12, background: "#F39C12", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 700 }}>
+                Fotos Pronto Disponibles
               </div>
             )}
           </div>

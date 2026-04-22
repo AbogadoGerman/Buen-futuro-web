@@ -6,20 +6,40 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("cookie_consent")) {
-      const timer = setTimeout(() => setVisible(true), 5000);
-      return () => clearTimeout(timer);
-    }
+    const readConsent = () => {
+      try {
+        return localStorage.getItem("cookie_consent");
+      } catch {
+        return null;
+      }
+    };
+
+    if (readConsent()) return;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const timer = setTimeout(() => {
+      if (!readConsent()) setVisible(true);
+    }, isMobile ? 1200 : 5000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   function accept() {
-    localStorage.setItem("cookie_consent", "accepted");
+    try {
+      localStorage.setItem("cookie_consent", "accepted");
+    } catch {
+      // Ignora errores de almacenamiento en navegadores restringidos.
+    }
     setVisible(false);
     window.dispatchEvent(new Event("cookie_consent_granted"));
   }
 
   function decline() {
-    localStorage.setItem("cookie_consent", "declined");
+    try {
+      localStorage.setItem("cookie_consent", "declined");
+    } catch {
+      // Ignora errores de almacenamiento en navegadores restringidos.
+    }
     setVisible(false);
   }
 
@@ -38,15 +58,18 @@ export default function CookieConsent() {
       <div style={{
         position: "fixed", inset: 0, zIndex: 9999,
         display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "20px",
+        padding: "max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left))",
+        overflowY: "auto",
       }}>
         <div style={{
           background: "rgba(27,42,74,0.98)",
           backdropFilter: "blur(12px)",
           borderRadius: 16,
-          padding: "36px 40px",
+          padding: "clamp(18px, 5vw, 36px) clamp(16px, 4vw, 40px)",
           maxWidth: 560,
           width: "100%",
+          maxHeight: "calc(100dvh - 24px)",
+          overflowY: "auto",
           boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
           fontFamily: "'Inter',system-ui,sans-serif",
           display: "flex",
