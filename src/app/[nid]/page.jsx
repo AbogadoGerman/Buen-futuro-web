@@ -86,7 +86,7 @@ export default async function PropertyPage({ params }) {
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             </div>
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%) rotate(-15deg)", background: "#E74C3C", color: "white", padding: "16px 60px", fontSize: "clamp(22px,5vw,36px)", fontWeight: 900, letterSpacing: 6, textTransform: "uppercase", boxShadow: "0 6px 30px rgba(231,76,60,0.5)", textAlign: "center", zIndex: 1 }}>VENDIDO</div>
+            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%) rotate(-12deg)", background: "#E67E22", color: "white", padding: "12px 32px", fontSize: "clamp(14px,3vw,24px)", fontWeight: 900, letterSpacing: 2, textTransform: "uppercase", boxShadow: "0 6px 30px rgba(230,126,34,0.45)", textAlign: "center", zIndex: 1 }}>Apartamentos en Remodelación</div>
           </div>
         )}
 
