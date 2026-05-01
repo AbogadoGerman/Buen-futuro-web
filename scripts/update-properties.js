@@ -20,6 +20,58 @@ const CONFIG = {
   delayBetweenRequestsMs: 800
 };
 
+// --- Guard: evitar ejecuciones desde versiones viejas / múltiples instancias ---
+const { execSync } = require('child_process');
+const os = require('os');
+const LOCK_PATH = path.join(os.tmpdir(), 'update-properties.lock');
+
+function obtainLock() {
+  try {
+    const fd = fs.openSync(LOCK_PATH, 'wx');
+    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+    const head = execSync('git rev-parse HEAD').toString().trim();
+    fs.writeSync(fd, `pid:${process.pid}\nbranch:${branch}\nhead:${head}\n`);
+    fs.closeSync(fd);
+    process.on('exit', () => { try { fs.unlinkSync(LOCK_PATH); } catch {} });
+    process.on('SIGINT', () => process.exit(1));
+    process.on('SIGTERM', () => process.exit(1));
+  } catch (err) {
+    console.error('⚠️  Otra instancia está corriendo o existe un lock en', LOCK_PATH);
+    console.error('Si estás seguro que no hay otra ejecución, elimina el lock y vuelve a intentar:');
+    console.error(`  rm ${LOCK_PATH}`);
+    process.exit(1);
+  }
+}
+
+function verifyGitCleanAndOnMain() {
+  try {
+    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+    const local = execSync('git rev-parse HEAD').toString().trim();
+    let remote = '';
+    try { remote = execSync('git rev-parse origin/main').toString().trim(); } catch {}
+    const status = execSync('git status --porcelain').toString().trim();
+    if (branch !== 'main') {
+      console.error(`⚠️  Abortando: branch actual es '${branch}'. Cambia a 'main' para ejecutar este script.`);
+      process.exit(1);
+    }
+    if (remote && local !== remote) {
+      console.error('⚠️  Abortando: HEAD local difiere de origin/main. Sincroniza el repo (pull/push).');
+      process.exit(1);
+    }
+    if (status) {
+      console.error('⚠️  Abortando: working tree con cambios. Haz commit o stash antes de ejecutar.');
+      process.exit(1);
+    }
+  } catch (err) {
+    console.warn('⚠️  Las comprobaciones de git fallaron (git no disponible o error). Continuando con precaución:', err.message);
+  }
+}
+
+// Ejecutar comprobaciones/lock al inicio
+verifyGitCleanAndOnMain();
+obtainLock();
+
+
 // ——— Browser compartido para scraping con Puppeteer ———
 let _browser = null;
 
@@ -590,23 +642,18 @@ function scrapeCarouselFromDom($, imageBaseUrl) {
 
 async function scrapeImages(url) {
   try {
+    const collectedImages = [];
+
     // ── MÉTODO PRIMARIO: browser headless con clic en botón del carrusel ──
     const browserRaw = await scrapeImagesWithBrowser(url);
     if (browserRaw !== null) {
-      const filtered = browserRaw
-        .map(raw => normalizeImageUrl(raw, url))
-        .filter(img => isValidImageUrl(img));
-
-      const uniqueByKey = new Map();
-      for (const img of filtered) {
-        const key = imageKey(img);
-        if (!uniqueByKey.has(key)) uniqueByKey.set(key, img);
+      for (const raw of browserRaw) {
+        const normalized = normalizeImageUrl(raw, url);
+        if (normalized && isValidImageUrl(normalized)) collectedImages.push(normalized);
       }
-      const sorted = [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
-      if (sorted.length >= CONFIG.minImages) return sorted;
     }
 
-    // ── FALLBACK: scraping estático cuando Puppeteer no está disponible ──
+    // ── FALLBACK: scraping estático cuando Puppeteer no está disponible o no captura todo ──
     const { data } = await axios.get(url, { timeout: 12000, headers: { "User-Agent": CONFIG.userAgent } });
     const $ = cheerio.load(data);
     const imageBaseUrl = detectImageBaseUrl(url, $);
@@ -653,9 +700,7 @@ async function scrapeImages(url) {
       const key = imageKey(imgUrl);
       if (!uniquePrimary.has(key)) uniquePrimary.set(key, imgUrl);
     }
-    const combinedPrimary = [...uniquePrimary.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
-
-    if (combinedPrimary.length >= CONFIG.minImages) return combinedPrimary;
+    collectedImages.push(...uniquePrimary.values());
 
     const candidates = [];
 
@@ -706,8 +751,15 @@ async function scrapeImages(url) {
       const key = imageKey(img);
       if (!uniqueByKey.has(key)) uniqueByKey.set(key, img);
     }
+    collectedImages.push(...uniqueByKey.values());
 
-    return [...uniqueByKey.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
+    const finalUnique = new Map();
+    for (const imgUrl of collectedImages) {
+      const key = imageKey(imgUrl);
+      if (!finalUnique.has(key)) finalUnique.set(key, imgUrl);
+    }
+
+    return [...finalUnique.values()].sort((a, b) => scoreImage(b) - scoreImage(a));
   } catch {
     return [];
   }
