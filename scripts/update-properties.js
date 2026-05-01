@@ -826,10 +826,31 @@ async function main() {
 
     const { data: properties } = parse(csvData, { header: true, skipEmptyLines: true });
     
-    const enriched = [];
+    let enriched = [];
+    const processedNids = new Set();
+    // Si ya existe un inventory previo, cargarlo y omitir propiedades ya procesadas
+    if (fs.existsSync(CONFIG.outputPath)) {
+      try {
+        const existing = JSON.parse(fs.readFileSync(CONFIG.outputPath, 'utf8'));
+        if (Array.isArray(existing)) {
+          enriched = existing.slice();
+          for (const e of existing) {
+            if (e && e.nid) processedNids.add(String(e.nid));
+          }
+          console.log(`ℹ️  Inventario previo cargado (${enriched.length} propiedades). Las ya procesadas se omitirán.`);
+        }
+      } catch (e) {
+        console.warn('⚠️  No se pudo leer el inventory existente — se regenerará desde cero.');
+      }
+    }
     let removedWithoutMedia = 0;
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
+      const nidKey = p.nid ? String(p.nid) : null;
+      if (nidKey && processedNids.has(nidKey)) {
+        console.log(`[${i+1}/${properties.length}] ${nidKey}: ⏭️  ya procesada — omitiendo.`);
+        continue;
+      }
       const habiUrl = p.url_habi || p.url || "";
       console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
 
@@ -859,6 +880,7 @@ async function main() {
         url_360: is360Valid ? p.url_360 : "",
         precio: parseInt(p.precio_venta || 0, 10)
       });
+      if (nidKey) processedNids.add(nidKey);
       await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
     }
 
