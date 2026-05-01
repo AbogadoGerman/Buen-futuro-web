@@ -807,6 +807,12 @@ async function validate360(url) {
   }
 }
 
+const pLimit = require('p-limit');
+
+// Control de concurrencia (por defecto 4, puede ajustarse via env or CONFIG)
+CONFIG.concurrentRequests = Number(process.env.CONCURRENT_REQUESTS || 4);
+CONFIG.dryRun = Boolean(process.env.DRY);
+
 async function main() {
   try {
     const drive = await getGoogleDriveClient();
@@ -844,6 +850,9 @@ async function main() {
       }
     }
     let removedWithoutMedia = 0;
+    // Build a list of jobs for properties that still need processing
+    const limit = pLimit(CONFIG.concurrentRequests);
+    const jobs = [];
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
       const nidKey = p.nid ? String(p.nid) : null;
@@ -851,37 +860,47 @@ async function main() {
         console.log(`[${i+1}/${properties.length}] ${nidKey}: ⏭️  ya procesada — omitiendo.`);
         continue;
       }
-      const habiUrl = p.url_habi || p.url || "";
-      console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
 
-      const [scrapedImages, is360Valid] = await Promise.all([
-        habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
-        p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
-      ]);
+      jobs.push(limit(async () => {
+        if (CONFIG.dryRun) {
+          console.log(`[DRY] [${i+1}/${properties.length}] ${p.nid || i}: prueba de scraping (no guardará).`);
+        } else {
+          console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
+        }
 
-      if (!is360Valid && p.url_360) {
-        console.log(`  ⚠️  360 inválido (404/error) - se eliminará del campo: ${p.url_360}`);
-      }
-      console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"} | url: ${habiUrl}`);
+        const habiUrl = p.url_habi || p.url || "";
+        const [scrapedImages, is360Valid] = await Promise.all([
+          habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
+          p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
+        ]);
 
-      // Si no hay fotos Y el Matterport tampoco funciona, eliminar la propiedad
-      if (scrapedImages.length === 0 && !is360Valid) {
-        removedWithoutMedia++;
-        console.log(`  🗑️  Propiedad eliminada: sin fotos ni Matterport válido (nid: ${p.nid || i})`);
-        await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
-        continue;
-      }
+        if (!is360Valid && p.url_360) {
+          console.log(`  ⚠️  360 inválido (404/error) - se eliminará del campo: ${p.url_360}`);
+        }
+        console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"} | url: ${habiUrl}`);
 
-      const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
+        if (scrapedImages.length === 0 && !is360Valid) {
+          removedWithoutMedia++;
+          console.log(`  🗑️  Propiedad eliminada: sin fotos ni Matterport válido (nid: ${p.nid || i})`);
+          return null;
+        }
 
-      enriched.push({
-        ...p,
-        images,
-        url_360: is360Valid ? p.url_360 : "",
-        precio: parseInt(p.precio_venta || 0, 10)
-      });
+        const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
+        return { p, images, is360Valid };
+      }));
+      // If dry run, limit total jobs to small number for quick test
+      if (CONFIG.dryRun && jobs.length >= 5) break;
+    }
+
+    const results = await Promise.all(jobs);
+    for (const res of results) {
+      if (!res) continue;
+      const { p, images, is360Valid } = res;
+      const nidKey = p.nid ? String(p.nid) : null;
+      enriched.push({ ...p, images, url_360: is360Valid ? p.url_360 : "", precio: parseInt(p.precio_venta || 0, 10) });
       if (nidKey) processedNids.add(nidKey);
-      await new Promise(r => setTimeout(r, CONFIG.delayBetweenRequestsMs));
+      // small sleep to avoid bursty writes when not dry
+      if (!CONFIG.dryRun) await new Promise(r => setTimeout(r, Math.max(0, CONFIG.delayBetweenRequestsMs / CONFIG.concurrentRequests)));
     }
 
     const jsonData = JSON.stringify(enriched, null, 2);
