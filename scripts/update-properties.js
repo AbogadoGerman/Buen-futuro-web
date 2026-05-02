@@ -89,21 +89,20 @@ verifyGitCleanAndOnMain();
 obtainLock();
 
 
-// ——— Browser compartido para scraping con Puppeteer ———
+// ——— Browser compartido para scraping con Playwright ———
 let _browser = null;
 
 async function getBrowser() {
   if (_browser) return _browser;
   try {
-    const puppeteer = require("puppeteer");
-    _browser = await puppeteer.launch({
+    const { chromium } = require("playwright");
+    _browser = await chromium.launch({
       headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
         "--disable-gpu",
-        // Anti-detección: oculta que es un browser automatizado
         "--disable-blink-features=AutomationControlled",
         "--disable-features=IsolateOrigins,site-per-process",
         "--disable-infobars",
@@ -112,14 +111,18 @@ async function getBrowser() {
     });
     return _browser;
   } catch (err) {
-    console.warn("  ⚠️  Puppeteer no disponible, se usará scraping estático:", err.message);
+    console.warn("  ⚠️  Playwright no disponible, se usará scraping estático:", err.message);
     return null;
   }
 }
 
 async function closeBrowser() {
   if (_browser) {
-    try { await _browser.close(); } catch {}
+    try {
+      await _browser.close();
+    } catch (err) {
+      console.warn("  ⚠️  Error al cerrar browser:", err.message);
+    }
     _browser = null;
   }
 }
@@ -128,25 +131,19 @@ async function scrapeImagesWithBrowser(url) {
   const browser = await getBrowser();
   if (!browser) return null;
 
-  let page;
+  let context, page;
   try {
-    page = await browser.newPage();
-
-    // User-agent de Chrome real para evitar la detección de bot (BuenFuturoBot causa 503)
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    );
-    await page.setViewport({ width: 1366, height: 768 });
-    await page.setExtraHTTPHeaders({
-      "Accept-Language": "es-CO,es;q=0.9,en-US;q=0.8,en;q=0.7",
-      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    context = await browser.newContext({
+      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      viewport: { width: 1366, height: 768 },
+      extraHTTPHeaders: {
+        "Accept-Language": "es-CO,es;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+      },
+      bypassCSP: true,
     });
-    await page.setDefaultNavigationTimeout(45000);
 
-    // Eliminar la propiedad navigator.webdriver que delata a Puppeteer
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-    });
+    page = await context.newPage();
 
     // Interceptar respuestas de red: captura URLs de imágenes aunque no estén en el DOM
     const networkImageUrls = new Set();
@@ -160,10 +157,15 @@ async function scrapeImagesWithBrowser(url) {
       }
     });
 
-    const navResponse = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
-    // Si la página devuelve error HTTP (bot detectado), abortar
-    if (navResponse && navResponse.status() >= 400) {
-      console.log(`  ⚠️  HTTP ${navResponse.status()} al cargar ${url}`);
+    // Ocultar que es un navegador automatizado
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+    });
+
+    try {
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+    } catch (err) {
+      console.log(`  ⚠️  Timeout/error al cargar ${url}: ${err.message}`);
       return null;
     }
 
@@ -171,7 +173,6 @@ async function scrapeImagesWithBrowser(url) {
     await new Promise(r => setTimeout(r, 3000));
 
     // ── PASO 1: Extraer imágenes del estado JS antes de abrir el carrusel ──
-    // window.__NEXT_DATA__ / __GATSBY_INITIAL_DATA__ suelen contener TODAS las fotos
     const stateImages = await page.evaluate(() => {
       const cdnPattern = /https?:\/\/d3hzflklh28tts\.cloudfront\.net\/[^\s"'\\<>,]+\.(?:jpe?g|png|webp|avif)/gi;
       const imgs = new Set();
@@ -192,18 +193,20 @@ async function scrapeImagesWithBrowser(url) {
 
     // ── PASO 2: Clic en el botón "Ver todas las imágenes" para abrir el carrusel ──
     const buttonSelectors = [
-      '[data-id="listing-btn-allImages"]',
-      '[data-testid="Carousel-button"]',
       'button[data-id="listing-btn-allImages"]',
+      '[data-testid="Carousel-button"]',
+      '[data-id="listing-btn-allImages"]',
     ];
     let clicked = false;
     for (const sel of buttonSelectors) {
       try {
-        await page.waitForSelector(sel, { timeout: 8000 });
-        await page.click(sel);
-        clicked = true;
-        console.log(`    🖱️  Carrusel abierto con selector: ${sel}`);
-        break;
+        const element = await page.waitForSelector(sel, { timeout: 8000 }).catch(() => null);
+        if (element) {
+          await page.click(sel);
+          clicked = true;
+          console.log(`    🖱️  Carrusel abierto con selector: ${sel}`);
+          break;
+        }
       } catch {}
     }
 
@@ -213,7 +216,6 @@ async function scrapeImagesWithBrowser(url) {
 
       // Scroll por la galería para disparar lazy loading de todas las fotos
       await page.evaluate(async () => {
-        // Buscar el contenedor scrollable de la galería (el modal que abre el botón)
         const galSelectors = [
           '[role="dialog"]',
           '[class*="allImages"]',
@@ -238,7 +240,6 @@ async function scrapeImagesWithBrowser(url) {
           }
         }
 
-        // Si no encontramos un contenedor específico, scrollear el body y la raíz
         const targets = container ? [container, document.documentElement] : [document.documentElement, document.body];
 
         for (const target of targets) {
@@ -322,6 +323,7 @@ async function scrapeImagesWithBrowser(url) {
     return null;
   } finally {
     if (page) { try { await page.close(); } catch {} }
+    if (context) { try { await context.close(); } catch {} }
   }
 }
 
