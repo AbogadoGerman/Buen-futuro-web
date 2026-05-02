@@ -807,7 +807,36 @@ async function validate360(url) {
   }
 }
 
-const pLimit = require('p-limit');
+function createLimiter(concurrency) {
+  const queue = [];
+  let activeCount = 0;
+
+  const next = () => {
+    activeCount--;
+    if (queue.length > 0) {
+      const { fn, resolve, reject } = queue.shift();
+      run(fn).then(resolve, reject);
+    }
+  };
+
+  const run = async (fn) => {
+    activeCount++;
+    try {
+      return await fn();
+    } finally {
+      next();
+    }
+  };
+
+  return (fn) => {
+    if (activeCount < concurrency) {
+      return run(fn);
+    }
+    return new Promise((resolve, reject) => {
+      queue.push({ fn, resolve, reject });
+    });
+  };
+}
 
 // Control de concurrencia (por defecto 4, puede ajustarse via env or CONFIG)
 CONFIG.concurrentRequests = Number(process.env.CONCURRENT_REQUESTS || 4);
@@ -851,7 +880,7 @@ async function main() {
     }
     let removedWithoutMedia = 0;
     // Build a list of jobs for properties that still need processing
-    const limit = pLimit(CONFIG.concurrentRequests);
+    const limit = createLimiter(CONFIG.concurrentRequests);
     const jobs = [];
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
