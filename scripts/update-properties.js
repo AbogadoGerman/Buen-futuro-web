@@ -54,10 +54,12 @@ function verifyGitCleanAndOnMain() {
     const local = execSync('git rev-parse HEAD').toString().trim();
     let remote = '';
     try { remote = execSync('git rev-parse origin/main').toString().trim(); } catch {}
-    const status = execSync('git status --porcelain').toString().trim();
+    const status = execSync('git status --porcelain').toString();
     const blockingChanges = status
       ? status.split('\n').filter((line) => {
-          const rawPath = line.slice(3).trim();
+          const cleanedLine = line.replace(/\r$/, '');
+          if (!cleanedLine.trim()) return false;
+          const rawPath = cleanedLine.slice(3).trim();
           if (!rawPath) return false;
           const cleanPath = rawPath.split(' -> ').pop().trim();
           return !GUARD_IGNORED_FILES.has(cleanPath);
