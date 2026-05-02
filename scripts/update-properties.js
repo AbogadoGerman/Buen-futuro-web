@@ -24,6 +24,11 @@ const CONFIG = {
 const { execSync } = require('child_process');
 const os = require('os');
 const LOCK_PATH = path.join(os.tmpdir(), 'update-properties.lock');
+const GUARD_IGNORED_FILES = new Set([
+  path.posix.join('public', 'data', 'inventory.json'),
+  path.posix.join('src', 'data', 'inventory.json'),
+  path.posix.join('src', 'data', 'properties.js'),
+]);
 
 function obtainLock() {
   try {
@@ -50,6 +55,14 @@ function verifyGitCleanAndOnMain() {
     let remote = '';
     try { remote = execSync('git rev-parse origin/main').toString().trim(); } catch {}
     const status = execSync('git status --porcelain').toString().trim();
+    const blockingChanges = status
+      ? status.split('\n').filter((line) => {
+          const rawPath = line.slice(3).trim();
+          if (!rawPath) return false;
+          const cleanPath = rawPath.split(' -> ').pop().trim();
+          return !GUARD_IGNORED_FILES.has(cleanPath);
+        })
+      : [];
     if (branch !== 'main') {
       console.error(`⚠️  Abortando: branch actual es '${branch}'. Cambia a 'main' para ejecutar este script.`);
       process.exit(1);
@@ -58,8 +71,10 @@ function verifyGitCleanAndOnMain() {
       console.error('⚠️  Abortando: HEAD local difiere de origin/main. Sincroniza el repo (pull/push).');
       process.exit(1);
     }
-    if (status) {
+    if (blockingChanges.length > 0) {
       console.error('⚠️  Abortando: working tree con cambios. Haz commit o stash antes de ejecutar.');
+      console.error('Cambios que bloquean:');
+      for (const line of blockingChanges) console.error(`  ${line}`);
       process.exit(1);
     }
   } catch (err) {
