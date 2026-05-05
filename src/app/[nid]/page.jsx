@@ -56,7 +56,7 @@ export default async function PropertyPage({ params }) {
 
   const imgs = p.images || [];
   const realPhotos = hasRealImages(imgs);
-  const showSoonPhotosTag = realPhotos && imgs.length === 2;
+  const showSoonPhotosTag = realPhotos && imgs.length <= 4;
   const has360 = Boolean(p.url_360);
   const precioOriginal = parseInt(p.precio_original || 0);
   const precioVenta = parseInt(p.precio_venta || 0);

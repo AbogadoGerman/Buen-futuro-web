@@ -95,8 +95,9 @@ const ZONA_LOCALIDADES={
   "Funza":["funza"],
   "Mosquera":["mosquera"],
   "Chía":["chia"],
+  "Madrid":["madrid"],
 };
-const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía"];
+const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía","Madrid"];
 function extractFeatures(desc){const kw=[["balcón","balcon","balkony"],["cocina integral","cocina"],["zona de estudio","estudio"],["depósito","deposito","bodega"],["zona de lavandería","lavanderia"],["vista exterior","vista"],["ascensor","elevador"]];return kw.map(([k,...a])=>{const d=normText(desc);return (d.includes(normText(k))||a.some(x=>d.includes(normText(x))))?k:null}).filter(Boolean)}
 function waMsg(p){return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(p.banos||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
 function notifyAndWhatsApp(p,waUrl,eventName){fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nid:p.nid,titulo:p.titulo||"",ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", "),precio:fmt(p.precio_venta),area:p.area||"N/A",habitaciones:p.habitaciones||"N/A",banos:p.banos||"N/A",bonoHabi:p.bonoHabi?fmt(p.bonoHabi):"",eventName:eventName||"Contact",sourceUrl:typeof window!=="undefined"?window.location.href:"",fbp:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||"":"",fbc:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||"":""})}).catch(()=>{});window.open(waUrl,"_blank")}
@@ -427,7 +428,7 @@ function hasRealImages(images){
 function Card({p,onClick,featured,onSimCredit}){
   const [ii,setII]=useState(0);const [dir,setDir]=useState(1);const imgs=p.images||[];const d=disc(p);
   const realPhotos=hasRealImages(imgs);
-  const showSoonPhotosTag=realPhotos&&imgs.length===2;
+  const showSoonPhotosTag=realPhotos&&imgs.length<=4;
   const noPhotosNo360=!realPhotos&&!p.url_360;
   const goPrev=e=>{e.stopPropagation();setDir(-1);setII(i=>i>0?i-1:imgs.length-1);};
   const goNext=e=>{e.stopPropagation();setDir(1);setII(i=>i<imgs.length-1?i+1:0);};
@@ -470,7 +471,7 @@ function Modal({p,onClose,onSimCredit}){
   const [checking360,setChecking360]=useState(false);
   const imgs=p?.images||[];const d=p?disc(p):0;
   const realPhotos=hasRealImages(imgs);
-  const showSoonPhotosTag=realPhotos&&imgs.length===2;
+  const showSoonPhotosTag=realPhotos&&imgs.length<=4;
   const hasBonus=num(p?.bonoHabi)>0;
   const noPhotosNo360=!realPhotos&&!valid360&&!checking360;
   const [emblaRef,emblaApi]=useEmblaCarousel({
@@ -683,7 +684,7 @@ export default function App(){
     if(af.bonoHabi&&(!p.bonoHabi||p.bonoHabi<=0))return false;
     if(af.duplex&&!/(d[uú]plex)/i.test(p.titulo||""))return false;
     if(af.deposito&&!p.deposito)return false;
-    const hasPhotosSoon=hasRealImages(p.images||[])&&(p.images||[]).length===2;
+    const hasPhotosSoon=hasRealImages(p.images||[])&&(p.images||[]).length<=4;
     if(af.showSoonPhotos===false&&hasPhotosSoon)return false;
     if(af.showSubasta===false&&Boolean(p.enSubasta))return false;
     return true;

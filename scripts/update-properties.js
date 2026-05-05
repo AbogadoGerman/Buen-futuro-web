@@ -972,8 +972,9 @@ async function main() {
       url_360: p.url_360 || "",
       url_habi: p.url_habi || p.url || "",
       images: p.images || [],
+      current_state: p.current_state || "",
       deposito: /dep[oó]sito/i.test(p.descripcion || "") || /dep[oó]sito/i.test(p.titulo || ""),
-      enSubasta: /^separado$/i.test((p.estado_del_inmueble || "").trim()),
+      enSubasta: /^set_aside$/i.test((p.current_state || "").trim()) || /^separado$/i.test((p.estado_del_inmueble || "").trim()),
     }));
     const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
     fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
