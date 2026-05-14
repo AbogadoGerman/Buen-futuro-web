@@ -425,7 +425,7 @@ function hasRealImages(images){
   return images.some(img=>img&&img.startsWith("http")&&!img.includes("unsplash.com")&&!img.endsWith(".svg"));
 }
 
-function Card({p,onClick,featured,onSimCredit}){
+function Card({p,onClick,featured,onSimCredit,onImageClick}){
   const [ii,setII]=useState(0);const [dir,setDir]=useState(1);const imgs=p.images||[];const d=disc(p);
   const realPhotos=hasRealImages(imgs);
   const showSoonPhotosTag=realPhotos&&imgs.length<=4;
@@ -433,10 +433,11 @@ function Card({p,onClick,featured,onSimCredit}){
   const goPrev=e=>{e.stopPropagation();setDir(-1);setII(i=>i>0?i-1:imgs.length-1);};
   const goNext=e=>{e.stopPropagation();setDir(1);setII(i=>i<imgs.length-1?i+1:0);};
   const goDot=(e,i)=>{e.stopPropagation();setDir(i>=ii?1:-1);setII(i);};
+  const handleImgClick=e=>{e.stopPropagation();if(onImageClick&&realPhotos)onImageClick(imgs,ii);};
   return(
     <div className="card-wrap" onClick={()=>onClick(p)} style={{background:"white",borderRadius:14,overflow:"hidden",cursor:"pointer",transition:"transform .2s, box-shadow .2s",boxShadow:"0 2px 12px rgba(27,79,114,0.07)",border:featured?"2px solid #FF6B35":"1px solid rgba(27,79,114,0.06)",minWidth:0}}>
       <div style={{position:"relative",paddingTop:"58%",overflow:"hidden",background:"#E8ECF0"}}>
-        {realPhotos?<div key={ii} className={dir>0?"card-img-slide-right":"card-img-slide-left"}><Image src={imgs[ii]||"https://via.placeholder.com/600x400"} alt={p.titulo} fill sizes="(max-width:768px) 100vw, 280px" style={{objectFit:"cover"}} unoptimized /></div>:p.url_360?<iframe src={p.url_360} title="Vista 360" loading="lazy" style={{position:"absolute",inset:0,width:"100%",height:"100%",border:"none",pointerEvents:"none"}} />:<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#1B2A4A,#2C3E50)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>}
+        {realPhotos?<div key={ii} onClick={handleImgClick} className={dir>0?"card-img-slide-right":"card-img-slide-left"} style={{cursor:"zoom-in"}}><Image src={imgs[ii]||"https://via.placeholder.com/600x400"} alt={p.titulo} fill sizes="(max-width:768px) 100vw, 280px" style={{objectFit:"cover"}} unoptimized /></div>:p.url_360?<iframe src={p.url_360} title="Vista 360" loading="lazy" style={{position:"absolute",inset:0,width:"100%",height:"100%",border:"none",pointerEvents:"none"}} />:<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#1B2A4A,#2C3E50)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>}
         {noPhotosNo360&&<div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%) rotate(-20deg)",background:"#E67E22",color:"white",padding:"8px 28px",fontSize:12,fontWeight:900,letterSpacing:1.2,textTransform:"uppercase",whiteSpace:"nowrap",zIndex:5,boxShadow:"0 4px 20px rgba(230,126,34,0.45)"}}>Apartamentos en Remodelación</div>}
         {imgs.length>1&&<><button onClick={goPrev} style={{position:"absolute",left:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,zIndex:2}}>‹</button><button onClick={goNext} style={{position:"absolute",right:5,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.35)",border:"none",borderRadius:"50%",width:26,height:26,color:"white",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,zIndex:2}}>›</button></>}
         {imgs.length>1&&<div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3,zIndex:2}}>{imgs.map((_,i)=><button key={i} onClick={e=>goDot(e,i)} style={{width:6,height:6,borderRadius:"50%",border:"1.5px solid white",cursor:"pointer",background:i===ii?"white":"rgba(255,255,255,0.3)",padding:0}} />)}</div>}
@@ -458,6 +459,61 @@ function Card({p,onClick,featured,onSimCredit}){
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span></div>
           <div style={{display:"flex",gap:4,alignItems:"center",flexShrink:0}}>{onSimCredit&&<button onClick={e=>{e.stopPropagation();onSimCredit(p);}} style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,border:"none",cursor:"pointer",whiteSpace:"nowrap"}}>💜 Simular</button>}<span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600}}>Ver</span></div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ IMAGE LIGHTBOX ============ */
+function ImageLightbox({imgs,startIndex,onClose}){
+  const [ii,setII]=useState(startIndex||0);
+  const [lbRef,lbApi]=useEmblaCarousel({loop:imgs.length>1,align:"center",dragFree:false});
+  const prev=useCallback(()=>lbApi&&lbApi.scrollPrev(),[lbApi]);
+  const next=useCallback(()=>lbApi&&lbApi.scrollNext(),[lbApi]);
+  const goTo=useCallback(i=>lbApi&&lbApi.scrollTo(i),[lbApi]);
+  useEffect(()=>{
+    if(!lbApi)return;
+    const onSelect=()=>setII(lbApi.selectedScrollSnap());
+    onSelect();
+    lbApi.on("select",onSelect);
+    lbApi.on("reInit",onSelect);
+    return()=>{lbApi.off("select",onSelect);lbApi.off("reInit",onSelect);};
+  },[lbApi]);
+  useEffect(()=>{if(lbApi)lbApi.scrollTo(startIndex||0,true);},[lbApi]);
+  useEffect(()=>{
+    const onKey=e=>{if(e.key==="Escape")onClose();if(e.key==="ArrowLeft")prev();if(e.key==="ArrowRight")next();};
+    window.addEventListener("keydown",onKey);
+    return()=>window.removeEventListener("keydown",onKey);
+  },[onClose,prev,next]);
+  return(
+    <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.95)",zIndex:2000,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",animation:"fadeIn .2s"}}>
+      <button onClick={onClose} style={{position:"absolute",top:16,right:16,background:"rgba(255,255,255,0.15)",border:"none",borderRadius:"50%",width:42,height:42,color:"white",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",zIndex:3,backdropFilter:"blur(4px)"}}>✕</button>
+      <div style={{position:"absolute",top:20,left:"50%",transform:"translateX(-50%)",background:"rgba(0,0,0,0.6)",color:"white",padding:"4px 12px",borderRadius:14,fontSize:13,fontWeight:600,zIndex:3}}>{ii+1}/{imgs.length}</div>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+        <div style={{flex:1,position:"relative",minHeight:0}}>
+          <div className="embla-lb" ref={lbRef} style={{height:"100%"}}>
+            <div className="embla-lb__container">
+              {imgs.map((img,i)=>(
+                <div className="embla-lb__slide" key={img+"-"+i} style={{position:"relative"}}>
+                  <Image src={img} alt="" fill sizes="100vw" style={{objectFit:"contain"}} unoptimized />
+                </div>
+              ))}
+            </div>
+          </div>
+          {imgs.length>1&&<>
+            <button onClick={prev} style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",background:"rgba(255,255,255,0.15)",border:"none",borderRadius:"50%",width:44,height:44,color:"white",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(4px)"}}>‹</button>
+            <button onClick={next} style={{position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"rgba(255,255,255,0.15)",border:"none",borderRadius:"50%",width:44,height:44,color:"white",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(4px)"}}>›</button>
+          </>}
+        </div>
+        {imgs.length>1&&(
+          <div style={{flexShrink:0,padding:"10px 0",display:"flex",justifyContent:"center",gap:6,overflowX:"auto",maxWidth:"100%"}}>
+            {imgs.map((img,i)=>(
+              <button key={i} onClick={()=>goTo(i)} style={{flexShrink:0,padding:0,border:"none",background:"none",cursor:"pointer",opacity:i===ii?1:0.5,transition:"opacity .2s"}}>
+                <Image src={img} alt="" width={56} height={38} style={{objectFit:"cover",borderRadius:4,border:i===ii?"2px solid white":"2px solid transparent",display:"block"}} unoptimized />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -616,6 +672,7 @@ export default function App(){
   const [search,setSearch]=useState("");
   const [page,setPage]=useState("inicio");
   const [sel,setSel]=useState(null);
+  const [lightbox,setLightbox]=useState(null);
   useEffect(()=>{
     if(sel){window.history.pushState(null,'','/'+sel.nid);}
     else{const p=window.location.pathname;if(p&&p!=='/')window.history.replaceState(null,'',catalogURL.current);}
@@ -752,6 +809,11 @@ export default function App(){
         .embla-modal__container{display:flex;height:100%}
         .embla-modal__slide{flex:0 0 100%;min-width:0;position:relative;background:#111}
         .embla-modal__slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.01);transition:transform .35s ease}
+        .embla-lb{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
+        .embla-lb:active{cursor:grabbing}
+        .embla-lb__container{display:flex;height:100%}
+        .embla-lb__slide{flex:0 0 100%;min-width:0;position:relative;background:#000}
+        .embla-lb__slide img{width:100%;height:100%;object-fit:contain}
         /* ---- MOBILE 768 ---- */
         @media(max-width:768px){
           .hero-grid{flex-direction:column!important;gap:14px!important}
@@ -855,7 +917,7 @@ export default function App(){
             <button onClick={()=>setPage("catalogo")} style={{padding:"8px 16px",borderRadius:10,border:"2px solid #1B4F72",background:"transparent",color:"#1B4F72",fontWeight:700,fontSize:12,cursor:"pointer"}}>Ver todo ({inv.length})</button>
           </div>
           <div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>
-            {featured.map((p,i)=><div key={p.nid} style={{animation:"slideUp .5s ease "+(i*.07)+"s both"}}><Card p={p} onClick={setSel} featured onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} /></div>)}
+            {featured.map((p,i)=><div key={p.nid} style={{animation:"slideUp .5s ease "+(i*.07)+"s both"}}><Card p={p} onClick={setSel} featured onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} onImageClick={(imgs,idx)=>setLightbox({imgs,startIndex:idx})} /></div>)}
           </div>
         </section>}
 
@@ -886,7 +948,7 @@ export default function App(){
           </div>
         </div>
         {filtered.length===0?<div style={{textAlign:"center",padding:40}}><div style={{fontSize:48}}>🏠</div><p style={{color:"#7F8C8D",fontSize:14,marginTop:10}}>No se encontraron inmuebles</p><button onClick={clearAll} style={{marginTop:12,padding:"10px 20px",borderRadius:10,border:"none",background:"#1B4F72",color:"white",fontWeight:700,cursor:"pointer"}}>Ver todos</button></div>
-        :<div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>{filtered.map((p,i)=><div key={p.nid||i} style={{animation:"slideUp .35s ease "+(i*.04)+"s both"}}><Card p={p} onClick={setSel} featured={isFeat(p)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} /></div>)}</div>}
+        :<div className="cat-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(280px,100%),1fr))",gap:14}}>{filtered.map((p,i)=><div key={p.nid||i} style={{animation:"slideUp .35s ease "+(i*.04)+"s both"}}><Card p={p} onClick={setSel} featured={isFeat(p)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} onImageClick={(imgs,idx)=>setLightbox({imgs,startIndex:idx})} /></div>)}</div>}
       </section>}
 
       <a className="wf" href={"https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, estoy interesado en los inmuebles de Buen Futuro")} target="_blank" rel="noopener noreferrer"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
@@ -894,6 +956,7 @@ export default function App(){
       <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,false,null,true):""} />
       {cOpen&&<CreditSim key={simProperty?.nid||"generic"} property={simProperty} onClose={()=>{setCOpen(false);setSimProperty(null);}} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,true,simProperty?.nid||null):""} />}
       {sel&&<Modal p={sel} onClose={()=>setSel(null)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} />}
+      {lightbox&&<ImageLightbox imgs={lightbox.imgs} startIndex={lightbox.startIndex} onClose={()=>setLightbox(null)} />}
     </div>
   );
 }
