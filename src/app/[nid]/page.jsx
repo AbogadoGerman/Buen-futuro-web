@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import PropertyCTAButtons from "@/components/PropertyCTAButtons";
+import ImageGallery from "./ImageGallery";
 
 const WA = "573108074915";
 
@@ -92,41 +93,13 @@ export default async function PropertyPage({ params }) {
 
         {/* Images */}
         {realPhotos && (
-          <div style={{ borderRadius: 16, overflow: "hidden", marginBottom: 20, position: "relative", paddingTop: "56%", background: "#E8ECF0" }}>
-            <Image
-              src={imgs[0]}
-              alt={p.titulo}
-              fill
-              sizes="(max-width:768px) 100vw, 780px"
-              priority
-              style={{ objectFit: "cover" }}
-              unoptimized
-            />
-            {descuento > 0 && (
-              <div style={{ position: "absolute", top: 12, left: 12, background: "#E74C3C", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 13, fontWeight: 800 }}>
-                -{descuento}%
-              </div>
-            )}
-            {p.tipo && (
-              <div style={{ position: "absolute", top: 12, right: 12, background: "#1B4F72", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
-                {p.tipo}
-              </div>
-            )}
-            {showSoonPhotosTag && (
-              <div style={{ position: "absolute", top: 12, left: descuento > 0 ? 95 : 12, background: "#F39C12", color: "white", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 700 }}>
-                Fotos Pronto Disponibles
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Thumbnail strip */}
-        {realPhotos && imgs.length > 1 && (
-          <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 4 }}>
-            {imgs.slice(1).map((img, i) => (
-              <Image key={i} src={img} alt="" width={80} height={60} style={{ objectFit: "cover", borderRadius: 8, flexShrink: 0 }} unoptimized />
-            ))}
-          </div>
+          <ImageGallery
+            imgs={imgs}
+            titulo={p.titulo}
+            descuento={descuento}
+            tipo={p.tipo}
+            showSoonPhotosTag={showSoonPhotosTag}
+          />
         )}
 
         {/* Title & Price */}
