@@ -46,3 +46,17 @@ body {
   inset: 0;
   animation: slideInLeft 0.3s ease;
 }
+
+/* Embla carousel for [nid] property page gallery */
+.prop-embla{overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab;height:100%}
+.prop-embla:active{cursor:grabbing}
+.prop-embla__container{display:flex;height:100%}
+.prop-embla__slide{flex:0 0 100%;min-width:0;position:relative;background:#111}
+
+/* Embla lightbox shared styles (also available for [nid] pages) */
+.embla-lb-global{height:100%;overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab}
+.embla-lb-global:active{cursor:grabbing}
+.embla-lb-global__container{display:flex;height:100%}
+.embla-lb-global__slide{flex:0 0 100%;min-width:0;position:relative;background:#000}
+
+@keyframes fadeInGlobal{from{opacity:0}to{opacity:1}}

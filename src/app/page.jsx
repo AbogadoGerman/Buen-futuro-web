@@ -520,7 +520,7 @@ function ImageLightbox({imgs,startIndex,onClose}){
 }
 
 /* ============ MODAL with 360 + Carousel tabs ============ */
-function Modal({p,onClose,onSimCredit}){
+function Modal({p,onClose,onSimCredit,onImageClick}){
   const [ii,setII]=useState(0);
   const [tab,setTab]=useState("fotos");
   const [valid360,setValid360]=useState(false);
@@ -610,7 +610,7 @@ function Modal({p,onClose,onSimCredit}){
         {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111",overflow:"hidden"}}>
           <div className="embla-modal" ref={emblaRef}>
             <div className="embla-modal__container">
-              {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative"}}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover"}} unoptimized /></div>)}
+              {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative",cursor:"zoom-in"}} onClick={()=>onImageClick&&onImageClick(imgs,ii)}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover",pointerEvents:"none"}} unoptimized /></div>)}
             </div>
           </div>
           {imgs.length>1&&<><button onClick={prev} style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button><button onClick={next} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button></>}
@@ -955,7 +955,7 @@ export default function App(){
 
       <FilterPanel open={fOpen} onClose={()=>setFOpen(false)} filters={filters} setFilters={setFilters} onApply={applyF} inv={inv} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,false,null,true):""} />
       {cOpen&&<CreditSim key={simProperty?.nid||"generic"} property={simProperty} onClose={()=>{setCOpen(false);setSimProperty(null);}} shareUrl={typeof window!=="undefined"?window.location.origin+buildCatalogURL(applied,search,sort,true,simProperty?.nid||null):""} />}
-      {sel&&<Modal p={sel} onClose={()=>setSel(null)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} />}
+      {sel&&<Modal p={sel} onClose={()=>setSel(null)} onSimCredit={prop=>{setSimProperty(prop);setCOpen(true);}} onImageClick={(imgs,idx)=>setLightbox({imgs,startIndex:idx})} />}
       {lightbox&&<ImageLightbox imgs={lightbox.imgs} startIndex={lightbox.startIndex} onClose={()=>setLightbox(null)} />}
     </div>
   );
