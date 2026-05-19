@@ -196,18 +196,78 @@ async function scrapeImagesWithBrowser(url) {
       'button[data-id="listing-btn-allImages"]',
       '[data-testid="Carousel-button"]',
       '[data-id="listing-btn-allImages"]',
+      'button:has-text("Ver todas las imágenes")',
+      'button:has-text("Ver todas las imagenes")',
+      'button:has-text("Todas las imágenes")',
+      'button:has-text("Todas las imagenes")',
+      'button:has-text("Más fotos")',
+      'button:has-text("Mas fotos")',
+      'button:has-text("Ver fotos")',
+      'button[aria-label*="imagen" i]',
+      'button[title*="imagen" i]',
     ];
-    let clicked = false;
-    for (const sel of buttonSelectors) {
+    const galleryKeywords = [
+      'ver todas las imagenes',
+      'todas las imagenes',
+      'mas fotos',
+      'ver fotos',
+      'galeria',
+      'gallery',
+    ];
+    const tryClickInContext = async (context, selector) => {
       try {
-        const element = await page.waitForSelector(sel, { timeout: 8000 }).catch(() => null);
-        if (element) {
-          await page.click(sel);
+        const element = await context.waitForSelector(selector, { timeout: 4000, state: 'visible' }).catch(() => null);
+        if (!element) return false;
+        await element.click({ timeout: 3000 });
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    const tryTextFallback = async (context) => {
+      try {
+        return await context.evaluate((keywords) => {
+          const normalize = (value) => (value || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const candidate = buttons.find((button) => {
+            const text = normalize([
+              button.textContent,
+              button.getAttribute('aria-label'),
+              button.getAttribute('title'),
+            ].filter(Boolean).join(' '));
+            return keywords.some((keyword) => text.includes(keyword));
+          });
+
+          if (!candidate) return false;
+          candidate.click();
+          return true;
+        }, galleryKeywords);
+      } catch {
+        return false;
+      }
+    };
+
+    let clicked = false;
+    const contexts = [page, ...page.frames().filter((frame) => frame.url())];
+    for (const context of contexts) {
+      for (const sel of buttonSelectors) {
+        if (await tryClickInContext(context, sel)) {
           clicked = true;
-          console.log(`    🖱️  Carrusel abierto con selector: ${sel}`);
+          console.log(`    🖱️  Carrusel abierto con selector: ${sel}${context === page ? '' : ' (frame)'}`);
           break;
         }
-      } catch {}
+      }
+      if (clicked) break;
+
+      if (await tryTextFallback(context)) {
+        clicked = true;
+        console.log(`    🖱️  Carrusel abierto con fallback de texto${context === page ? '' : ' (frame)'}`);
+        break;
+      }
     }
 
     if (clicked) {
@@ -869,7 +929,7 @@ async function main() {
 
     const res = await drive.files.get({ fileId: file.id, alt: "media" }, { responseType: "arraybuffer" });
     const buffer = Buffer.from(res.data);
-    
+
     let csvData;
     if (file.name.endsWith(".xlsx")) {
       const workbook = XLSX.read(buffer, { type: "buffer" });
@@ -879,7 +939,7 @@ async function main() {
     }
 
     const { data: properties } = parse(csvData, { header: true, skipEmptyLines: true });
-    
+
     const enriched = [];
     let removedWithoutMedia = 0;
     const limit = createLimiter(CONFIG.concurrentRequests);
