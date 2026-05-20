@@ -710,7 +710,32 @@ export default function App(){
   const reviewPrev=useCallback(()=>reviewApi&&reviewApi.scrollPrev(),[reviewApi]);
   const reviewNext=useCallback(()=>reviewApi&&reviewApi.scrollNext(),[reviewApi]);
 
-  useEffect(()=>{fetch("/data/inventory.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.length)setInv(d.map(p=>adjustPropertyPrices({...p,tipo:p.tipo||p.tipo_de_propiedad||"",precio_original:p.precio_original||p.precio_anterior||"0",habitaciones:p.habitaciones||p.num_habitaciones||"",baños:p["baños"]||p.banos||"",garaje:p.garaje||p.garajes||"",piso:p.piso||p.num_piso||"",admin:p.admin||p.costo_administracion||0,bonoHabi:p.bonoHabi||p.bonus_value||0,ascensor:p.ascensor!=null?p.ascensor:p.tiene_ascensor==="1",deposito:p.deposito||/dep[oó]sito/i.test(p.descripcion||"")||/dep[oó]sito/i.test(p.titulo||""),url_habi:p.url_habi||p.url||""}))))}).catch(()=>{});},[]);
+  useEffect(()=>{
+    fetch("/data/inventory.json",{cache:"no-store"})
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{
+        if(d && d.length){
+          setInv(d.map(p=>{
+            const norm = {
+              ...p,
+              tipo: p.tipo||p.tipo_de_propiedad||"",
+              precio_original: p.precio_original||p.precio_anterior||"0",
+              habitaciones: p.habitaciones||p.num_habitaciones||"",
+              "baños": p["baños"]||p.banos||"",
+              garaje: p.garaje||p.garajes||"",
+              piso: p.piso||p.num_piso||"",
+              admin: p.admin||p.costo_administracion||0,
+              bonoHabi: p.bonoHabi||p.bonus_value||0,
+              ascensor: p.ascensor!=null?p.ascensor:p.tiene_ascensor==="1",
+              deposito: p.deposito||/dep[oó]sito/i.test(p.descripcion||"")||/dep[oó]sito/i.test(p.titulo||""),
+              url_habi: p.url_habi||p.url||""
+            };
+            return adjustPropertyPrices(norm);
+          }));
+        }
+      })
+      .catch(()=>{});
+  },[]);
   useEffect(()=>{
     if(!reviewApi)return;
     const t=setInterval(()=>reviewApi.scrollNext(),5000);
