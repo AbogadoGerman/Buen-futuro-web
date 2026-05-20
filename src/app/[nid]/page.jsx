@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import PropertyCTAButtons from "@/components/PropertyCTAButtons";
+import { adjustPropertyPrices } from "@/lib/pricing";
 import ImageGalleryWithLightbox from "@/components/ImageGalleryWithLightbox";
 
 const WA = "573108074915";
@@ -24,8 +25,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { nid } = await params;
-  const p = INV.find((x) => x.nid === nid);
-  if (!p) return { title: "Inmueble no encontrado" };
+  const pRaw = INV.find((x) => x.nid === nid);
+  if (!pRaw) return { title: "Inmueble no encontrado" };
+  const p = adjustPropertyPrices(pRaw);
   return {
     title: p.titulo + " | Inmobiliaria Buen Futuro",
     description: p.descripcion
@@ -52,8 +54,9 @@ function hasRealImages(images) {
 
 export default async function PropertyPage({ params }) {
   const { nid } = await params;
-  const p = INV.find((x) => x.nid === nid);
-  if (!p) notFound();
+  const pRaw = INV.find((x) => x.nid === nid);
+  if (!pRaw) notFound();
+  const p = adjustPropertyPrices(pRaw);
 
   const imgs = p.images || [];
   const realPhotos = hasRealImages(imgs);
@@ -138,8 +141,21 @@ export default async function PropertyPage({ params }) {
             )}
           </div>
 
+          <div style={{ fontSize: 12, color: "#7F8C8D", marginTop: 6 }}>Incluye DdC</div>
+
+          <div style={{ marginTop: 8, display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCredit</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicredit)}</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCapital</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicapital)}</div>
+            </div>
+          </div>
+
           {p.admin > 0 && (
-            <div style={{ fontSize: 12, color: "#7F8C8D", marginTop: 4 }}>Administración: {fmt(p.admin)}/mes</div>
+            <div style={{ fontSize: 12, color: "#7F8C8D", marginTop: 8 }}>Administración: {fmt(p.admin)}/mes</div>
           )}
 
           {p.bonoHabi > 0 && (
