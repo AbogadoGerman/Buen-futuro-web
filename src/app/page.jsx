@@ -649,6 +649,19 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
               {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through"}}>{fmtM(p.precio_original)}</div>}
               <div style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</div>
               <div style={{fontSize:10,color:"#7F8C8D",marginTop:4}}>Incluye DdC</div>
+              <div style={{marginTop:10,padding:"6px 10px",borderRadius:10,background:"linear-gradient(135deg,rgba(123,47,247,0.12),rgba(91,31,166,0.08))",border:"1px solid rgba(123,47,247,0.18)",textAlign:"left"}}>
+                <div style={{fontSize:10,fontWeight:900,letterSpacing:1,color:"#7B2FF7",marginBottom:6}}>PRECIOS ESPECIALES.</div>
+                <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  <div>
+                    <div style={{fontSize:10,color:"#5D6D7E"}}>Precio con HabiCredit</div>
+                    <div style={{fontSize:13,fontWeight:800,color:"#1B4F72"}}>{fmt(p.precio_habicredit)}</div>
+                  </div>
+                  <div>
+                    <div style={{fontSize:10,color:"#5D6D7E"}}>Precio con HabiCapital</div>
+                    <div style={{fontSize:13,fontWeight:800,color:"#1B4F72"}}>{fmt(p.precio_habicapital)}</div>
+                  </div>
+                </div>
+              </div>
               {num(p.admin)>0&&<div style={{fontSize:10,color:"#7F8C8D"}}>Admin: {fmt(p.admin)}/mes</div>}
             </div>
           </div>

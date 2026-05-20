@@ -143,14 +143,17 @@ export default async function PropertyPage({ params }) {
 
           <div style={{ fontSize: 12, color: "#7F8C8D", marginTop: 6 }}>Incluye DdC</div>
 
-          <div style={{ marginTop: 8, display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCredit</div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicredit)}</div>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCapital</div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicapital)}</div>
+          <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 12, background: "linear-gradient(135deg,rgba(123,47,247,0.10),rgba(91,31,166,0.06))", border: "1px solid rgba(123,47,247,0.16)" }}>
+            <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 1, color: "#7B2FF7", marginBottom: 8 }}>PRECIOS ESPECIALES.</div>
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCredit</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicredit)}</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 12, color: "#5D6D7E" }}>Precio con HabiCapital</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: "#1B4F72" }}>{fmt(p.precio_habicapital)}</div>
+              </div>
             </div>
           </div>
 
