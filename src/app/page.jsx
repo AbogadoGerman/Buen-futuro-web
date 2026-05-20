@@ -642,35 +642,34 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
           <div style={{background:"#E67E22",color:"white",padding:"12px 32px",fontSize:"clamp(14px,3vw,24px)",fontWeight:900,letterSpacing:2,textTransform:"uppercase",transform:"rotate(-12deg)",boxShadow:"0 6px 30px rgba(230,126,34,0.45)",textAlign:"center",zIndex:1}}>Apartamentos en Remodelación</div>
         </div>}
 
-        {/* Photo carousel tab */}
-        {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"clamp(200px,40vw,320px)",background:"#111",overflow:"hidden"}}>
-          <div className="embla-modal" ref={emblaRef}>
-            <div className="embla-modal__container">
-              {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative",cursor:"zoom-in"}} onClick={()=>onImageClick&&onImageClick(imgs,ii)}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover",pointerEvents:"none"}} unoptimized /></div>)}
-            </div>
-          </div>
-          {imgs.length>1&&<><button onClick={prev} style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button><button onClick={next} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button></>}
-          <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{imgs.map((_,i)=><button key={i} onClick={()=>goTo(i)} style={{width:10,height:10,borderRadius:"50%",border:"2px solid white",cursor:"pointer",background:i===ii?"white":"transparent",padding:0}} />)}</div>
-          {/* Thumbnails strip */}
-          {imgs.length>1&&<div className="modal-thumbs" style={{position:"absolute",bottom:30,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>{imgs.map((img,i)=><Image key={i} src={img} alt="" width={44} height={30} onClick={()=>goTo(i)} style={{objectFit:"cover",borderRadius:4,border:i===ii?"2px solid white":"2px solid transparent",cursor:"pointer",opacity:i===ii?1:0.6}} unoptimized />)}</div>}
-          {d>0&&<div style={{position:"absolute",top:12,left:12,background:"#E74C3C",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800}}>{d}% DESC.</div>}
-          {hasBonus&&<div style={{position:"absolute",top:d>0?54:12,left:12,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800,display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI_W} alt="" width={32} height={12} style={{objectFit:"contain"}} />Bono: {fmt(p.bonoHabi)}</div>}
-          {showSoonPhotosTag&&<div style={{position:"absolute",top:hasBonus?(d>0?96:54):(d>0?54:12),left:12,background:"#F39C12",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,zIndex:2}}>Fotos Pronto Disponibles</div>}
-          {p.enSubasta&&<div style={{position:"absolute",top:48,right:12,background:"linear-gradient(135deg,#F39C12,#D68910)",color:"white",padding:"5px 11px",borderRadius:20,fontSize:12,fontWeight:800,letterSpacing:"0.2px",zIndex:2}}>🔨 En Subasta</div>}
-          <div style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,0.6)",color:"white",padding:"4px 10px",borderRadius:14,fontSize:12,fontWeight:600}}>{ii+1}/{imgs.length}</div>
-        </div>}
+        <div className="modal-content-grid">
+          <div className="modal-media">
+            {tab==="fotos"&&realPhotos&&<div style={{position:"relative",height:"100%",background:"#111",overflow:"hidden"}}>
+              <div className="embla-modal" ref={emblaRef}>
+                <div className="embla-modal__container">
+                  {imgs.map((img,i)=><div className="embla-modal__slide" key={img+"-"+i} style={{position:"relative",cursor:"zoom-in"}} onClick={()=>onImageClick&&onImageClick(imgs,ii)}><Image src={img} alt="" fill sizes="100vw" style={{objectFit:"cover",pointerEvents:"none"}} unoptimized /></div>)}
+                </div>
+              </div>
+              {imgs.length>1&&<><button onClick={prev} style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button><button onClick={next} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"rgba(0,0,0,0.5)",border:"none",borderRadius:"50%",width:36,height:36,color:"white",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button></>}
+              <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{imgs.map((_,i)=><button key={i} onClick={()=>goTo(i)} style={{width:10,height:10,borderRadius:"50%",border:"2px solid white",cursor:"pointer",background:i===ii?"white":"transparent",padding:0}} />)}</div>
+              {imgs.length>1&&<div className="modal-thumbs" style={{position:"absolute",bottom:30,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>{imgs.map((img,i)=><Image key={i} src={img} alt="" width={44} height={30} onClick={()=>goTo(i)} style={{objectFit:"cover",borderRadius:4,border:i===ii?"2px solid white":"2px solid transparent",cursor:"pointer",opacity:i===ii?1:0.6}} unoptimized />)}</div>}
+              {d>0&&<div style={{position:"absolute",top:12,left:12,background:"#E74C3C",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800}}>{d}% DESC.</div>}
+              {hasBonus&&<div style={{position:"absolute",top:d>0?54:12,left:12,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:13,fontWeight:800,display:"flex",alignItems:"center",gap:6}}><Image src={LOGO_HABI_W} alt="" width={32} height={12} style={{objectFit:"contain"}} />Bono: {fmt(p.bonoHabi)}</div>}
+              {showSoonPhotosTag&&<div style={{position:"absolute",top:hasBonus?(d>0?96:54):(d>0?54:12),left:12,background:"#F39C12",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,zIndex:2}}>Fotos Pronto Disponibles</div>}
+              {p.enSubasta&&<div style={{position:"absolute",top:48,right:12,background:"linear-gradient(135deg,#F39C12,#D68910)",color:"white",padding:"5px 11px",borderRadius:20,fontSize:12,fontWeight:800,letterSpacing:"0.2px",zIndex:2}}>🔨 En Subasta</div>}
+              <div style={{position:"absolute",top:12,right:12,background:"rgba(0,0,0,0.6)",color:"white",padding:"4px 10px",borderRadius:14,fontSize:12,fontWeight:600}}>{ii+1}/{imgs.length}</div>
+            </div>}
 
-        {/* 360 view tab */}
-        {tab==="360"&&<div style={{position:"relative",height:"clamp(280px,50vw,450px)",background:"#111"}}>
-          <iframe src={p.url_360} title="Vista 360" loading="lazy" style={{width:"100%",height:"100%",border:"none"}} allowFullScreen allow="xr-spatial-tracking" />
-          <div style={{position:"absolute",top:10,left:10,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,display:"flex",alignItems:"center",gap:5}}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
-            Recorrido Virtual Matterport
+            {tab==="360"&&<div style={{position:"relative",height:"100%",background:"#111"}}>
+              <iframe src={p.url_360} title="Vista 360" loading="lazy" style={{width:"100%",height:"100%",border:"none"}} allowFullScreen allow="xr-spatial-tracking" />
+              <div style={{position:"absolute",top:10,left:10,background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:800,display:"flex",alignItems:"center",gap:5}}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><ellipse cx="12" cy="12" rx="4" ry="10"/></svg>
+                Recorrido Virtual Matterport
+              </div>
+            </div>}
           </div>
-        </div>}
 
-        {/* Property details */}
-        <div style={{padding:"clamp(14px,3vw,20px) clamp(14px,3vw,22px)"}}>
+          <div className="modal-details">
           <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
             <div style={{flex:1,minWidth:0}}>
               <h2 style={{margin:0,fontSize:"clamp(15px,3.5vw,22px)",color:"#1B2A4A",fontFamily:"'Playfair Display',serif",lineHeight:1.2,wordWrap:"break-word"}}>{p.titulo}</h2>
@@ -919,6 +918,17 @@ export default function App(){
           .hero-imgs{flex-direction:column!important}
           .hero-imgs img{height:90px!important;border-radius:8px!important}
           .house-deco{display:none!important}
+        }
+        /* Modal layout improvements: two-column grid on wide screens to reduce wasted vertical space */
+        .modal-inner{max-width:880px}
+        .modal-content-grid{display:block}
+        .modal-media{width:100%}
+        .modal-details{width:100%}
+        @media(min-width:900px){
+          .modal-content-grid{display:grid;grid-template-columns:60% 40%;gap:16px;align-items:start}
+          .modal-media{height:calc(80vh);overflow:hidden}
+          .modal-media .embla-modal, .modal-media iframe{height:100%}
+          .modal-details{max-height:80vh;overflow:auto;padding:12px}
         }
         @media(min-width:769px){.mob-btn{display:none!important}.mob-menu{display:none!important}.search-wrap-mob{display:none!important}}
       `}</style>
