@@ -428,6 +428,9 @@ function hasRealImages(images){
 
 function Card({p,onClick,featured,onSimCredit,onImageClick}){
   const [ii,setII]=useState(0);const [dir,setDir]=useState(1);const imgs=p.images||[];const d=disc(p);
+  const [shareOpen,setShareOpen]=useState(false);
+  const [copied,setCopied]=useState(false);
+  const shareRef=useRef(null);
   const realPhotos=hasRealImages(imgs);
   const showSoonPhotosTag=realPhotos&&imgs.length<=4;
   const noPhotosNo360=!realPhotos&&!p.url_360;
@@ -435,6 +438,22 @@ function Card({p,onClick,featured,onSimCredit,onImageClick}){
   const goNext=e=>{e.stopPropagation();setDir(1);setII(i=>i<imgs.length-1?i+1:0);};
   const goDot=(e,i)=>{e.stopPropagation();setDir(i>=ii?1:-1);setII(i);};
   const handleImgClick=e=>{e.stopPropagation();if(onImageClick&&realPhotos)onImageClick(imgs,ii);};
+  useEffect(()=>{
+    function onDocClick(e){if(shareRef.current && !shareRef.current.contains(e.target)){setShareOpen(false);}}
+    document.addEventListener("click",onDocClick);
+    return()=>document.removeEventListener("click",onDocClick);
+  },[]);
+
+  async function handleShareClick(e){e.stopPropagation();try{const shareData={title:p.titulo||"Inmueble",text:`${p.titulo||"Inmueble"} - ${[p.barrio,p.ciudad].filter(Boolean).join(", ")}`,url:typeof window!="undefined"?window.location.origin+"/"+p.nid:window.location.href};if(navigator.share){await navigator.share(shareData);fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:typeof window!=='undefined'?window.location.href:'',fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});return;} }catch(err){}
+    setShareOpen(v=>!v);
+  }
+
+  function openShareUrl(url,e){e&&e.stopPropagation();fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:typeof window!=='undefined'?window.location.href:'',fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});
+    window.open(url,'_blank');setShareOpen(false);
+  }
+
+  async function copyLink(e){e&&e.stopPropagation();try{const url=typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href;await navigator.clipboard.writeText(url);setCopied(true);setTimeout(()=>setCopied(false),2000);fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:url,fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});}catch(e){}
+  }
   return(
     <div className="card-wrap" onClick={()=>onClick(p)} style={{background:"white",borderRadius:14,overflow:"hidden",cursor:"pointer",transition:"transform .2s, box-shadow .2s",boxShadow:"0 2px 12px rgba(27,79,114,0.07)",border:featured?"2px solid #FF6B35":"1px solid rgba(27,79,114,0.06)",minWidth:0}}>
       <div style={{position:"relative",paddingTop:"58%",overflow:"hidden",background:"#E8ECF0"}}>
@@ -460,7 +479,21 @@ function Card({p,onClick,featured,onSimCredit,onImageClick}){
           <div style={{minWidth:0,overflow:"hidden"}}>{d>0&&<span style={{fontSize:10,color:"#AEB6BF",textDecoration:"line-through",marginRight:3}}>{fmtM(p.precio_original)}</span>}<span style={{fontSize:"clamp(12px,3vw,15px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</span>
             <div style={{fontSize:10,color:"#7F8C8D",marginTop:3}}>Incluye DdC</div>
           </div>
-          <div style={{display:"flex",gap:4,alignItems:"center",flexShrink:0}}>{onSimCredit&&<button onClick={e=>{e.stopPropagation();onSimCredit(p);}} style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,border:"none",cursor:"pointer",whiteSpace:"nowrap"}}>💜 Simular</button>}<span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600}}>Ver</span></div>
+          <div style={{display:"flex",gap:8,alignItems:"center",flexShrink:0,position:"relative"}} ref={shareRef}>
+            {onSimCredit&&<button onClick={e=>{e.stopPropagation();onSimCredit(p);}} style={{background:"linear-gradient(135deg,#7B2FF7,#5B1FA6)",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600,border:"none",cursor:"pointer",whiteSpace:"nowrap"}}>💜 Simular</button>}
+            <span style={{background:"#1B4F72",color:"white",padding:"3px 8px",borderRadius:6,fontSize:9,fontWeight:600}}>Ver</span>
+            <button onClick={handleShareClick} onMouseDown={e=>e.stopPropagation()} style={{background:"#F5F7FA",border:"2px solid #E6EDF3",padding:"6px 8px",borderRadius:8,cursor:"pointer",fontWeight:700,fontSize:12,color:"#1B2A4A"}}>🔗</button>
+            {shareOpen&&(
+              <div onClick={e=>e.stopPropagation()} style={{position:"absolute",right:0,top:"-110%",background:"white",border:"1px solid #E6EDF3",borderRadius:10,boxShadow:"0 8px 24px rgba(17,24,39,0.08)",padding:8,display:"flex",flexDirection:"column",gap:6,minWidth:180,zIndex:60}}>
+                <button onClick={e=>openShareUrl(`https://wa.me/?text=${encodeURIComponent(p.titulo+" "+(typeof window!=='undefined'?window.location.origin+"/"+p.nid:""))}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>WhatsApp</button>
+                <button onClick={e=>openShareUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Facebook</button>
+                <button onClick={e=>openShareUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(p.titulo||'')}&url=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Twitter</button>
+                <button onClick={e=>openShareUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>LinkedIn</button>
+                <button onClick={e=>openShareUrl(`mailto:?subject=${encodeURIComponent(p.titulo||'Inmueble')}&body=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Email</button>
+                <button onClick={copyLink} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>{copied? 'Enlace copiado' : 'Copiar enlace'}</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

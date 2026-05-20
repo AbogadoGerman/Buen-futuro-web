@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { trackViewContent, trackContact, trackSchedule } from "./PixelScripts";
 
 const WA = "573108074915";
@@ -58,6 +58,56 @@ export default function PropertyCTAButtons({ property }) {
     window.open(`https://wa.me/${WA}?text=${waScheduleMsg}`, "_blank");
   }
 
+  // Compartir
+  const [shareOpen, setShareOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const shareRef = useRef(null);
+
+  useEffect(() => {
+    function onDocClick(e) {
+      if (shareRef.current && !shareRef.current.contains(e.target)) {
+        setShareOpen(false);
+      }
+    }
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, []);
+
+  async function handleShareClick() {
+    try {
+      const shareData = {
+        title: p.titulo || "Inmueble",
+        text: `${p.titulo || "Inmueble"} - ${[p.barrio, p.ciudad].filter(Boolean).join(", ")}`,
+        url: window.location.href,
+      };
+      if (navigator.share) {
+        await navigator.share(shareData);
+        sendServerEvent(p, "Share");
+        return;
+      }
+    } catch (e) {
+      // ignore and fallback
+    }
+    setShareOpen((v) => !v);
+  }
+
+  function openShareUrl(url) {
+    sendServerEvent(p, "Share");
+    window.open(url, "_blank");
+    setShareOpen(false);
+  }
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      sendServerEvent(p, "Share");
+    } catch (e) {
+      // ignore
+    }
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <button
@@ -83,6 +133,35 @@ export default function PropertyCTAButtons({ property }) {
       >
         {"\u{1F4C5}"} Agendar visita
       </button>
+      <div style={{ position: "relative" }} ref={shareRef}>
+        <button
+          onClick={handleShareClick}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            background: "#f5f7fa", color: "#1B2A4A", borderRadius: 14,
+            padding: "12px 16px", fontWeight: 700, fontSize: 15,
+            textDecoration: "none", border: "2px solid #e0e6eb", cursor: "pointer"
+          }}
+        >
+          {"\u{1F4E4}"} Compartir
+        </button>
+
+        {shareOpen && (
+          <div style={{
+            position: "absolute", right: 0, top: "calc(100% + 8px)",
+            background: "white", border: "1px solid #e6edf3", borderRadius: 10,
+            boxShadow: "0 8px 24px rgba(17,24,39,0.08)", padding: 10, zIndex: 40,
+            display: "flex", flexDirection: "column", gap: 8, minWidth: 220
+          }}>
+            <button onClick={() => openShareUrl(`https://wa.me/?text=${encodeURIComponent(p.titulo + ' ' + window.location.href)}`)} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>WhatsApp</button>
+            <button onClick={() => openShareUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`)} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>Facebook</button>
+            <button onClick={() => openShareUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(p.titulo || '')}&url=${encodeURIComponent(window.location.href)}`)} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>Twitter</button>
+            <button onClick={() => openShareUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`)} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>LinkedIn</button>
+            <button onClick={() => openShareUrl(`mailto:?subject=${encodeURIComponent(p.titulo || 'Inmueble')}&body=${encodeURIComponent(window.location.href)}`)} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>Email</button>
+            <button onClick={copyLink} style={{padding:8, textAlign:"left", borderRadius:8, border:"none", background:"#fff", cursor:"pointer"}}>{copied ? 'Enlace copiado' : 'Copiar enlace'}</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
