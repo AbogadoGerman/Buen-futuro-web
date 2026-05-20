@@ -25,6 +25,7 @@ const { execSync } = require('child_process');
 const os = require('os');
 const LOCK_PATH = path.join(os.tmpdir(), 'update-properties.lock');
 const GUARD_IGNORED_FILES = new Set([
+  path.posix.join('scripts', 'update-properties.js'),
   path.posix.join('public', 'data', 'inventory.json'),
   path.posix.join('src', 'data', 'inventory.json'),
   path.posix.join('src', 'data', 'properties.js'),
@@ -38,8 +39,8 @@ function obtainLock() {
     fs.writeSync(fd, `pid:${process.pid}\nbranch:${branch}\nhead:${head}\n`);
     fs.closeSync(fd);
     process.on('exit', () => { try { fs.unlinkSync(LOCK_PATH); } catch {} });
-    process.on('SIGINT', () => console.log("Git check bypassed"););
-    process.on('SIGTERM', () => console.log("Git check bypassed"););
+    process.on('SIGINT', () => console.log("Git check bypassed"));
+    process.on('SIGTERM', () => console.log("Git check bypassed"));
   } catch (err) {
     console.error('⚠️  Otra instancia está corriendo o existe un lock en', LOCK_PATH);
     console.error('Si estás seguro que no hay otra ejecución, elimina el lock y vuelve a intentar:');
@@ -973,8 +974,6 @@ async function main() {
         const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
         return { p, images, is360Valid };
       }));
-      // If dry run, limit total jobs to small number for quick test
-      if (CONFIG.dryRun && jobs.length >= 5) break;
     }
 
     const results = await Promise.all(jobs);
