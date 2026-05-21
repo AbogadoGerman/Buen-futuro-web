@@ -772,15 +772,15 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
                   {p.conjunto&&<div style={{marginTop:6,display:"inline-flex",alignItems:"center",gap:6,fontSize:12,color:"#1B4F72",background:"#EAF2FB",padding:"4px 10px",borderRadius:20,fontWeight:700,letterSpacing:0.2}}>{cleanText(p.conjunto)}</div>}
                 </div>
                 <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
-                  <div style={{textAlign:"right",flexShrink:0,minWidth:140}}>
-                    {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:6}}>{fmtM(p.precio_original)}</div>}
-                    <div style={{fontSize:"clamp(18px,4vw,28px)",fontWeight:900,color:"#E74C3C",lineHeight:1.05}}>{fmt(p.precio_venta)}</div>
-                    <div style={{fontSize:12,color:"#E67E22",marginTop:6,fontWeight:800}}>Incluye DdC</div>
-                  </div>
                   <div style={{flex:1,minWidth:0}}>
                     <p style={{margin:"4px 0",color:"#5D6D7E",fontSize:"clamp(11px,2.5vw,13px)",wordWrap:"break-word"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p)),cleanText(p.ciudad)].filter(Boolean).join(", ")}</p>
                     {p.direccion&&(()=>{const url=getGoogleMapsUrl(p);return <div style={{marginTop:5}}><a href={url||"#"} target={url?"_blank":undefined} rel={url?"noopener noreferrer":undefined} style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#1B4F72",textDecoration:"none",background:"#EAF2FB",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="#1B4F72"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{cleanText(p.direccion)}</a></div>;})()}
                     {p.nid&&<div style={{marginTop:4}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
+                  </div>
+                  <div style={{textAlign:"right",flexShrink:0,minWidth:140}}>
+                    {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:6}}>{fmtM(p.precio_original)}</div>}
+                    <div style={{fontSize:"clamp(18px,4vw,28px)",fontWeight:900,color:"#E74C3C",lineHeight:1.05}}>{fmt(p.precio_venta)}</div>
+                    <div style={{fontSize:12,color:"#E67E22",marginTop:6,fontWeight:800}}>Incluye DdC</div>
                   </div>
                 </div>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(92px,1fr))",gap:6,marginTop:12}}>{[{l:"Área",v:p.area?p.area+"m²":""},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p["baños"]??p.banos},{l:"Parq",v:p.garaje},{l:"Depósito",v:p.deposito?"Sí":null},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined"&&x.v!=="undefinedm²").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"7px 10px",borderRadius:10,textAlign:"center",minWidth:0}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
