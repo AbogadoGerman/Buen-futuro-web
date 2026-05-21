@@ -776,7 +776,7 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
                     {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:0}}>{fmtM(p.precio_original)}</div>}
                   </div>
                 </div>
-                <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
+                <div className="modal-detail-row no-stack-mobile" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
                   <div style={{flex:1,minWidth:0}}>
                     {p.direccion&&(()=>{const url=getGoogleMapsUrl(p);return <div style={{marginTop:5}}><a href={url||"#"} target={url?"_blank":undefined} rel={url?"noopener noreferrer":undefined} style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#1B4F72",textDecoration:"none",background:"#EAF2FB",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="#1B4F72"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{cleanText(p.direccion)}</a></div>;})()}
                     {p.nid&&<div style={{marginTop:4}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
@@ -1040,6 +1040,7 @@ export default function App(){
           .modal-media .embla-modal__slide img{object-fit:cover!important}
           .modal-details{width:100%!important;padding:12px 14px 16px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
+          .no-stack-mobile{flex-direction:row!important;align-items:center!important}
           .modal-price-col{text-align:left!important}
           .modal-price-col{min-width:0!important}
           .modal-price-col > div:first-child{margin-top:0!important}
