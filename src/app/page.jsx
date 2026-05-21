@@ -1027,21 +1027,19 @@ export default function App(){
           .hero-imgs img{height:90px!important;border-radius:8px!important}
           .house-deco{display:none!important}
         }
-        /* Modal layout improvements: two-column grid on wide screens to reduce wasted vertical space */
+        /* Modal layout: keep a stacked distribution */
         .modal-inner{max-width:880px}
         .modal-content-grid{display:block}
         .modal-media{width:100%}
         .modal-details{width:100%}
         @media(min-width:900px){
-          .modal-content-grid{display:grid;grid-template-columns:60% 40%;gap:16px;align-items:start}
-          .modal-media{height:calc(80vh);overflow:hidden}
+          .modal-content-grid{display:block}
+          .modal-media{height:clamp(280px,52vw,520px);overflow:hidden}
           .modal-media .embla-modal, .modal-media iframe{height:100%}
-          .modal-details{max-height:80vh;overflow:auto;padding:12px}
-          .modal-details-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.75fr);gap:14px;align-items:start}
-          .modal-details-main{min-width:0}
-          .modal-details-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+          .modal-details{padding:14px 16px 18px}
+          .modal-details-grid{display:block}
+          .modal-details-side{margin-top:14px}
           .modal-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-          .modal-actions button:last-child{grid-column:1/-1}
         }
         @media(min-width:769px){.mob-btn{display:none!important}.mob-menu{display:none!important}.search-wrap-mob{display:none!important}}
       `}</style>
