@@ -773,7 +773,7 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
                   {/* Nueva fila: Ubicación (izquierda) y Valor anterior (derecha) */}
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,marginTop:8}}>
                     <p style={{margin:"4px 0",color:"#5D6D7E",fontSize:"clamp(11px,2.5vw,13px)",wordWrap:"break-word"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p)),cleanText(p.ciudad)].filter(Boolean).join(", ")}{p.conjunto?" · "+cleanText(p.conjunto):""}</p>
-                    <div style={{fontSize:13,color:"#AEB6BF",fontWeight:800,whiteSpace:"nowrap",marginLeft:12}}>{p.precio_original?fmt(p.precio_original):""}</div>
+                    {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:0}}>{fmtM(p.precio_original)}</div>}
                   </div>
                 </div>
                 <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
@@ -782,7 +782,6 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
                     {p.nid&&<div style={{marginTop:4}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
                   </div>
                   <div style={{textAlign:"right",flexShrink:0,minWidth:140}}>
-                    {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:6}}>{fmtM(p.precio_original)}</div>}
                     <div style={{fontSize:"clamp(18px,4vw,28px)",fontWeight:900,color:"#E74C3C",lineHeight:1.05}}>{fmt(p.precio_venta)}</div>
                     <div style={{fontSize:12,color:"#E67E22",marginTop:6,fontWeight:800}}>Incluye DdC</div>
                   </div>
