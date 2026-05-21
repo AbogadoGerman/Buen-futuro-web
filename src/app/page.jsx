@@ -561,6 +561,9 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
   const [tab,setTab]=useState("fotos");
   const [valid360,setValid360]=useState(false);
   const [checking360,setChecking360]=useState(false);
+  const [shareOpen,setShareOpen]=useState(false);
+  const [copied,setCopied]=useState(false);
+  const shareRef=useRef(null);
   const imgs=p?.images||[];const d=p?disc(p):0;
   const realPhotos=hasRealImages(imgs);
   const showSoonPhotosTag=realPhotos&&imgs.length<=4;
@@ -593,6 +596,12 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
   },[p,emblaApi]);
 
   useEffect(()=>{
+    function onDocClick(e){if(shareRef.current&& !shareRef.current.contains(e.target)){setShareOpen(false);}}
+    document.addEventListener("click",onDocClick);
+    return()=>document.removeEventListener("click",onDocClick);
+  },[]);
+
+  useEffect(()=>{
     setValid360(false);
     if(!p?.url_360){
       setChecking360(false);
@@ -615,6 +624,41 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
       .catch(()=>{if(!cancelled)setChecking360(false);});
     return()=>{cancelled=true;};
   },[p?.url_360]);
+
+  async function handleShareClick(e){
+    e?.stopPropagation();
+    try{
+      const shareData={
+        title:p.titulo||"Inmueble",
+        text:`${p.titulo||"Inmueble"} - ${[p.barrio,p.ciudad].filter(Boolean).join(", ")}`,
+        url:typeof window!=="undefined"?window.location.origin+"/"+p.nid:window.location.href,
+      };
+      if(navigator.share){
+        await navigator.share(shareData);
+        fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:typeof window!=='undefined'?window.location.href:'',fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});
+        return;
+      }
+    }catch(err){}
+    setShareOpen(v=>!v);
+  }
+
+  function openShareUrl(url,e){
+    e?.stopPropagation();
+    fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:typeof window!=='undefined'?window.location.href:'',fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});
+    window.open(url,'_blank');
+    setShareOpen(false);
+  }
+
+  async function copyLink(e){
+    e?.stopPropagation();
+    try{
+      const url=typeof window!=="undefined"?window.location.origin+"/"+p.nid:window.location.href;
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(()=>setCopied(false),2000);
+      fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nid:p.nid,titulo:p.titulo||'',ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(', '),precio:fmt(p.precio_venta),eventName:'Share',sourceUrl:url,fbp:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||''):'',fbc:(typeof document!=='undefined'?((document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||''):'')})}).catch(()=>{});
+    }catch(err){}
+  }
 
   if(!p)return null;
 
@@ -706,6 +750,19 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
                 </div>
 
                 <div className="modal-actions" style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,marginTop:16}}>
+            <div ref={shareRef} style={{position:"relative",gridColumn:"1/-1"}}>
+              <button onClick={handleShareClick} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,background:"#F5F7FA",color:"#1B2A4A",borderRadius:12,padding:"12px 14px",fontSize:"clamp(12px,2.5vw,14px)",fontWeight:700,border:"2px solid #E6EDF3",cursor:"pointer",width:"100%"}}>
+                🔗 Compartir
+              </button>
+              {shareOpen&&<div onClick={e=>e.stopPropagation()} style={{position:"absolute",right:0,bottom:"calc(100% + 8px)",background:"white",border:"1px solid #E6EDF3",borderRadius:10,boxShadow:"0 8px 24px rgba(17,24,39,0.08)",padding:8,display:"flex",flexDirection:"column",gap:6,minWidth:220,zIndex:50}}>
+                <button onClick={e=>openShareUrl(`https://wa.me/?text=${encodeURIComponent(p.titulo+" "+(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href))}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>WhatsApp</button>
+                <button onClick={e=>openShareUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Facebook</button>
+                <button onClick={e=>openShareUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(p.titulo||'')}&url=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Twitter</button>
+                <button onClick={e=>openShareUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>LinkedIn</button>
+                <button onClick={e=>openShareUrl(`mailto:?subject=${encodeURIComponent(p.titulo||'Inmueble')}&body=${encodeURIComponent(typeof window!=='undefined'?window.location.origin+"/"+p.nid:window.location.href)}`,e)} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>Email</button>
+                <button onClick={copyLink} style={{padding:8,textAlign:"left",borderRadius:8,border:"none",background:"#fff",cursor:"pointer"}}>{copied? 'Enlace copiado' : 'Copiar enlace'}</button>
+              </div>}
+            </div>
             <button onClick={()=>handleScheduleClick(p)} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,background:"linear-gradient(135deg,#1B4F72,#1B2A4A)",color:"white",borderRadius:12,padding:"14px 16px",fontSize:"clamp(13px,3vw,15px)",fontWeight:700,border:"none",cursor:"pointer",width:"100%",boxShadow:"0 4px 14px rgba(27,79,114,0.35)"}}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.592-.768-6.39-2.07l-.446-.334-2.633.882.882-2.633-.334-.446A9.958 9.958 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
               Agendar Visita
