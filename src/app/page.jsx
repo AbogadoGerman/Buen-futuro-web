@@ -188,6 +188,15 @@ function getGoogleMapsUrl(p){
   return parts.length?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}`:"";
 }
 
+function highlightDescription(text){
+  const parts=(text||"").split(/(\d+|\b(?:bono|habi|bonificaci[oó]n|descuento|incluye|administraci[oó]n|admin)\b)/gi);
+  return parts.map((part,index)=>{
+    if(/^\d+$/.test(part))return <strong key={index} style={{color:"#1B4F72"}}>{part}</strong>;
+    if(/^(bono|habi|bonificaci[oó]n|descuento|incluye|administraci[oó]n|admin)$/i.test(part))return <strong key={index} style={{color:"#E67E22"}}>{part}</strong>;
+    return <span key={index}>{part}</span>;
+  });
+}
+
 function CreditSim({onClose,property,shareUrl}){
   const initVal=property?Math.max(80000000,Math.min(1500000000,num(property.precio_venta)||250000000)):250000000;
   const [val,setVal]=useState(initVal);
@@ -706,7 +715,7 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
 
   return(
     <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",backdropFilter:"blur(4px)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:10,animation:"fadeIn .25s",overflowY:"auto"}}>
-      <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:750,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)",margin:"auto"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"white",borderRadius:20,maxWidth:980,width:"100%",maxHeight:"95vh",overflow:"auto",boxShadow:"0 24px 80px rgba(0,0,0,0.3)",margin:"auto"}}>
         {/* Tabs */}
         <div style={{display:"flex",borderBottom:"2px solid #EBF0F5",position:"sticky",top:0,background:"white",zIndex:2,borderRadius:"20px 20px 0 0"}}>
           {realPhotos&&<button onClick={()=>setTab("fotos")} style={{flex:1,padding:"14px",border:"none",background:tab==="fotos"?"white":"#F8F9FA",cursor:"pointer",fontWeight:800,fontSize:14,color:tab==="fotos"?"#1B4F72":"#999",borderBottom:tab==="fotos"?"3px solid #1B4F72":"3px solid transparent",borderRadius:tab==="fotos"?"20px 0 0 0":"0",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
@@ -758,37 +767,39 @@ function Modal({p,onClose,onSimCredit,onImageClick}){
           <div className="modal-details">
             <div className="modal-details-grid">
               <div className="modal-details-main">
-                <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+                <div className="modal-detail-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
                   <div style={{flex:1,minWidth:0}}>
                     <h2 style={{margin:0,fontSize:"clamp(15px,3.5vw,22px)",color:"#1B2A4A",fontFamily:"'Playfair Display',serif",lineHeight:1.2,wordWrap:"break-word"}}>{p.titulo}</h2>
                     <p style={{margin:"4px 0",color:"#5D6D7E",fontSize:"clamp(11px,2.5vw,13px)",wordWrap:"break-word"}}>{[cleanText(p.barrio),prettyLocalidad(getLocalidad(p)),cleanText(p.ciudad)].filter(Boolean).join(", ")}{p.conjunto?" · "+cleanText(p.conjunto):""}</p>
                     {p.direccion&&(()=>{const url=getGoogleMapsUrl(p);return <div style={{marginTop:5}}><a href={url||"#"} target={url?"_blank":undefined} rel={url?"noopener noreferrer":undefined} style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#1B4F72",textDecoration:"none",background:"#EAF2FB",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="#1B4F72"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>{cleanText(p.direccion)}</a></div>;})()}
                     {p.nid&&<div style={{marginTop:4}}>{p.url_habi?<a href={p.url_habi} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",textDecoration:"none",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</a>:<span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:10,color:"#9B59B6",background:"#F5EEF8",padding:"3px 8px",borderRadius:20,fontWeight:600,letterSpacing:0.3}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9B59B6" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>NID HABI: {p.nid}</span>}</div>}
                   </div>
+                  <div style={{textAlign:"right",flexShrink:0,minWidth:140}}>
+                    {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through",marginBottom:6}}>{fmtM(p.precio_original)}</div>}
+                    <div style={{fontSize:"clamp(18px,4vw,28px)",fontWeight:900,color:"#E74C3C",lineHeight:1.05}}>{fmt(p.precio_venta)}</div>
+                    <div style={{fontSize:12,color:"#E67E22",marginTop:6,fontWeight:800}}>Incluye DdC</div>
+                  </div>
                 </div>
-                <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>{[{l:"Área",v:p.area?p.area+"m²":""},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p["baños"]??p.banos},{l:"Parq",v:p.garaje},{l:"Depósito",v:p.deposito?"Sí":null},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined"&&x.v!=="undefinedm²").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"5px 10px",borderRadius:8,textAlign:"center",minWidth:48}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
-                {p.descripcion&&<p style={{marginTop:12,fontSize:"clamp(11px,2.5vw,13px)",color:"#34495E",lineHeight:1.5,wordWrap:"break-word",overflowWrap:"break-word"}}>{p.descripcion}</p>}
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(92px,1fr))",gap:6,marginTop:12}}>{[{l:"Área",v:p.area?p.area+"m²":""},{l:"Hab",v:p.habitaciones},{l:"Baños",v:p["baños"]??p.banos},{l:"Parq",v:p.garaje},{l:"Depósito",v:p.deposito?"Sí":null},{l:"Estrato",v:p.estrato},{l:"Piso",v:p.piso},{l:"Ascensor",v:p.ascensor?"Sí":"No"}].filter(x=>x.v&&x.v!=="0"&&x.v!=="undefined"&&x.v!=="undefinedm²").map(({l,v})=><div key={l} style={{background:"#F0F4F8",padding:"7px 10px",borderRadius:10,textAlign:"center",minWidth:0}}><div style={{fontSize:9,color:"#7F8C8D"}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1B2A4A"}}>{v}</div></div>)}</div>
+                {p.descripcion&&<div style={{marginTop:14}}><div style={{fontSize:12,fontWeight:900,color:"#1B2A4A",marginBottom:6}}>Descripción</div><p style={{margin:0,fontSize:"clamp(12px,2.8vw,15px)",color:"#34495E",lineHeight:1.65,wordWrap:"break-word",overflowWrap:"break-word"}}>{highlightDescription(p.descripcion)}</p></div>}
+                {num(p.admin)>0&&<div style={{marginTop:10,fontSize:12,fontWeight:800,color:"#1B2A4A"}}>Administración: <span style={{color:"#5D6D7E",fontWeight:700}}>{fmt(p.admin)}/mes</span></div>}
               </div>
 
               <div className="modal-details-side">
                 <div className="modal-price-col" style={{textAlign:"right",flexShrink:0}}>
-                  {d>0&&<div style={{fontSize:12,color:"#AEB6BF",textDecoration:"line-through"}}>{fmtM(p.precio_original)}</div>}
-                  <div style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:800,color:"#E74C3C"}}>{fmt(p.precio_venta)}</div>
-                  <div style={{fontSize:10,color:"#7F8C8D",marginTop:4}}>Incluye DdC</div>
-                  <div style={{marginTop:10,padding:"6px 10px",borderRadius:10,background:"linear-gradient(135deg,rgba(123,47,247,0.12),rgba(91,31,166,0.08))",border:"1px solid rgba(123,47,247,0.18)",textAlign:"left"}}>
+                  <div style={{marginTop:10,padding:"8px 10px",borderRadius:12,background:"linear-gradient(135deg,rgba(123,47,247,0.12),rgba(91,31,166,0.08))",border:"1px solid rgba(123,47,247,0.18)",textAlign:"left"}}>
                     <div style={{fontSize:10,fontWeight:900,letterSpacing:1,color:"#7B2FF7",marginBottom:6}}>PRECIOS ESPECIALES.</div>
-                    <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                      <div>
+                    <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8}}>
+                      <div style={{background:"rgba(255,255,255,0.6)",borderRadius:10,padding:"8px 10px"}}>
                         <div style={{fontSize:10,color:"#5D6D7E"}}>Precio con HabiCredit</div>
                         <div style={{fontSize:13,fontWeight:800,color:"#1B4F72"}}>{fmt(p.precio_habicredit)}</div>
                       </div>
-                      <div>
+                      <div style={{background:"rgba(255,255,255,0.6)",borderRadius:10,padding:"8px 10px"}}>
                         <div style={{fontSize:10,color:"#5D6D7E"}}>Precio con HabiCapital</div>
                         <div style={{fontSize:13,fontWeight:800,color:"#1B4F72"}}>{fmt(p.precio_habicapital)}</div>
                       </div>
                     </div>
                   </div>
-                  {num(p.admin)>0&&<div style={{fontSize:10,color:"#7F8C8D",marginTop:8}}>Admin: {fmt(p.admin)}/mes</div>}
                 </div>
 
                 <div className="modal-actions" style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,marginTop:16}}>
