@@ -1025,10 +1025,28 @@ export default function App(){
           .search-wrap-mob{display:block!important}
           .reviews-embla__slide{flex-basis:100%!important}
           .sort-bar{flex-direction:column!important;align-items:stretch!important;gap:8px!important}
+          .modal-content-grid{display:flex!important;flex-direction:column!important}
+          .modal-media{width:100%!important;height:clamp(260px,72vw,390px)!important;overflow:hidden!important}
+          .modal-media .embla-modal,
+          .modal-media .embla-modal__container,
+          .modal-media .embla-modal__slide,
+          .modal-media iframe{height:100%!important}
+          .modal-media .embla-modal__slide img{object-fit:cover!important}
+          .modal-details{width:100%!important;padding:12px 14px 16px!important}
           .modal-detail-row{flex-direction:column!important;gap:4px!important}
           .modal-price-col{text-align:left!important}
+          .modal-price-col{min-width:0!important}
+          .modal-price-col > div:first-child{margin-top:0!important}
           .modal-actions{flex-direction:column!important}
+          .modal-actions{grid-template-columns:1fr!important}
+          .modal-actions > *{grid-column:1/-1!important}
+          .modal-actions button{width:100%!important}
+          .modal-details-main{padding-bottom:6px!important}
+          .modal-details-side{margin-top:10px!important}
+          .modal-details-side .modal-price-col{padding-top:0!important}
+          .modal-details-side .modal-price-col > div:first-child{margin-top:0!important}
           .modal-thumbs{display:none!important}
+          .modal-media .embla-modal__slide{cursor:default!important}
           .house-deco{width:28%!important;opacity:0.04!important}
         }
         /* ---- MOBILE 420 ---- */
