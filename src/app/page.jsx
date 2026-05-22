@@ -97,8 +97,9 @@ const ZONA_LOCALIDADES={
   "Mosquera":["mosquera"],
   "Chía":["chia"],
   "Madrid":["madrid"],
+  "Cota":["Cota"],
 };
-const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía","Madrid"];
+const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía","Madrid","Cota"];
 function extractFeatures(desc){const kw=[["balcón","balcon","balkony"],["cocina integral","cocina"],["zona de estudio","estudio"],["depósito","deposito","bodega"],["zona de lavandería","lavanderia"],["vista exterior","vista"],["ascensor","elevador"]];return kw.map(([k,...a])=>{const d=normText(desc);return (d.includes(normText(k))||a.some(x=>d.includes(normText(x))))?k:null}).filter(Boolean)}
 function waMsg(p){return encodeURIComponent("\ud83c\udfe0 *INMOBILIARIA BUEN FUTURO - Aliados HABI*\n\nHola, estoy interesado en:\n\n\ud83d\udccb *Ref:* "+p.nid+"\n\ud83c\udfe1 *Inmueble:* "+(p.titulo||"")+"\n\ud83d\udccd *Ubicación:* "+[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", ")+"\n\ud83d\udcb0 *Precio:* "+fmt(p.precio_venta)+"\n\ud83d\udcd0 *Area:* "+(p.area||"N/A")+" m2\n\ud83d\udecf\ufe0f *Hab:* "+(p.habitaciones||"N/A")+"\n\ud83d\udebf *Baños:* "+(p.banos||"N/A")+(p.bonoHabi?"\n\ud83c\udf81 *Bono HABI:* "+fmt(p.bonoHabi):"")+"\n\nQuiero más info y programar visita.")}
 function notifyAndWhatsApp(p,waUrl,eventName){fetch("/api/notify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nid:p.nid,titulo:p.titulo||"",ubicacion:[p.barrio,p.conjunto,p.ciudad].filter(Boolean).join(", "),precio:fmt(p.precio_venta),area:p.area||"N/A",habitaciones:p.habitaciones||"N/A",banos:p.banos||"N/A",bonoHabi:p.bonoHabi?fmt(p.bonoHabi):"",eventName:eventName||"Contact",sourceUrl:typeof window!=="undefined"?window.location.href:"",fbp:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbp=([^;]*)/)||[])[1]||"":"",fbc:typeof document!=="undefined"?(document.cookie.match(/(?:^|;\s*)_fbc=([^;]*)/)||[])[1]||"":""})}).catch(()=>{});window.open(waUrl,"_blank")}
