@@ -97,7 +97,7 @@ const ZONA_LOCALIDADES={
   "Mosquera":["mosquera"],
   "Chía":["chia"],
   "Madrid":["madrid"],
-  "Cota":["Cota"],
+  "Cota":["cota"],
 };
 const ZONA_ORDEN=["Bogotá Norte","Bogotá Centro","Bogotá Sur / Soacha","Funza","Mosquera","Chía","Madrid","Cota"];
 function extractFeatures(desc){const kw=[["balcón","balcon","balkony"],["cocina integral","cocina"],["zona de estudio","estudio"],["depósito","deposito","bodega"],["zona de lavandería","lavanderia"],["vista exterior","vista"],["ascensor","elevador"]];return kw.map(([k,...a])=>{const d=normText(desc);return (d.includes(normText(k))||a.some(x=>d.includes(normText(x))))?k:null}).filter(Boolean)}
