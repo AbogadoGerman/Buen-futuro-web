@@ -955,7 +955,13 @@ async function main() {
       csvData = buffer.toString();
     }
 
-    const { data: properties } = parse(csvData, { header: true, skipEmptyLines: true });
+    const parsed = parse(csvData, { header: true, skipEmptyLines: true });
+    // Permitir una prueba rápida limitando la cantidad de propiedades procesadas
+    let properties = parsed.data || [];
+    if (process.env.SAMPLE_SIZE) {
+      const n = Number(process.env.SAMPLE_SIZE) || 0;
+      if (n > 0) properties = properties.slice(0, n);
+    }
 
     const enriched = [];
     let removedWithoutMedia = 0;
