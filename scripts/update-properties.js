@@ -92,9 +92,16 @@ obtainLock();
 
 // ——— Browser compartido para scraping con Playwright ———
 let _browser = null;
+let _browserInitPromise = null;
+let _browserUnavailable = false;
+let _browserWarningShown = false;
 
 async function getBrowser() {
   if (_browser) return _browser;
+  if (_browserUnavailable) return null;
+  if (_browserInitPromise) return _browserInitPromise;
+
+  _browserInitPromise = (async () => {
   try {
     const { chromium } = require("playwright");
     _browser = await chromium.launch({
@@ -112,9 +119,18 @@ async function getBrowser() {
     });
     return _browser;
   } catch (err) {
-    console.warn("  ⚠️  Playwright no disponible, se usará scraping estático:", err.message);
+    _browserUnavailable = true;
+    if (!_browserWarningShown) {
+      _browserWarningShown = true;
+      console.warn("  ⚠️  Playwright no disponible, se usará scraping estático:", err.message);
+    }
     return null;
+  } finally {
+    _browserInitPromise = null;
   }
+  })();
+
+  return _browserInitPromise;
 }
 
 async function closeBrowser() {
