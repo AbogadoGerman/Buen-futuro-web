@@ -934,12 +934,220 @@ function createLimiter(concurrency) {
   };
 }
 
+function countUsableImages(images) {
+  if (!Array.isArray(images) || images.length === 0) return 0;
+  return images.filter((img) => typeof img === "string" && img && img !== CONFIG.placeholderImage).length;
+}
+
+function propertyKey(p) {
+  const nid = (p?.nid || "").toString().trim();
+  if (nid) return `nid:${nid}`;
+  const url = (p?.url_habi || p?.url || "").toString().trim().toLowerCase();
+  if (url) return `url:${url}`;
+  return "";
+}
+
+function loadPreviousInventory() {
+  const parseInventory = (raw) => {
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const inventoryCandidates = [];
+  const diskCandidates = [CONFIG.outputPath, CONFIG.publicOutputPath];
+  for (const filePath of diskCandidates) {
+    try {
+      if (!fs.existsSync(filePath)) continue;
+      const raw = fs.readFileSync(filePath, "utf8");
+      const parsed = parseInventory(raw);
+      if (parsed) {
+        inventoryCandidates.push({ source: `disk:${filePath}`, items: parsed });
+      }
+    } catch (err) {
+      console.warn(`⚠️  No se pudo leer inventario previo (${filePath}): ${err.message}`);
+    }
+  }
+
+  // Fallback robusto: si el archivo local quedó truncado por una ejecución parcial,
+  // intentar recuperar una base más completa desde git.
+  const gitRelativePaths = [
+    path.relative(ROOT, CONFIG.outputPath).replace(/\\/g, "/"),
+    path.relative(ROOT, CONFIG.publicOutputPath).replace(/\\/g, "/"),
+  ];
+  const gitRefs = ["HEAD", "origin/main"];
+
+  for (const ref of gitRefs) {
+    for (const relPath of gitRelativePaths) {
+      try {
+        const raw = execSync(`git show ${ref}:${relPath}`, { stdio: ["ignore", "pipe", "ignore"] }).toString();
+        const parsed = parseInventory(raw);
+        if (parsed) {
+          inventoryCandidates.push({ source: `git:${ref}:${relPath}`, items: parsed });
+        }
+      } catch {
+        // Ignorar si el ref/path no existe o git no está disponible.
+      }
+    }
+  }
+
+  if (inventoryCandidates.length === 0) return [];
+
+  inventoryCandidates.sort((a, b) => b.items.length - a.items.length);
+  const selected = inventoryCandidates[0];
+  if (selected.items.length > 0) {
+    console.log(`ℹ️  Inventario previo seleccionado (${selected.items.length} propiedades) desde ${selected.source}`);
+  }
+  return selected.items;
+}
+
+function normalizeHeader(value) {
+  return (value || "")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function parseHeaderlessRow(row) {
+  const pick = (index) => (row[index] ?? "").toString().trim();
+
+  const parsed = {
+    nid: pick(0),
+    tipo_de_propiedad: pick(1),
+    conjunto: pick(2),
+    direccion: pick(3),
+    num_piso: pick(4),
+    precio_anterior: pick(5),
+    precio_venta: pick(6),
+    area: pick(7),
+    banos: pick(8),
+    tiene_ascensor: pick(10),
+    num_habitaciones: pick(15),
+    localidad: pick(27),
+    ciudad: pick(28),
+    zona_pequeña: pick(31),
+    estado_del_inmueble: pick(33),
+    current_state: pick(34),
+    barrio: pick(35),
+    costo_administracion: pick(36),
+    descripcion: pick(37),
+    titulo: pick(38),
+    url_360: pick(39),
+    url_habi: pick(41),
+  };
+
+  // Compatibilidad con código existente que también consulta p.url.
+  parsed.url = parsed.url_habi;
+  return parsed;
+}
+
+function parseSpreadsheetRows(buffer, fileName) {
+  if (!fileName.endsWith(".xlsx")) {
+    const csvData = buffer.toString();
+    return parse(csvData, { header: true, skipEmptyLines: true }).data || [];
+  }
+
+  const workbook = XLSX.read(buffer, { type: "buffer" });
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const matrix = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: "" });
+  if (!Array.isArray(matrix) || matrix.length === 0) return [];
+
+  const firstRowHeaders = (matrix[0] || []).map(normalizeHeader).filter(Boolean);
+  const knownHeaders = new Set(["nid", "url_habi", "url", "precio_venta", "titulo", "descripcion", "url_360"]);
+  const looksLikeHeaderedFile = firstRowHeaders.some((header) => knownHeaders.has(header));
+
+  if (looksLikeHeaderedFile) {
+    const csvData = XLSX.utils.sheet_to_csv(sheet);
+    return parse(csvData, { header: true, skipEmptyLines: true }).data || [];
+  }
+
+  console.log("ℹ️  Excel sin encabezados detectado: aplicando mapeo por posiciones de columnas.");
+  return matrix
+    .map((row) => parseHeaderlessRow(row))
+    .filter((item) => item.nid || item.url_habi || item.titulo);
+}
+
+function buildPageFormatted(enriched) {
+  return enriched.map((p) => ({
+    nid: p.nid,
+    titulo: p.titulo,
+    tipo: p.tipo_de_propiedad || p.tipo || "",
+    barrio: p.barrio || "",
+    conjunto: p.conjunto || "",
+    ciudad: p.ciudad || "",
+    localidad: p.localidad || "",
+    zona_grande: p.zona_grande || "",
+    zona_mediana: p.zona_mediana || "",
+    zona_pequeña: p.zona_pequeña || p["zona_pequeña"] || "",
+    direccion: p.direccion || "",
+    googleMapsUrl: p.googleMapsUrl || (() => {
+      const parts = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean);
+      return parts.length ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}` : "";
+    })(),
+    descripcion: p.descripcion || "",
+    area: p.area || "",
+    habitaciones: p.num_habitaciones || p.habitaciones || "",
+    baños: p.banos || p["baños"] || "",
+    garaje: p.garajes || p.garaje || "",
+    piso: p.num_piso || p.piso || "",
+    estrato: p.estrato || "",
+    ascensor: p.tiene_ascensor === "1" || p.tiene_ascensor === 1
+      ? true
+      : p.tiene_ascensor === "0" || p.tiene_ascensor === 0
+      ? false
+      : null,
+    bonoHabi: parseInt(p.bonus_value || p.bonoHabi || 0),
+    admin: parseInt(p.costo_administracion || p.admin || 0),
+    precio_venta: p.precio_venta || "",
+    precio_original: p.precio_anterior || p.precio_original || "",
+    url_360: p.url_360 || "",
+    url_habi: p.url_habi || p.url || "",
+    images: p.images || [],
+    current_state: p.current_state || "",
+    deposito: /dep[oó]sito/i.test(p.descripcion || "") || /dep[oó]sito/i.test(p.titulo || ""),
+    enSubasta: /^set_aside$/i.test((p.current_state || "").trim()) || /^separado$/i.test((p.estado_del_inmueble || "").trim()),
+  }));
+}
+
+function writeOutputFiles(enriched) {
+  const jsonData = JSON.stringify(enriched, null, 2);
+
+  if (!fs.existsSync(path.dirname(CONFIG.outputPath))) fs.mkdirSync(path.dirname(CONFIG.outputPath), { recursive: true });
+  fs.writeFileSync(CONFIG.outputPath, jsonData);
+
+  if (!fs.existsSync(path.dirname(CONFIG.publicOutputPath))) fs.mkdirSync(path.dirname(CONFIG.publicOutputPath), { recursive: true });
+  fs.writeFileSync(CONFIG.publicOutputPath, jsonData);
+
+  const pageFormatted = buildPageFormatted(enriched);
+  const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
+  fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
+}
+
 // Control de concurrencia (por defecto 4, puede ajustarse via env or CONFIG)
 CONFIG.concurrentRequests = Number(process.env.CONCURRENT_REQUESTS || 4);
 CONFIG.dryRun = Boolean(process.env.DRY);
+if (process.env.SAMPLE_SIZE && !CONFIG.dryRun) {
+  CONFIG.dryRun = true;
+  console.log("ℹ️  SAMPLE_SIZE detectado sin DRY: se fuerza DRY para no sobrescribir la base completa.");
+}
 
 async function main() {
   try {
+    const previousInventory = loadPreviousInventory();
+    const previousByKey = new Map();
+    for (const prev of previousInventory) {
+      const key = propertyKey(prev);
+      if (!key || previousByKey.has(key)) continue;
+      previousByKey.set(key, prev);
+    }
+
     const drive = await getGoogleDriveClient();
     const file = await findLatestFile(drive);
     console.log(`📄 Procesando archivo: ${file.name}`);
@@ -947,45 +1155,48 @@ async function main() {
     const res = await drive.files.get({ fileId: file.id, alt: "media" }, { responseType: "arraybuffer" });
     const buffer = Buffer.from(res.data);
 
-    let csvData;
-    if (file.name.endsWith(".xlsx")) {
-      const workbook = XLSX.read(buffer, { type: "buffer" });
-      csvData = XLSX.utils.sheet_to_csv(workbook.Sheets[workbook.SheetNames[0]]);
-    } else {
-      csvData = buffer.toString();
-    }
-
-    const parsed = parse(csvData, { header: true, skipEmptyLines: true });
+    const parsedData = parseSpreadsheetRows(buffer, file.name);
     // Permitir una prueba rápida limitando la cantidad de propiedades procesadas
-    let properties = parsed.data || [];
+    let properties = parsedData || [];
     if (process.env.SAMPLE_SIZE) {
       const n = Number(process.env.SAMPLE_SIZE) || 0;
       if (n > 0) properties = properties.slice(0, n);
     }
 
     const enriched = [];
+    let processedWithMedia = 0;
+    const checkpointEvery = Number(process.env.CHECKPOINT_EVERY || 100);
     let removedWithoutMedia = 0;
     const limit = createLimiter(CONFIG.concurrentRequests);
     const jobs = [];
     for (let i = 0; i < properties.length; i++) {
       const p = properties[i];
       jobs.push(limit(async () => {
+        const key = propertyKey(p);
+          const previous = key ? previousByKey.get(key) : null;
+          const previousUsableImages = countUsableImages(previous?.images);
+          const reuseExistingImages = previousUsableImages >= 10;
+
         if (CONFIG.dryRun) {
           console.log(`[DRY] [${i+1}/${properties.length}] ${p.nid || i}: prueba de scraping (no guardará).`);
         } else {
-          console.log(`[${i+1}/${properties.length}] ${p.nid || i}: scraping fotos...`);
+            console.log(`[${i+1}/${properties.length}] ${p.nid || i}: ${reuseExistingImages ? `reutilizando fotos existentes (${previousUsableImages})` : `scraping fotos (${previousUsableImages} previas)`}`);
         }
 
         const habiUrl = p.url_habi || p.url || "";
+        const imagesPromise = reuseExistingImages
+          ? Promise.resolve(previous.images)
+          : (habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]));
+
         const [scrapedImages, is360Valid] = await Promise.all([
-          habiUrl ? scrapeImages(habiUrl) : Promise.resolve([]),
+          imagesPromise,
           p.url_360 ? validate360(p.url_360) : Promise.resolve(false)
         ]);
 
         if (!is360Valid && p.url_360) {
           console.log(`  ⚠️  360 inválido (404/error) - se eliminará del campo: ${p.url_360}`);
         }
-        console.log(`  📸 ${scrapedImages.length} fotos | 360: ${is360Valid ? "✅" : "❌"} | url: ${habiUrl}`);
+        console.log(`  📸 ${scrapedImages.length} fotos${reuseExistingImages ? " (reutilizadas)" : ""} | 360: ${is360Valid ? "✅" : "❌"} | url: ${habiUrl}`);
 
         if (scrapedImages.length === 0 && !is360Valid) {
           removedWithoutMedia++;
@@ -994,71 +1205,27 @@ async function main() {
         }
 
         const images = scrapedImages.length > 0 ? scrapedImages : [CONFIG.placeholderImage];
-        return { p, images, is360Valid };
+        const enrichedItem = { ...p, images, url_360: is360Valid ? p.url_360 : "", precio: parseInt(p.precio_venta || 0, 10) };
+        enriched.push(enrichedItem);
+        processedWithMedia++;
+
+        if (!CONFIG.dryRun && checkpointEvery > 0 && processedWithMedia % checkpointEvery === 0) {
+          writeOutputFiles(enriched);
+          console.log(`💾 Checkpoint guardado (${processedWithMedia} propiedades acumuladas).`);
+        }
+
+        // small sleep to avoid bursty writes when not dry
+        if (!CONFIG.dryRun) await new Promise(r => setTimeout(r, Math.max(0, CONFIG.delayBetweenRequestsMs / CONFIG.concurrentRequests)));
+        return null;
       }));
     }
 
-    const results = await Promise.all(jobs);
-    for (const res of results) {
-      if (!res) continue;
-      const { p, images, is360Valid } = res;
-      enriched.push({ ...p, images, url_360: is360Valid ? p.url_360 : "", precio: parseInt(p.precio_venta || 0, 10) });
-      // small sleep to avoid bursty writes when not dry
-      if (!CONFIG.dryRun) await new Promise(r => setTimeout(r, Math.max(0, CONFIG.delayBetweenRequestsMs / CONFIG.concurrentRequests)));
+    await Promise.all(jobs);
+    if (!CONFIG.dryRun) {
+      writeOutputFiles(enriched);
+    } else {
+      console.log("ℹ️  DRY activo: no se escribieron archivos de salida.");
     }
-
-    const jsonData = JSON.stringify(enriched, null, 2);
-
-    // Guardar en src/data/ para imports
-    if (!fs.existsSync(path.dirname(CONFIG.outputPath))) fs.mkdirSync(path.dirname(CONFIG.outputPath), { recursive: true });
-    fs.writeFileSync(CONFIG.outputPath, jsonData);
-
-    // Guardar en public/data/ para fetch desde el frontend
-    if (!fs.existsSync(path.dirname(CONFIG.publicOutputPath))) fs.mkdirSync(path.dirname(CONFIG.publicOutputPath), { recursive: true });
-    fs.writeFileSync(CONFIG.publicOutputPath, jsonData);
-
-    // Generar properties.js con el formato que usa el frontend
-    const pageFormatted = enriched.map((p) => ({
-      nid: p.nid,
-      titulo: p.titulo,
-      tipo: p.tipo_de_propiedad || p.tipo || "",
-      barrio: p.barrio || "",
-      conjunto: p.conjunto || "",
-      ciudad: p.ciudad || "",
-      localidad: p.localidad || "",
-      zona_grande: p.zona_grande || "",
-      zona_mediana: p.zona_mediana || "",
-      zona_pequeña: p.zona_pequeña || p["zona_pequeña"] || "",
-      direccion: p.direccion || "",
-      googleMapsUrl: p.googleMapsUrl || (() => {
-        const parts = [p.direccion, p.conjunto, p.zona_pequeña, p.zona_mediana, p.zona_grande, p.ciudad].filter(Boolean);
-        return parts.length ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(", "))}` : "";
-      })(),
-      descripcion: p.descripcion || "",
-      area: p.area || "",
-      habitaciones: p.num_habitaciones || p.habitaciones || "",
-      baños: p.banos || p["baños"] || "",
-      garaje: p.garajes || p.garaje || "",
-      piso: p.num_piso || p.piso || "",
-      estrato: p.estrato || "",
-      ascensor: p.tiene_ascensor === "1" || p.tiene_ascensor === 1
-        ? true
-        : p.tiene_ascensor === "0" || p.tiene_ascensor === 0
-        ? false
-        : null,
-      bonoHabi: parseInt(p.bonus_value || p.bonoHabi || 0),
-      admin: parseInt(p.costo_administracion || p.admin || 0),
-      precio_venta: p.precio_venta || "",
-      precio_original: p.precio_anterior || p.precio_original || "",
-      url_360: p.url_360 || "",
-      url_habi: p.url_habi || p.url || "",
-      images: p.images || [],
-      current_state: p.current_state || "",
-      deposito: /dep[oó]sito/i.test(p.descripcion || "") || /dep[oó]sito/i.test(p.titulo || ""),
-      enSubasta: /^set_aside$/i.test((p.current_state || "").trim()) || /^separado$/i.test((p.estado_del_inmueble || "").trim()),
-    }));
-    const propertiesJs = `export const INV = ${JSON.stringify(pageFormatted, null, 2)};\n`;
-    fs.writeFileSync(CONFIG.propertiesJsPath, propertiesJs);
 
     console.log(`✅ ¡Inventario actualizado con éxito! (${enriched.length} propiedades)`);
     console.log(`🗑️ Propiedades eliminadas por falta de fotos/Matterport: ${removedWithoutMedia}`);
